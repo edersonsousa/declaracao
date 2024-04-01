@@ -312,19 +312,9 @@ def path_check(declara):
         except OSError as e:
             messagebox.showerror("Falha ao criar a pasta!!!", f"Falha ao criar a pasta '{declara['Ato']}': {e}")
     else:
-        messagebox.showinfo("Pasta já existe!", f"A pasta '{declara['Ato']}' já existe.")
-    
-def declaracao(declara):
-    # Cria PDF
-    pdfmetrics.registerFont(TTFont('Verdana', 'Vera.ttf'))
-    pdfmetrics.registerFont(TTFont('Verdana-Bold', 'VeraBd.ttf'))
-    nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
-    
-    path_check(declara)
-    
-        
-    c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}", pagesize=A4) 
+        messagebox.showinfo("Pasta já existe!", f"A pasta '{declara['Nome']}' dentro de '{declara['Ato']} já existe.")
 
+def declaracao_experiencia(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 750, "Declaração de Experiência")
@@ -357,6 +347,46 @@ def declaracao(declara):
     #format_date(data_atual, format='full', locale=locale)
     ###   strtotime('today')
     # Fecha o arquivo PDF
+def termo_de_anuencia(c , declara):
+    #Define título
+    c.setFont("Verdana-Bold", 14)
+    c.drawCentredString(300, 750, "Termo de Anuência")
+    
+    # Adiciona informações do dicionário do PDF em um parágrafo justificado
+    #text = "    "
+    #for key, value in declara.items():
+    #    text += f"{key}: {value}\n"
+    c.setFont("Verdana", 12)
+    y_position = 700
+    text =f"Termo......"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700 - p.height)
+   
+    c.setFont("Verdana", 12)
+    c.drawCentredString(300, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
+    c.setFont("Verdana", 11)
+    c.drawCentredString(300, 470, f"__________________________________________________")
+    c.setFont("Verdana", 10)
+    c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
+
+    
+def declaracao(declara):
+    # Cria PDF
+    pdfmetrics.registerFont(TTFont('Verdana', 'Vera.ttf'))
+    pdfmetrics.registerFont(TTFont('Verdana-Bold', 'VeraBd.ttf'))
+    nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
+    
+    path_check(declara)
+            
+    c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}", pagesize=A4) 
+    declaracao_experiencia(c , declara)
+    c.showPage()
+    termo_de_anuencia(c , declara)
+    c.showPage()
+    
     c.save()
     #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
     subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}"], shell=True)
