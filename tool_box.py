@@ -1,8 +1,20 @@
 import tkinter as tk
-from datetime import datetime
+from datetime import datetime, date
 from tkinter import Tk, Label, Entry, Checkbutton, W, Button, messagebox, END ,simpledialog
 from PIL import Image, ImageDraw
 import re
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.platypus import Paragraph
+import subprocess, os, locale
+from babel.dates import format_date, Locale
+
+locale = Locale('pt', 'BR')
+
+
 
 def validar_nome_entry(new_value, nome_entry):
     # Verifica se a entrada está vazia
@@ -117,41 +129,73 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     periodo_fechado_checkbutton.config(state="normal")
     regime_combo.set('')
  
+user_date_a_partir_variable = None
 
-
-def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo):
+def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window):
+    global user_date_a_partir_variable
     if a_partir_var.get():
         periodo_fechado_var.set(False)
         periodo_fechado_checkbutton.config(state="disabled")
         # Exibir caixa de diálogo para solicitar uma data
-        user_date = simpledialog.askstring("Data", "Qual a data do a partir? Ex:(dd/mm/aaaa)")
+        window.withdraw() 
+        user_date = simpledialog.askstring("Data", "Qual a data do a partir? Ex:(dd/mm/aaaa)", initialvalue = datetime.now().strftime('%d/%m/%Y'))
         # Verificar se a data está no formato correto
         if user_date and len(user_date) == 10 and user_date[2] == '/' and user_date[5] == '/':
-            #print("Data selecionada:", user_date)
+            # print("Data selecionada:", user_date)
             # Use a data fornecida pelo usuário como desejar
+            user_date_a_partir_variable = user_date
             # Atualizar valores do Combobox
             ato_combo["values"] = "Designação", "Designação com posterior Nomeação" 
             ato_combo.config(state="normal")
-            
+        elif user_date == None or user_date_a_partir_variable == None:
+            #print(user_date)
+            #print(user_date_a_partir_variable)
+            window.deiconify()
         else:
             tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
             toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo)
     else:
         periodo_fechado_checkbutton.config(state="normal")
-    
-    #ato_combo["values"] = "Designação"
+    window.deiconify()
+date_periodofechado_inicio_variable = None
+date_periodofechado_fim_variable = None
     
 
-
-def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo):
+def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window):
+    global date_periodofechado_inicio_variable
+    global date_periodofechado_fim_variable
     if periodo_fechado_var.get():
         a_partir_var.set(False)
         a_partir_checkbutton.config(state="disabled")
-        ato_combo["values"] = "Designação"
+        ato_combo["values"] = "Designação"        
+        #Escondendo a janela principal(window)
+        window.withdraw() 
+        date_periodofechado_inicio = simpledialog.askstring("A Partir", "Qual a data do a partir \n para o período fechado? Ex:(dd/mm/aaaa)",
+                                                            initialvalue = datetime.now().strftime('%d/%m/%Y'))
+        print(date_periodofechado_inicio)
+        if date_periodofechado_inicio and len(date_periodofechado_inicio) == 10 and date_periodofechado_inicio[2] == '/' and date_periodofechado_inicio[5] == '/':
+            # Use a data fornecida pelo usuário como desejar
+            date_periodofechado_inicio_variable = date_periodofechado_inicio
+            # Atualizar valores do Combobox
+        elif date_periodofechado_inicio == None:
+            window.deiconify()
+        else:
+            tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+            toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo)
+        date_periodofechado_fim = simpledialog.askstring("Data fim...", "Qual a data fim para o período fechado? Ex:(dd/mm/aaaa)",                                                         
+                                                         initialvalue = 'dd/mm/aaaa')
+        print(date_periodofechado_fim)
+        if date_periodofechado_fim and len(date_periodofechado_fim) == 10 and date_periodofechado_fim[2] == '/' and date_periodofechado_fim[5] == '/':
+            date_periodofechado_fim_variable = date_periodofechado_fim            
+        elif date_periodofechado_fim == None:
+            window.deiconify()
+        else:
+            tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+            toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo)
     else:
         a_partir_checkbutton.config(state="normal")
-
-
+    #Volta a principal janela(window)
+    window.deiconify()
 def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo):
     selected_value = ato_combo.get()
     if selected_value == "Nomeação":
@@ -259,7 +303,64 @@ def validar_tipo_de_servidor(ato_combo, cargo_de_origem_entry, bnt_n_servidor, b
     #print(ato_combo.get())
     #print(cargo_de_origem_entry.get())
     
+def path_check(declara):
+    if not (os.path.exists(f'{declara['Ato']}/{declara['Nome']}/')): 
+        print(f"Não temos a pasta {declara['Ato']}/{declara['Nome']}")
+        try:
+            os.makedirs(f'./{declara['Ato']}/{declara['Nome']}/')  # Tenta criar a pasta
+            messagebox.showinfo("Pasta criada!", f"Pasta '{declara['Nome']}' dentro de '{declara['Ato']}' criada com sucesso!")
+        except OSError as e:
+            messagebox.showerror("Falha ao criar a pasta!!!", f"Falha ao criar a pasta '{declara['Ato']}': {e}")
+    else:
+        messagebox.showinfo("Pasta já existe!", f"A pasta '{declara['Ato']}' já existe.")
+    
 def declaracao(declara):
-    print (declara)
-    declara.values()
-    print(declara.values())
+    # Cria PDF
+    pdfmetrics.registerFont(TTFont('Verdana', 'Vera.ttf'))
+    pdfmetrics.registerFont(TTFont('Verdana-Bold', 'VeraBd.ttf'))
+    nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
+    
+    path_check(declara)
+    
+        
+    c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}", pagesize=A4) 
+
+    #Define título
+    c.setFont("Verdana-Bold", 14)
+    c.drawCentredString(300, 750, "Declaração de Experiência")
+    
+    # Adiciona informações do dicionário do PDF em um parágrafo justificado
+    #text = "    "
+    #for key, value in declara.items():
+    #    text += f"{key}: {value}\n"
+    c.setFont("Verdana", 12)
+    y_position = 700
+    text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, para {declara['Ato']} e após análise curricular declaro que para fins do disposto do {declara['Lei']}, que a indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, no tocante a experiência profissional exigida com relação aos assuntos relacionados as atividades a serem desempenhadas no cargo de {declara['Cargo']} classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
+    
+    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent = 30, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700 - p.height)
+    #print (declara['Nome'])
+    #locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+    
+    #locale.setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese')
+    #date_default_timezone_set('America/Sao_Paulo')
+
+    c.setFont("Verdana", 12)
+    c.drawCentredString(300, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
+    c.setFont("Verdana", 11)
+    c.drawCentredString(300, 470, f"__________________________________________________")
+    c.setFont("Verdana", 10)
+    c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
+    #c.drawCentredString(300, 500, f"{datetime.now().strftime('%A, %d de %B de %Y')}")
+    #format_date(data_atual, format='full', locale=locale)
+    ###   strtotime('today')
+    # Fecha o arquivo PDF
+    c.save()
+    #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
+    subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}"], shell=True)
+    #subprocess.Popen(["start", f"./{declara['Ato']}/{nomearquivo}"], shell=True)
+    #print(f"{declara['Nome']} + Teste + {declara['Cargo']}")
+    # def verifica_pasta()
+    #     pass
