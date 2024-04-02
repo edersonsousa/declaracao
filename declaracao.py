@@ -14,6 +14,9 @@ from tool_box import (
     validar_tipo_de_servidor,
     declaracao,
     user_date_a_partir_variable,
+    cargo_box_select,
+    coordenadoria_box_select,
+    ua_box_select
 )
 import tkinter as tk
 from tkinter.ttk import Combobox
@@ -70,17 +73,22 @@ cargo_label = Label(text="Cargo :")
 cargo_label["font"] = ("Montserrat", "12")
 cargo_label.grid(row=7, column=1, pady=4, sticky="W")
 
-destinacao_label = Label(text="Destinação :")
-destinacao_label["font"] = ("Montserrat", "12")
-destinacao_label.grid(row=8, column=1, pady=4, sticky="W")
+
+
+
+coordenadoria_label = Label(text="Coordenadoria :")
+coordenadoria_label["font"] = ("Montserrat", "12")
+coordenadoria_label.grid(row=8, column=1, pady=4, sticky="W")
 
 ua_label = Label(text="UA :")
 ua_label["font"] = ("Montserrat", "12")
 ua_label.grid(row=9, column=1, pady=4, sticky="W")
 
-coordenadoria_label = Label(text="Coordenadoria :")
-coordenadoria_label["font"] = ("Montserrat", "12")
-coordenadoria_label.grid(row=10, column=1, pady=4, sticky="W")
+destinacao_label = Label(text="Destinação :")
+destinacao_label["font"] = ("Montserrat", "12")
+destinacao_label.grid(row=10, column=1, pady=4, sticky="W")
+
+
 
 cargo_de_origem_label = Label(text="Cargo de Origem :")
 cargo_de_origem_label["font"] = ("Montserrat", "12")
@@ -166,7 +174,7 @@ jornada_combo = Combobox(
         "Jornada de 30(trinta) horas de Trabalho",
     ],
     width=42,
-    state="disable",
+    state="disable"
 )
 jornada_combo.grid(row=6, column=2)
 jornada_combo.bind(
@@ -175,27 +183,52 @@ jornada_combo.bind(
 
 cargo_combo = Combobox(window, width=42, state="disable")
 cargo_combo.grid(row=7, column=2)
+cargo_combo.bind(
+    "<<ComboboxSelected>>", lambda event: cargo_box_select(coordenadoria_combo)
+)
 
-destinacao_entry = Entry(width=45)
-destinacao_entry.grid(row=8, column=2)
+
+
+coordenadoria_combo = Combobox(
+    window,
+    values=[
+        "Administração Superior da Secretaria e da Sede	",
+        "Coordenadoria de Assistência Farmacêutica	",
+        "Coordenadoria de Ciência, Tecnologia e Insumos Estratégicos de Saúde	",
+        "Coordenadoria de Controle de Doenças	",
+        "Coordenadoria de Defesa e Saúde Animal	",
+        "Coordenadoria de Gestão de Contratos de Serviços de Saúde	",
+        "Coordenadoria de Gestão Orçamentaria e Financeira	",
+        "Coordenadoria de Planejamento de Saúde	",
+        "Coordenadoria de Regiões de Saúde	",
+        "Coordenadoria de Serviços de Saúde	",
+        "Coordenadoria Geral de Administração	",
+    ],
+    width=72,
+    state="disable",
+)
+coordenadoria_combo.grid(row=8, column=2, columnspan=3, sticky='w')
+coordenadoria_combo.bind(
+    "<<ComboboxSelected>>", lambda event: coordenadoria_box_select(ua_combo)
+)
 
 ua_combo = Combobox(
     window,
     values=[
         'Centro de Atenção Integrada em Saúde Mental "Philippe Pinel" - CAISM Philippe Pinel',
-        'Centro de Atenção Integral à Saúde "Clemente Ferreira" de Lins	',
+        'Centro de Atenção Integral à Saúde "Clemente Ferreira" de Lins',
         'Centro de Atenção Integral à Saúde "Professor Cantídio de Moura Campos"',
-        "Centro de Atenção Integral à Saúde de Santa Rita - C.A.I.S./SR	",
-        "Centro de Desenvolvimento do Portador de Deficiência Mental, em Itu	",
-        "Centro de Reabilitação de Casa Branca	",
-        "Centro de Referência da Saúde da Mulher	",
+        "Centro de Atenção Integral à Saúde de Santa Rita - C.A.I.S./SR",
+        "Centro de Desenvolvimento do Portador de Deficiência Mental, em Itu",
+        "Centro de Reabilitação de Casa Branca",
+        "Centro de Referência da Saúde da Mulher",
         #'Centro de Referência de Álcool, Tabaco e Outras Drogas',
-        'Centro de Referência e Treinamento - "DST/AIDS"	',
-        'Centro de Vigilância Epidemiológica "Professor Alexandre Vranjac"	',
-        "Centro de Vigilância Sanitária	",
-        'Centro Especializado em Reabilitação "Doutor Arnaldo Pezzuti Cavalcanti", em Mogi das Cruzes	',
-        'Centro Pioneiro em Atenção Psicossocial "Arquiteto Januário José Ezemplari"- CPAP	',
-        'Complexo Hospitalar "Padre Bento" de Guarulhos	',
+        'Centro de Referência e Treinamento - "DST/AIDS"',
+        'Centro de Vigilância Epidemiológica "Professor Alexandre Vranjac"',
+        "Centro de Vigilância Sanitária",
+        'Centro Especializado em Reabilitação "Doutor Arnaldo Pezzuti Cavalcanti", em Mogi das Cruzes',
+        'Centro Pioneiro em Atenção Psicossocial "Arquiteto Januário José Ezemplari"- CPAP',
+        'Complexo Hospitalar "Padre Bento" de Guarulhos',
         "Complexo Hospitalar do Juquery, em Franco da Rocha",
         "Conjunto Hospitalar de Sorocaba",
         "Conjunto Hospitalar do Mandaqui",
@@ -267,29 +300,17 @@ ua_combo = Combobox(
         "Unidade de Gestão Assistencial IV	",
         "Unidade de Gestão Assistencial V	",
     ],
-    width=42,
+    width=75,
+    state="disable",
 )
-ua_combo.grid(row=9, column=2, pady=6)
-
-
-coordenadoria_combo = Combobox(
-    window,
-    values=[
-        "Administração Superior da Secretaria e da Sede	",
-        "Coordenadoria de Assistência Farmacêutica	",
-        "Coordenadoria de Ciência, Tecnologia e Insumos Estratégicos de Saúde	",
-        "Coordenadoria de Controle de Doenças	",
-        "Coordenadoria de Defesa e Saúde Animal	",
-        "Coordenadoria de Gestão de Contratos de Serviços de Saúde	",
-        "Coordenadoria de Gestão Orçamentaria e Financeira	",
-        "Coordenadoria de Planejamento de Saúde	",
-        "Coordenadoria de Regiões de Saúde	",
-        "Coordenadoria de Serviços de Saúde	",
-        "Coordenadoria Geral de Administração	",
-    ],
-    width=42,
+ua_combo.grid(row=9, column=2, pady=6, columnspan=5, sticky='w')
+ua_combo.bind(
+    "<<ComboboxSelected>>", lambda event: ua_box_select(destinacao_entry)
 )
-coordenadoria_combo.grid(row=10, column=2)
+
+destinacao_entry = Entry(width=75, state="disable")
+destinacao_entry.grid(row=10, column=2, pady=6, columnspan=5, sticky='w')
+
 
 cargo_de_origem_entry = Entry(width=45)
 cargo_de_origem_entry.grid(row=11, column=2)
@@ -320,7 +341,7 @@ a_partir_checkbutton = Checkbutton(
         window,
     ),
 )
-a_partir_checkbutton.grid(row=1, sticky=tk.W, column=5, columnspan=4)
+a_partir_checkbutton.grid(row=1, sticky=tk.W, column=7, columnspan=4)
 
 periodo_fechado_var = tk.BooleanVar()
 periodo_fechado_checkbutton = Checkbutton(
@@ -332,7 +353,7 @@ periodo_fechado_checkbutton = Checkbutton(
         periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window
     ),
 )
-periodo_fechado_checkbutton.grid(row=3, sticky=tk.W, column=5, columnspan=4)
+periodo_fechado_checkbutton.grid(row=3, sticky=tk.W, column=7, columnspan=4)
 
 bnt_n_servidor = Button(
     text="Gerar Dados \n Não Servidor",
@@ -413,6 +434,8 @@ bnt_limpar = Button(
         periodo_fechado_var,
         periodo_fechado_checkbutton,
         regime_combo,
+        bnt_n_servidor, 
+        bnt_servidor 
     ),
 )
 bnt_limpar["font"] = ("Montserrat", "12")

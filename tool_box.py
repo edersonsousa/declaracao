@@ -14,8 +14,6 @@ from babel.dates import format_date, Locale
 
 locale = Locale('pt', 'BR')
 
-
-
 def validar_nome_entry(new_value, nome_entry):
     # Verifica se a entrada está vazia
     if not new_value:
@@ -37,7 +35,6 @@ def validar_nome_entry(new_value, nome_entry):
 
 def on_validate(P, nome_entry):
     return validar_nome_entry(P, nome_entry)
-
 
 def validate_content(event):
     content = nome_entry.get()
@@ -103,7 +100,7 @@ def validar_cpf_entry(event):
 
 def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo, jornada_combo, lei_combo, cargo_combo, 
                   destinacao_entry, ua_combo, coordenadoria_combo, cargo_de_origem_entry, a_partir_var, a_partir_checkbutton, periodo_fechado_var, 
-                  periodo_fechado_checkbutton, regime_combo):
+                  periodo_fechado_checkbutton, regime_combo, bnt_n_servidor, bnt_servidor):
     # Limpa o valor de todos os campos de entrada
     nome_entry.delete(0, END)
     nome_entry.focus()
@@ -113,21 +110,27 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     ato_combo.set('')
     jornada_combo.set('')
     jornada_combo.config(state="disable")
-    #ato_combo["values"] = "Nomeação","Designação","Designação com posterior Nomeação"
+    ato_combo["values"] = "Nomeação","Designação","Designação com posterior Nomeação"
     #ato_combo.config(state="disable")
     lei_combo.set('')
     #lei_combo.config(state="disable")
     cargo_combo.set('')
     cargo_combo.config(state="disable")
     destinacao_entry.delete(0, END)
+    destinacao_entry.config(state="disable")
     ua_combo.set('')
+    ua_combo.config(state="disable")
     coordenadoria_combo.set('')
+    coordenadoria_combo.config(state="disable")
     cargo_de_origem_entry.delete(0, END)
     periodo_fechado_var.set(False)
     a_partir_var.set(False)
     a_partir_checkbutton.config(state="normal")
     periodo_fechado_checkbutton.config(state="normal")
     regime_combo.set('')
+    bnt_n_servidor.config(state="disable")
+    bnt_servidor.config(state="disable")
+
  
 user_date_a_partir_variable = None
 
@@ -196,6 +199,7 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
         a_partir_checkbutton.config(state="normal")
     #Volta a principal janela(window)
     window.deiconify()
+    
 def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo):
     selected_value = ato_combo.get()
     if selected_value == "Nomeação":
@@ -290,6 +294,14 @@ def jornada_box_select(cargo_combo, lei_combo):
         cargo_combo.config(state=tk.NORMAL)
         cargo_combo.set("")
 
+def cargo_box_select(coordenadoria_combo):
+    coordenadoria_combo.config(state="normal")
+    
+def coordenadoria_box_select(ua_combo):
+    ua_combo.config(state="normal")
+
+def ua_box_select(destinacao_entry):
+    destinacao_entry.config(state="normal")
 
         
 def validar_tipo_de_servidor(ato_combo, cargo_de_origem_entry, bnt_n_servidor, bnt_servidor):
@@ -325,7 +337,11 @@ def declaracao_experiencia(c , declara):
     #    text += f"{key}: {value}\n"
     c.setFont("Verdana", 12)
     y_position = 700
-    text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, para {declara['Ato']} e após análise curricular declaro que para fins do disposto do {declara['Lei']}, que a indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, no tocante a experiência profissional exigida com relação aos assuntos relacionados as atividades a serem desempenhadas no cargo de {declara['Cargo']} classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
+    text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, \
+            para {declara['Ato']} e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
+            que a indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, \
+            no tocante a experiência profissional exigida com relação aos assuntos relacionados as atividades a serem desempenhadas \
+            no cargo de {declara['Cargo']} classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
     
     style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent = 30, leading=(12*1.5))
     p = Paragraph(text, style)
@@ -351,30 +367,98 @@ def termo_de_anuencia(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 750, "Termo de Anuência")
-    
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
-    #text = "    "
-    #for key, value in declara.items():
-    #    text += f"{key}: {value}\n"
     c.setFont("Verdana", 12)
     y_position = 700
-    text =f"Termo......"
+    text = f"Eu, {declara['Nome']}, "
+    # Para o caso de Servidor ou Não Servidor
+    if (declara['Cargo de Origem'] != ''):
+        text += f"{declara['Cargo de Origem']}, "
+    text += f"{declara['Regime']}, RG. {declara['RG']}, concordo com a {declara['Ato']} \
+                , em {declara['Jornada']}, para o cargo de {declara['Cargo']}"
+    # Para o caso de "A partir" ou "Período Fechado" 
+    if date_periodofechado_inicio_variable is not None and date_periodofechado_fim_variable is not None:
+        text += f"no período de {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable} "
+    elif  user_date_a_partir_variable is not None:
+        text += f", a partir de {user_date_a_partir_variable}"
+             
+    text += f", do(a) {declara['Destinação']}, da {declara['UA']}, da {declara['Coordenadoria']}. "
     
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
    
+    
     c.setFont("Verdana", 12)
-    c.drawCentredString(300, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
+    
+    c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
-    c.drawCentredString(300, 470, f"__________________________________________________")
+    c.drawRightString(500, 470, f"__________________________________________________")
     c.setFont("Verdana", 10)
-    c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
+    c.drawRightString(500, 450, f"{declara['Nome']}")
+    
+def declaracao_hipotese_inelegibilidade(c , declara):
+    #Define título
+    c.setFont("Verdana-Bold", 14)
+    c.drawCentredString(300, 750, "DECLARAÇÃO")
+    c.setFont("Verdana", 10)
+    c.drawCentredString(300, 735, "(hipóteses de inelegibilidade)")
+    
+    
+    c.setFont("Verdana", 12)
+    y_position = 700
+    text =f"Eu, {declara['Nome']}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
+            declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012. \
+            Declaro ainda, sob as penas da lei, não incorrer em nenhuma das hipóteses de inelegibilidade previstas em lei federal. \
+            Assumo, por fim, o compromisso de comunicar a meu superior hierárquico, no prazo de 30 (trinta) dias subsequentes \
+            à respectiva ciência, a superveniência de: \n \
+            a) enquadramento em qualquer hipótese de inelegibilidade prevista em lei federal; \n \
+            b) instauração de processos administrativos ou judiciais cuja decisão possa importar \
+            em inelegibilidade, nos termos de lei federal.\n"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700 - p.height)
+    
+    
+    
+    c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
+    #c.setFont("Verdana", 11)
+    #c.drawRightString(500, 470, f"__________________________________________________")
+    c.setFont("Verdana", 10)
+    c.drawRightString(500, 450, f"{declara['Nome']}")
+    
+    
+def declaracao_cargo_funcao(c , declara):
+    c.setFont("Verdana-Bold", 14)
+    c.drawCentredString(300, 750, "DECLARAÇÃO")
+    
+    c.setFont("Verdana", 12)
+    y_position = 700
+    text =f"Eu, {declara['Nome']}, {declara['Cargo de Origem']}, {declara['Regime']}, RG. {declara['RG']}, \
+            DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, do(a) {declara['Destinação']}, do(a) \
+            {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
+            gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \
+            de Saúde - SUS/SP ou sejam por este credenciadas."
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700 - p.height)
+    
+    
+    
+    c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
+    #c.setFont("Verdana", 11)
+    #c.drawRightString(500, 470, f"__________________________________________________")
+    c.setFont("Verdana", 12)
+    c.drawRightString(500, 450, f"{declara['Nome']}")
 
     
 def declaracao(declara):
-    # Cria PDF
+    # Cria PDF 
     pdfmetrics.registerFont(TTFont('Verdana', 'Vera.ttf'))
     pdfmetrics.registerFont(TTFont('Verdana-Bold', 'VeraBd.ttf'))
     nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
@@ -386,6 +470,11 @@ def declaracao(declara):
     c.showPage()
     termo_de_anuencia(c , declara)
     c.showPage()
+    declaracao_hipotese_inelegibilidade(c, declara)
+    c.showPage()
+    declaracao_cargo_funcao(c , declara)
+    c.showPage()
+    
     
     c.save()
     #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
