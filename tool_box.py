@@ -1,3 +1,4 @@
+import reportlab.rl_config
 import tkinter as tk
 from datetime import datetime, date
 from tkinter import Tk, Label, Entry, Checkbutton, W, Button, messagebox, END ,simpledialog
@@ -6,9 +7,10 @@ import re
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase.ttfonts import TTFont, pdfmetrics
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
+import babel.numbers
 import subprocess, os, locale
 from babel.dates import format_date, Locale
 
@@ -297,9 +299,138 @@ def jornada_box_select(cargo_combo, lei_combo):
 def cargo_box_select(coordenadoria_combo):
     coordenadoria_combo.config(state="normal")
     
-def coordenadoria_box_select(ua_combo):
+def coordenadoria_box_select(ua_combo, coordenadoria_combo):
+    selected_value = coordenadoria_combo.get()
+    ua_combo.set('')
+    if selected_value == 'Administração Superior da Secretaria e da Sede':
+        ua_combo["values"] = [
+                                "Gabinete do Coordenador",
+                                "Gabinete do Secretário e Assessorias",
+                                "Grupo de Assistência Farmacêutica",
+                                "Coordenadoria de Gestão Orçamentária e Financeira  - CGOF",
+                                "Coordenadoria de Planejamento de Saúde	",
+                                "Coordenadoria de Recursos Humanos",
+                                "Coordenadoria Geral de Administração",
+                                "Departamento de Gerenciamento Ambulatorial da Capital - DGAC"
+                                
+                              ]
+    elif selected_value =="Coordenadoria de Serviços de Saúde":
+        ua_combo["values"] = [
+                                'Centro de Atenção Integrada em Saúde Mental "Philippe Pinel" - CAISM Philippe Pinel',
+                                'Centro de Atenção Integral à Saúde "Clemente Ferreira" de Lins',
+                                'Centro de Atenção Integral à Saúde "Professor Cantídio de Moura Campos"',
+                                "Centro de Atenção Integral à Saúde de Santa Rita - C.A.I.S./SR",
+                                "Centro de Desenvolvimento do Portador de Deficiência Mental, em Itu",
+                                "Centro de Reabilitação de Casa Branca",
+                                "Centro de Referência da Saúde da Mulher",
+                                'Centro de Referência de Álcool, Tabaco e Outras Drogas',
+                                'Centro Especializado em Reabilitação "Doutor Arnaldo Pezzuti Cavalcanti", em Mogi das Cruzes',
+                                'Centro Pioneiro em Atenção Psicossocial "Arquiteto Januário José Ezemplari"- CPAP',
+                                'Complexo Hospitalar "Padre Bento" de Guarulhos',
+                                "Complexo Hospitalar do Juquery, em Franco da Rocha",
+                                "Conjunto Hospitalar de Sorocaba",
+                                "Conjunto Hospitalar do Mandaqui",
+                                "Grupo de Resgate - GRAU	",
+                                'Hospital "Adhemar de Barros" em Divinolândia',
+                                'Hospital "Dr. Francisco Ribeiro Arantes", em Itu',
+                                'Hospital "Guilherme Álvaro" em Santos',
+                                'Hospital "Manoel de Abreu" de Bauru',
+                                'Hospital "Nestor Goulart Reis" em Américo Brasiliense',
+                                'Hospital das Clínicas "Luzia de Pinho Melo" em Mogi das Cruzes	',
+                                'Hospital Estadual "Dr. Odilo Antunes de Siqueira" em Presidente Prudente',
+                                'Hospital Estadual "Dr. Oswaldo Brandi Faria" em Mirandópolis	',
+                                'Hospital Estadual Especializado em Reabilitação "Dr. Francisco Ribeiro Arantes", em Itu',
+                                'Hospital Geral "Dr. Álvaro Simões de Souza" em Vila Nova Cachoeirinha	',
+                                'Hospital Geral "Dr. José Pangella" de Vila Penteado',
+                                'Hospital Geral "Dr. Manoel Bifulco" em São Mateus',
+                                'Hospital Geral "Jesus Teixeira da Costa" em Guaianazes',
+                                'Hospital Geral "Prefeito Miguel Martin Gualda", de Promissão',
+                                "Hospital Geral de Taipas",
+                                'Hospital Infantil "Cândido Fontoura"',
+                                'Hospital Maternidade Interlagos "Waldemar Seyssel - Arrelia"',
+                                "Hospital Psiquiátrico Pinel, em Pirituba",
+                                'Hospital Regional "Doutor Leopoldo Bevilacqua" do Vale do Ribeira, em Pariquera-Açu',
+                                'Hospital Regional "Dr. Osíris Florindo Coelho" em Ferraz de Vasconcelos	',
+                                'Hospital Regional "Dr. Vivaldo Martins Simões" em Osasco	',
+                                "Hospital Regional de Assis",
+                                "Hospital Regional Sul",
+                                "Hospital Santa Tereza em Ribeirão Preto",
+                                "Instituto Clemente Ferreira - ICF",
+                                'Instituto de Infectologia "Emílio Ribas"',
+                                'Instituto "Dante Pazzanese" de Cardiologia',
+                                'Instituto "Lauro de Souza Lima" em Bauru',
+                                'Instituto Paulista de Geriatria e Gerontologia - IPGG "José Ermírio de Moraes"',
+                                "Núcleo de Gestão Assistencial 14 - Campos Elíseos",
+                                "Unidade de Gestão Assistencial I",
+                                "Unidade de Gestão Assistencial II",
+                                "Unidade de Gestão Assistencial III",
+                                "Unidade de Gestão Assistencial IV",
+                                "Unidade de Gestão Assistencial V"
+                            ]
+    elif selected_value == "Coordenadoria de Assistência Farmacêutica":
+        ua_combo["values"] = [
+                            ""
+                             ]
+    elif selected_value == "Coordenadoria de Ciência, Tecnologia e Insumos Estratégicos de Saúde":
+        ua_combo["values"] = [
+                            "Instituto Butantan",
+                            "Instituto de Saúde"
+                            ]
+    elif selected_value == "Coordenadoria de Controle de Doenças":
+        ua_combo["values"] = [
+                                'Centro de Referência e Treinamento - "DST/AIDS"',
+                                'Centro de Vigilância Epidemiológica "Professor Alexandre Vranjac"',
+                                "Centro de Vigilância Sanitária",
+                                'Instituto "Adolfo Lutz" - IAL',
+                                "Instituto Pasteur"
+                            ]
+    elif selected_value == "Coordenadoria de Defesa e Saúde Animal":
+        ua_combo["values"] = [
+                            "Coordenadoria de Defesa e Saúde Animal"            
+                            ]
+    
+    elif selected_value == "Coordenadoria de Gestão de Contratos de Serviços de Saúde":
+        ua_combo["values"] = [
+                            ""
+            
+                            ]
+    elif selected_value == "Coordenadoria de Gestão Orçamentaria e Financeira":
+        ua_combo["values"] = [
+                            ""
+                            ]
+    elif selected_value == "Coordenadoria de Planejamento de Saúde":
+        ua_combo["values"] = [
+                            ""
+            
+                            ]
+    elif selected_value == "Coordenadoria de Regiões de Saúde":
+        ua_combo["values"] = [
+                                    "DRS I - Grande São Paulo	",
+                                    "DRS II - Araçatuba	",
+                                    "DRS III - Araraquara	",
+                                    'DRS IV "Dr. Maurício Fang" - Baixada Santista	',
+                                    "DRS IX - Marília	",
+                                    "DRS V - Barretos	",
+                                    "DRS VI - Bauru	",
+                                    'DRS VII "Dr. Leôncio de Souza Queiroz" - Campinas',
+                                    "DRS VIII - Franca",
+                                    "DRS X  - Piracicaba	",
+                                    "DRS XI - Presidente Prudente	",
+                                    "DRS XII - Registro	",
+                                    "DRS XIII - Ribeirão Preto	",
+                                    "DRS XIV - São João da Boa Vista	",
+                                    "DRS XV - São José do Rio Preto	",
+                                    "DRS XVI - Sorocaba	",
+                                    "DRS XVII - Taubaté	",
+                                    "DRS XVIII - Botucatu	"
+                            ]
+    elif selected_value == "Coordenadoria Geral de Administração":
+        ua_combo["values"] = [
+                            ""
+                            ]
     ua_combo.config(state="normal")
 
+    
 def ua_box_select(destinacao_entry):
     destinacao_entry.config(state="normal")
 
@@ -412,23 +543,36 @@ def declaracao_hipotese_inelegibilidade(c , declara):
             declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012. \
             Declaro ainda, sob as penas da lei, não incorrer em nenhuma das hipóteses de inelegibilidade previstas em lei federal. \
             Assumo, por fim, o compromisso de comunicar a meu superior hierárquico, no prazo de 30 (trinta) dias subsequentes \
-            à respectiva ciência, a superveniência de: \n \
-            a) enquadramento em qualquer hipótese de inelegibilidade prevista em lei federal; \n \
-            b) instauração de processos administrativos ou judiciais cuja decisão possa importar \
-            em inelegibilidade, nos termos de lei federal.\n"
+            à respectiva ciência, a superveniência de:"
     
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     
+    text =f"a) enquadramento em qualquer hipótese de inelegibilidade prevista em lei federal;"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 530)
+    p.drawOn(c, 100, 568)
+    
+    text =f"b) instauração de processos administrativos ou judiciais cuja decisão possa importar \
+            em inelegibilidade, nos termos de lei federal."
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 500)
+    p.drawOn(c, 100, 530)
     
     
-    c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
+    
+    
+    c.drawRightString(500, 350, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     #c.setFont("Verdana", 11)
     #c.drawRightString(500, 470, f"__________________________________________________")
     c.setFont("Verdana", 10)
-    c.drawRightString(500, 450, f"{declara['Nome']}")
+    c.drawRightString(500, 300, f"{declara['Nome']}")
     
     
 def declaracao_cargo_funcao(c , declara):
@@ -448,19 +592,309 @@ def declaracao_cargo_funcao(c , declara):
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     
-    
-    
     c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     #c.setFont("Verdana", 11)
     #c.drawRightString(500, 470, f"__________________________________________________")
     c.setFont("Verdana", 12)
     c.drawRightString(500, 450, f"{declara['Nome']}")
+    
+def declaracao_acumulo(c , declara):
+    c.setFont("Verdana-Bold", 14)
+    c.drawCentredString(300, 750, "DECLARAÇÃO DE ACÚMULO")
+    
+    #c.setFont("Verdana-Bold", 12)
+    y_position = 700
+    text_bold =f"DECLARO, "
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontName="Verdana-Bold")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700 - p.height)
+    
+    c.setFont("Verdana", 12)
+    y_position = 700
+    text_bold =f"sob pena de responsabilidade, para fins de acumulação que no âmbito do Serviço Público Federal, Estadual ou Municipal\
+            , ou ainda em Autarquias, Fundações, Empresas Públicas, Sociedade de Economia Mista, suas subsidiárias e Sociedades Controladas\
+            , direta ou indiretamente pelo Poder Público.:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), firstLineIndent = 65)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700 - p.height)
+    
+    c.setFont("Verdana", 12)
+    text=f"EU, {declara['Nome']}, RG Nº {declara['RG']},"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 600)
+        
+    text=f"não exerço"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    draw_checkbox(c, 100, 580 , checked=False)
+    draw_checkbox(c, 180, 580 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 580)
+    p.drawOn(c, 120, 580)
+
+    text=f" exerço"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 580)
+    p.drawOn(c, 198, 580)
 
     
+    text=f"SE EXERCE "
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 540)
+    p.drawOn(c, 100, 540)
+        
+    text=f"outro cargo"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    draw_checkbox(c, 100, 520 , checked=False)
+    draw_checkbox(c, 210, 520 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 520)
+    p.drawOn(c, 120, 520)
+
+    text=f"emprego"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 520)
+    p.drawOn(c, 228, 520)
+
+    text=f"função pública"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 520)
+    p.drawOn(c, 336, 520)
+    draw_checkbox(c, 318, 520 , checked=False)
+    
+    text=f"Onde:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 480)
+    p.drawOn(c, 100, 480)
+    
+    
+    text=f"Cargo/E/FP:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 450)
+    p.drawOn(c, 100, 450)
+    #draw_checkbox(c, 100, 600 , checked=False)
+    #draw_checkbox(c, 140, 600 , checked=False)
+    
+    text=f"APOSENTADO "
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 400)
+    p.drawOn(c, 100, 400)
+        
+    text=f"Sim"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    draw_checkbox(c, 135, 380 , checked=False)
+    draw_checkbox(c, 238, 380 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 380)
+    p.drawOn(c, 100, 380)
+
+    text=f"Não"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 380)
+    p.drawOn(c, 210, 380)
+    
+    text=f"SE SIM: "
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 320)
+    p.drawOn(c, 100, 320)
+        
+    
+    text=f"Orgão Público"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    draw_checkbox(c, 170, 300 , checked=False)
+    #draw_checkbox(c, 238, 300 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 300)
+    p.drawOn(c, 100, 300)
+    
+    text=f"Qual: "
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 320, 300)
+    p.drawOn(c, 210, 300)
+    
+    text=f"Cargo: "
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 320, 275)
+    p.drawOn(c, 210, 275)
+
+    text=f"D.O.E da Aposentadoria: "
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 320, 242)
+    p.drawOn(c, 210, 242)
+    
+    text=f"Empresa Privada "
+    style = ParagraphStyle(name='Justify', alignment=4)
+    draw_checkbox(c, 190, 212 , checked=False)
+    #draw_checkbox(c, 238, 300 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 212)
+    p.drawOn(c, 100, 212)
+
+    text=f"Onde: "
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 320, 212)
+    p.drawOn(c, 250, 212)
+    
+    text=f"Outro"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 320, 198)
+    p.drawOn(c, 250, 198)
+    draw_checkbox(c, 280, 198 , checked=False)
+
+
+    c.setFont("Verdana", 12)
+    c.drawCentredString(300, 150, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
+    #c.setFont("Verdana", 11)
+    #c.drawRightString(500, 470, f"__________________________________________________")
+    
+    c.drawCentredString(300, 100, f"{declara['Nome']}")
+
+def anexo_i(c , declara):
+       
+    #c.setFont("Verdana-Bold", 11)
+    y_position = 750
+    text =f"ANEXO I"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 700)
+    p.drawOn(c, 100, 750 - p.height)
+
+    #c.setFont("Verdana-Bold", 11)
+    y_position = 600
+    text_bold =f"a que se referem os artigos 1º e 2º do Decreto nº 54.376,\
+                    de 26 de maio de 2009 alterado pelo artigo\
+                    1º do Decreto nº 67.445, de 12 de janeiro de 2023"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700)
+
+    c.setFont("Verdana", 11)
+    y_position = 650
+    text_bold =f"DECLARAÇÃO DE PARENTESCO"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 550)
+    p.drawOn(c, 100, 650 - p.height)
+
+    c.setFont("Verdana", 11)
+    y_position = 650
+    text_bold =f"( SÚMULA VINCULANTE Nº 13 DO STF )"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 532)
+    p.drawOn(c, 100, 632 - p.height)
+    #c.line(90, y + size, x + size, y)
+    
+    text =f"Nome: {declara['Nome']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 618)
+    p.drawOn(c, 100, 600 - p.height)
+    #c.rect(90, 500, 400, 50)
+    c.rect(90, 550, 450, 50)
+    #c.rect(95, 600, 400, 50)
+    
+    
+    text =f"RG : {declara['RG']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 582 - p.height)
+
+    text =f"CPF : {declara['CPF']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 582)
+    p.drawOn(c, 100, 564 - p.height)
+
+    c.rect(90, 300, 450, 236)
+    y_position = 350
+    text_bold =f"É cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, inclusive,\
+                da autoridade nomeante ou de servidor do Poder Executivo investido em cargo de direção, chefia ou assessoramento?"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 425)
+    p.drawOn(c, 100, 475)
+    
+    text=f"NÃO"
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
+    draw_checkbox(c, 100, 440 , checked=False)
+    #draw_checkbox(c, 238, 300 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 200, 440)
+    p.drawOn(c, 120, 400)
+    
+    text=f"SIM"
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
+    draw_checkbox(c, 100, 400 , checked=False)
+    #draw_checkbox(c, 238, 300 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 200, 400)
+    p.drawOn(c, 120, 440)
+    
+    y_position = 400
+    text_bold =f"Em caso positivo, apontar:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 400)
+    p.drawOn(c, 100, 380)
+    
+    y_position = 420
+    text_bold =f"Nome:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 380)
+    p.drawOn(c, 100, 360)
+    
+    
+    y_position = 240
+    text_bold =f"Relação de Parentesco:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 368)
+    p.drawOn(c, 100, 350)
+
+    y_position = 240
+    text_bold =f"Cargo:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 348)
+    p.drawOn(c, 100, 320)
+
 def declaracao(declara):
     # Cria PDF 
     pdfmetrics.registerFont(TTFont('Verdana', 'Vera.ttf'))
     pdfmetrics.registerFont(TTFont('Verdana-Bold', 'VeraBd.ttf'))
+    #pdfmetrics.registerFont(TTFont('ZapfDingbats', './ZapfDingbats.ttf'))
     nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
     
     path_check(declara)
@@ -474,7 +908,10 @@ def declaracao(declara):
     c.showPage()
     declaracao_cargo_funcao(c , declara)
     c.showPage()
-    
+    declaracao_acumulo(c , declara)
+    c.showPage()
+    anexo_i(c , declara)
+    c.showPage()
     
     c.save()
     #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
@@ -483,3 +920,10 @@ def declaracao(declara):
     #print(f"{declara['Nome']} + Teste + {declara['Cargo']}")
     # def verifica_pasta()
     #     pass
+def draw_checkbox(c, x, y, size=10, checked=False):
+# Desenha o quadrado
+    c.rect(x, y, size, size)
+    if checked:
+        # Desenha a marca de seleção
+        c.line(x, y, x + size, y + size)
+        c.line(x, y + size, x + size, y)
