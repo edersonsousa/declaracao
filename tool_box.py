@@ -101,7 +101,7 @@ def validar_cpf_entry(event):
         return False
 
 def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo, jornada_combo, lei_combo, cargo_combo, 
-                  destinacao_entry, ua_combo, coordenadoria_combo, cargo_de_origem_entry, a_partir_var, a_partir_checkbutton, periodo_fechado_var, 
+                  destinacao_entry, ua_combo, coordenadoria_combo, cargo_origem_combo, a_partir_var, a_partir_checkbutton, periodo_fechado_var, 
                   periodo_fechado_checkbutton, regime_combo, bnt_n_servidor, bnt_servidor):
     # Limpa o valor de todos os campos de entrada
     nome_entry.delete(0, END)
@@ -124,7 +124,8 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     ua_combo.config(state="disable")
     coordenadoria_combo.set('')
     coordenadoria_combo.config(state="disable")
-    cargo_de_origem_entry.delete(0, END)
+    cargo_origem_combo.set('')
+    cargo_origem_combo.config(state="disable")
     periodo_fechado_var.set(False)
     a_partir_var.set(False)
     a_partir_checkbutton.config(state="normal")
@@ -136,7 +137,7 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
  
 user_date_a_partir_variable = None
 
-def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window):
+def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor):
     global user_date_a_partir_variable
     if a_partir_var.get():
         periodo_fechado_var.set(False)
@@ -162,11 +163,15 @@ def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_che
     else:
         periodo_fechado_checkbutton.config(state="normal")
     window.deiconify()
+    if bnt_servidor.cget("state") == "disable":
+        bnt_n_servidor.focus()
+    elif bnt_n_servidor.cget("state") == "disable":
+        bnt_servidor.focus()
 date_periodofechado_inicio_variable = None
 date_periodofechado_fim_variable = None
     
 
-def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window):
+def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor):
     global date_periodofechado_inicio_variable
     global date_periodofechado_fim_variable
     if periodo_fechado_var.get():
@@ -201,6 +206,10 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
         a_partir_checkbutton.config(state="normal")
     #Volta a principal janela(window)
     window.deiconify()
+    if bnt_servidor.cget("state") == "disable":
+        bnt_n_servidor.focus()
+    elif bnt_n_servidor.cget("state") == "disable":
+        bnt_servidor.focus()
     
 def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo):
     selected_value = ato_combo.get()
@@ -250,18 +259,18 @@ def jornada_box_select(cargo_combo, lei_combo):
                                 "Assessor Técnico de Gabinete II"       ,
                                 "Assessor Técnico de Gabinete III"      ,
                                 "Assessor Técnico de Gabinete IV"       ,
-                                "Assessor Técnico I"	                ,
+                                "Assessor Técnico I"                ,
                                 "Assessor Técnico II"   	            ,
-                                "Assessor Técnico III"	                ,
+                                "Assessor Técnico III"                ,
                                 "Assessor Técnico IV"   	            ,
                                 "Assessor Técnico V"    	            ,
                                 "Chefe de Gabinete"     	            ,
                                 "Chefe I"   	                        ,
                                 "Chefe II"      	                    ,
-                                "Diretor I"	                            ,
+                                "Diretor I"                            ,
                                 "Diretor II"    	                    ,
                                 "Diretor III"                           ,
-                                "Diretor Técnico I"	                    ,
+                                "Diretor Técnico I"                    ,
                                 "Diretor Técnico II"    	            ,
                                 "Diretor Técnico III"   	            ,
                                 "Encarregado I"     	                ,
@@ -308,7 +317,7 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                 "Gabinete do Secretário e Assessorias",
                                 "Grupo de Assistência Farmacêutica",
                                 "Coordenadoria de Gestão Orçamentária e Financeira  - CGOF",
-                                "Coordenadoria de Planejamento de Saúde	",
+                                "Coordenadoria de Planejamento de Saúde",
                                 "Coordenadoria de Recursos Humanos",
                                 "Coordenadoria Geral de Administração",
                                 "Departamento de Gerenciamento Ambulatorial da Capital - DGAC"
@@ -330,7 +339,7 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                 "Complexo Hospitalar do Juquery, em Franco da Rocha",
                                 "Conjunto Hospitalar de Sorocaba",
                                 "Conjunto Hospitalar do Mandaqui",
-                                "Grupo de Resgate - GRAU	",
+                                "Grupo de Resgate - GRAU",
                                 'Hospital "Adhemar de Barros" em Divinolândia',
                                 'Hospital "Dr. Francisco Ribeiro Arantes", em Itu',
                                 'Hospital "Guilherme Álvaro" em Santos',
@@ -405,24 +414,24 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                             ]
     elif selected_value == "Coordenadoria de Regiões de Saúde":
         ua_combo["values"] = [
-                                    "DRS I - Grande São Paulo	",
-                                    "DRS II - Araçatuba	",
-                                    "DRS III - Araraquara	",
+                                    "DRS I - Grande São Paulo",
+                                    "DRS II - Araçatuba",
+                                    "DRS III - Araraquara",
                                     'DRS IV "Dr. Maurício Fang" - Baixada Santista	',
-                                    "DRS IX - Marília	",
-                                    "DRS V - Barretos	",
-                                    "DRS VI - Bauru	",
+                                    "DRS IX - Marília",
+                                    "DRS V - Barretos",
+                                    "DRS VI - Bauru",
                                     'DRS VII "Dr. Leôncio de Souza Queiroz" - Campinas',
                                     "DRS VIII - Franca",
-                                    "DRS X  - Piracicaba	",
-                                    "DRS XI - Presidente Prudente	",
-                                    "DRS XII - Registro	",
-                                    "DRS XIII - Ribeirão Preto	",
-                                    "DRS XIV - São João da Boa Vista	",
-                                    "DRS XV - São José do Rio Preto	",
-                                    "DRS XVI - Sorocaba	",
-                                    "DRS XVII - Taubaté	",
-                                    "DRS XVIII - Botucatu	"
+                                    "DRS X  - Piracicaba",
+                                    "DRS XI - Presidente Prudente",
+                                    "DRS XII - Registro",
+                                    "DRS XIII - Ribeirão Preto",
+                                    "DRS XIV - São João da Boa Vista",
+                                    "DRS XV - São José do Rio Preto",
+                                    "DRS XVI - Sorocaba",
+                                    "DRS XVII - Taubaté",
+                                    "DRS XVIII - Botucatu"
                             ]
     elif selected_value == "Coordenadoria Geral de Administração":
         ua_combo["values"] = [
@@ -435,8 +444,8 @@ def ua_box_select(destinacao_entry):
     destinacao_entry.config(state="normal")
 
         
-def validar_tipo_de_servidor(ato_combo, cargo_de_origem_entry, bnt_n_servidor, bnt_servidor):
-    if (ato_combo.get() == "Nomeação" and cargo_de_origem_entry.get() == ""):
+def validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor):
+    if (ato_combo.get() == "Nomeação" and cargo__origem_combo.get() == ""):
         bnt_n_servidor.config(state="normal")
         bnt_servidor.config(state="disable")
     elif (ato_combo.get() != "Nomeação" or cargo_de_origem_entry.get() != ""):
@@ -771,13 +780,13 @@ def declaracao_acumulo(c , declara):
 def anexo_i(c , declara):
        
     #c.setFont("Verdana-Bold", 11)
-    y_position = 750
+    y_position = 780
     text =f"ANEXO I"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 700)
-    p.drawOn(c, 100, 750 - p.height)
+    p.wrapOn(c, 400, 730)
+    p.drawOn(c, 100, 780 - p.height)
 
     #c.setFont("Verdana-Bold", 11)
     y_position = 600
@@ -791,7 +800,7 @@ def anexo_i(c , declara):
     p.drawOn(c, 100, 700)
 
     c.setFont("Verdana", 11)
-    y_position = 650
+    y_position = 700
     text_bold =f"DECLARAÇÃO DE PARENTESCO"
     
     style = ParagraphStyle(name='Justify', alignment=4)
@@ -860,10 +869,13 @@ def anexo_i(c , declara):
     y_position = 400
     text_bold =f"Em caso positivo, apontar:"
     
+    
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 400)
     p.drawOn(c, 100, 380)
+    c.setFont("Verdana", 11)
+    
     
     y_position = 420
     text_bold =f"Nome:"
@@ -872,15 +884,16 @@ def anexo_i(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 380)
     p.drawOn(c, 100, 360)
-    
+    c.drawRightString(500, 360, f"_________________________________________________________________")
     
     y_position = 240
     text_bold =f"Relação de Parentesco:"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 368)
-    p.drawOn(c, 100, 350)
+    p.wrapOn(c, 400, 358)
+    p.drawOn(c, 100, 340)
+    c.drawRightString(500, 340, f"__________________________________________________")
 
     y_position = 240
     text_bold =f"Cargo:"
@@ -889,6 +902,54 @@ def anexo_i(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 348)
     p.drawOn(c, 100, 320)
+    c.drawRightString(500, 320, f"_________________________________________________________________")
+
+    c.rect(90, 222, 450, 70)
+    
+    text =f"Informe também a existência de cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade,\
+            até o terceiro grau, inclusive, no exercício de cargo de direção, chefia ou assessoramento no âmbito dos \
+            Poderes Judiciário ou Legislativo, do Ministério Público, da Defensoria Pública, das Autarquias \
+            (inclusive das universidades públicas), das empresas controladas pelo Estado e das fundações \
+            instituídas e mantidas pelo Poder Público:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 425, 220)
+    p.drawOn(c, 100, 145)
+    
+    c.rect(90, 140, 450, 75)
+    
+    text_bold =f"OBSERVAÇÕES:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 260)
+    p.drawOn(c, 100, 278)
+    
+    text_bold =f"   Parentes em linha reta: pais, avós, bisavós, filho[a], neto[a] e bisneto[a].\
+                    Parentes em linha colateral: irmão(ã), tio(a) e sobrinho(a).\
+                    Parentes por afinidade: genro, nora, sogro(a), enteado(a), \
+                    madrasta, padrasto e cunhado(a) e concunhado(a)."
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 190)
+    p.drawOn(c, 100, 240)
+
+    c.setFont("Verdana", 12)
+    
+    # c.drawLeftString(400, 150, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
+    # c.setFont("Verdana", 11)
+    # c.drawRightString(400, 120, f"__________________________________________________")
+    # c.setFont("Verdana", 11)
+    # c.drawRightString(400, 100, f"{declara['Nome']}")
+    
+    c.setFont("Verdana", 11)
+    text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 110)
+    p.drawOn(c, 100, 120)
 
 def declaracao(declara):
     # Cria PDF 
@@ -927,3 +988,397 @@ def draw_checkbox(c, x, y, size=10, checked=False):
         # Desenha a marca de seleção
         c.line(x, y, x + size, y + size)
         c.line(x, y + size, x + size, y)
+
+def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo ):
+    cargo_origem_combo.config(state="enable")
+    ua = ua_combo.get() 
+    if ua != '':
+        cargo_origem_combo["values"] = [
+            "Agente Administrativo",
+            "Agente Administrativo de Ensino",
+            "Agente de Administração Pública",
+            "Agente de Apoio a Pesquisa Científica e Tecnológica",
+            "Agente de Apoio Agropecuário",
+            "Agente de Áreas de Administração Geral",
+            "Agente de Desenvolvimento Educacional",
+            "Agente de Desenvolvimento Social",
+            "Agente de Escolta e Vigilância Penitenciária",
+            "Agente de Ofícios e Manutenção",
+            "Agente de Organização Escolar",
+            "Agente de Pessoal",
+            "Agente de Praça de Pedágio",
+            "Agente de Praça de Pesagem",
+            "Agente de Saneamento",
+            "Agente de Saúde",
+            "Agente de Segurança Penitenciária de Classe I",
+            "Agente de Segurança Penitenciária de Classe II",
+            "Agente de Segurança Penitenciária de Classe III",
+            "Agente de Segurança Penitenciária de Classe IV",
+            "Agente de Segurança Penitenciária de Classe V",
+            "Agente de Segurança Penitenciária de Classe VI",
+            "Agente de Segurança Penitenciária de Classe VII",
+            "Agente de Segurança Penitenciária de Classe VIII",
+            "Agente de Serviços Escolares",
+            "Agente de Serviços Técnicos",
+            "Agente de Telecomunicações Policial de 1ª Classe",
+            "Agente de Telecomunicações Policial de 2ª Classe",
+            "Agente de Telecomunicações Policial de 3ª Classe",
+            "Agente de Telecomunicações Policial de 4ª Classe",
+            "Agente de Telecomunicações Policial de 5ª Classe",
+            "Agente de Telecomunicações Policial de Classe Especial",
+            "Agente de Tráfego",
+            "Agente Fiscal de Rendas",
+            "Agente Operacional",
+            "Agente Policial de 1ª Classe",
+            "Agente Policial de 2ª Classe",
+            "Agente Policial de 3ª Classe",
+            "Agente Policial de 4ª Classe",
+            "Agente Policial de 5ª Classe",
+            "Agente Policial de Classe Especial",
+            "Agente Regional de Saúde Pública",
+            "Agente Técnico de Assistência à Saúde",
+            "Agente Técnico de Saúde",
+            "Ajudante de Laboratório",
+            "Almoxarife",
+            "Análise Clínica",
+            "Análise Clínica",
+            "Análises Clínicas"
+            "Analista Administrativo",
+            "Analista de Tecnologia",
+            "Analista Sociocultural",
+            "Arquiteto (vide Lc 540/88)",
+            "Arquiteto I",
+            "Arquiteto II",
+            "Arquiteto III",
+            "Arquiteto IV",
+            "Arquiteto V",
+            "Arquiteto VI",
+            "Arrais",
+            "Ascensorista",
+            "Assistente Agropecuário I",
+            "Assistente Agropecuário II",
+            "Assistente Agropecuário III",
+            "Assistente Agropecuário IV",
+            "Assistente Agropecuário V",
+            "Assistente Agropecuário VI",
+            "Assistente de Administração Escolar",
+            "Assistente de Aeroporto",
+            "Assistente de Diretor de Escola",
+            "Assistente Social",
+            "Assistente Social Encarregado",
+            "Assistente Social Encarregado de Turno",
+            "Assistente Técnico de Pesquisa Científica e Tecnológica I",
+            "Assistente Técnico de Pesquisa Científica e Tecnológica II",
+            "Assistente Técnico de Pesquisa Científica e Tecnológica III",
+            "Assistente Técnico de Pesquisa Científica e Tecnológica IV",
+            "Assistente Técnico de Pesquisa Científica e Tecnológica V",
+            "Assistente Técnico de Pesquisa Científica e Tecnológica VI",
+            "Atendente de Consultório Dentário",
+            "Atendente de Enfermagem",
+            "Atendente de Necrotério Policial de 1ª Classe",
+            "Atendente de Necrotério Policial de 2ª Classe",
+            "Atendente de Necrotério Policial de 3ª Classe",
+            "Atendente de Necrotério Policial de 4ª Classe",
+            "Atendente de Necrotério Policial de 5ª Classe",
+            "Atendente de Necrotério Policial de Classe Especial",
+            "Atendente de Nutrição",
+            "Atuario",
+            "Auxiliar Agropecuário",
+            "Auxiliar de Administração Pública",
+            "Auxiliar de Análises Clínicas",
+            "Auxiliar de Apoio a Pesquisa Científica e Tecnológica",
+            "Auxiliar de Apoio Agropecuário",
+            "Auxiliar de Desapropriação",
+            "Auxiliar de Desenvolvimento Infantil",
+            "Auxiliar de Enfermagem",
+            "Auxiliar de Enfermagem do Trabalho",
+            "Auxiliar de Engenheiro",
+            "Auxiliar de Laboratório",
+            "Auxiliar de Lavanderia e Rouparia Hospitalar",
+            "Auxiliar de Necropsia de 1ª Classe",
+            "Auxiliar de Necropsia de 2ª Classe",
+            "Auxiliar de Necropsia de 3ª Classe",
+            "Auxiliar de Necropsia de 4ª Classe",
+            "Auxiliar de Necropsia de 5ª Classe",
+            "Auxiliar de Necropsia de Classe Especial",
+            "Auxiliar de Papiloscopista Policial de 1ª Classe",
+            "Auxiliar de Papiloscopista Policial de 2ª Classe",
+            "Auxiliar de Papiloscopista Policial de 3ª Classe",
+            "Auxiliar de Papiloscopista Policial de 4ª Classe",
+            "Auxiliar de Papiloscopista Policial de 5ª Classe",
+            "Auxiliar de Papiloscopista Policial de Classe Especial",
+            "Auxiliar de Radiologia",
+            "Auxiliar de Recepções",
+            "Auxiliar de Saúde",
+            "Auxiliar de Serviços",
+            "Auxiliar de Serviços de Saúde",
+            "Auxiliar de Serviços Gerais",
+            "Auxiliar Técnico de Equipamento Rodoviário",
+            "Auxiliar Técnico de Saúde",
+            "Bibliotecário",
+            "Bibliotecário Encarregado",
+            "Bilheteiro",
+            "Biologista",
+            "Biologista Encarregado",
+            "Biologista Encarregado de Turno",
+            "Biólogo",
+            "Biomédico",
+            "Botânico",
+            "Capelão",
+            "Carcereiro de 1ª Classe",
+            "Carcereiro de 2ª Classe",
+            "Carcereiro de 3ª Classe",
+            "Carcereiro de 4ª Classe",
+            "Carcereiro de 5ª Classe",
+            "Carcereiro de Classe Especial",
+            "Cirurgião Dentista",
+            "Citotécnico",
+            "Contador",
+            "Coordenador Pedagogico",
+            "Cozinheiro Hospitalar",
+            "Criminologista",
+            "Delegado de Polícia de 1ª Classe",
+            "Delegado de Polícia de 2ª Classe",
+            "Delegado de Polícia de 3ª Clsse",
+            "Delegado de Polícia de 4ª Classe",
+            "Delegado de Polícia de 5ª Classe",
+            "Delegado de Polícia de Classe Especial",
+            "Desenhista",
+            "Desenhista Técnico Pericial de 1ª Classe",
+            "Desenhista Técnico Pericial de 2ª Classe",
+            "Desenhista Técnico Pericial de 3ª Classe",
+            "Desenhista Técnico Pericial de 4ª Classe",
+            "Desenhista Técnico Pericial de 5ª Classe",
+            "Desenhista Técnico Pericial de Classe Especial",
+            "Desinsetizador",
+            "Diretor de Escola",
+            "Economista",
+            "Economista Doméstico",
+            "Educador de Saúde Pública",
+            "Educador de Saúde Pública Encarregado",
+            "Educador Regional de Saúde Pública",
+            "Encarregado de Setor de Saúde",
+            "Encarregado de Setor Técnico de Saúde",
+            "Encarregado de Turno de Saúde",
+            "Enfermeiro",
+            "Enfermeiro do Trabalho",
+            "Enfermeiro Encarregado",
+            "Enfermeiro Encarregado de Turno",
+            "Enfermeiro Regional de Saúde Pública",
+            "Engenheiro (vide LC 540/88)",
+            "Engenheiro Agrônomo",
+            "Engenheiro Agrônomo I",
+            "Engenheiro Agrônomo II",
+            "Engenheiro Agrônomo III",
+            "Engenheiro Agrônomo IV",
+            "Engenheiro Agrônomo V",
+            "Engenheiro Agrônomo VI",
+            "Engenheiro I",
+            "Engenheiro II",
+            "Engenheiro III",
+            "Engenheiro IV",
+            "Engenheiro VI",
+            "Escrivão de Polícia de 1ª Classe",
+            "Escrivão de Polícia de 2ª Classe",
+            "Escrivão de Polícia de 3ª Classe",
+            "Escrivão de Polícia de 4ª Classe",
+            "Escrivão de Polícia de 5ª Classe",
+            "Escrivão de Polícia de Classe Especial",
+            "Especialista Ambiental",
+            "Especialista Ambiental II",
+            "Especialista Ambiental III",
+            "Especialista Ambiental IV",
+            "Especialista Ambiental V",
+            "Especialista Ambiental VI",
+            "Especialista em Desenvolvimento Social",
+            "Especialista Em Recursos Humanos",
+            "Estatístico",
+            "Executivo Público",
+            "Executivo Público I",
+            "Executivo Público II",
+            "Farmacêutico",
+            "Farmacêutico Encarregado",
+            "Feitor",
+            "Fiscal de Junta Comercial",
+            "Fiscal de Obras",
+            "Fiscal de Taxas",
+            "Fiscal de Transportes Coletivos",
+            "Fiscal Sanitário",
+            "Físico",
+            "Físico Encarregado",
+            "Fisioterapeuta",
+            "Fisioterapeuta Encarregado",
+            "Fonoaudiólogo",
+            "Fonoaudiólogo Encarregado",
+            "Fotógrafo Técnico Pericial de 1ª Classe",
+            "Fotógrafo Técnico Pericial de 2ª Classe",
+            "Fotógrafo Técnico Pericial de 3ª Classe",
+            "Fotográfo Técnico Pericial de 4ª Classe",
+            "Fotógrafo Técnico Pericial de 5ª Classe",
+            "Fotógrafo Técnico Pericial de Classe Especial",
+            "Geofísico",
+            "Geógrafo",
+            "Guarda Rodoviário",
+            "Histoquímico",
+            "Historiógrafo",
+            "Inspetor",
+            "Inspetor de Ensino Artístico",
+            "Inspetor de Máquinas e Veículos",
+            "Inspetor de Taxas",
+            "Inspetor de Trabalho",
+            "Investigador de Polícia de 1ª Classe",
+            "Investigador de Polícia de 2ª Classe",
+            "Investigador de Polícia de 3ª Classe",
+            "Investigador de Polícia de 4ª Classe",
+            "Investigador de Polícia de 5ª Classe",
+            "Investigador de Polícia de Classe Especial",
+            "Julgador de taxas",
+            "Julgador Tributário",
+            "Lançador",
+            "Marinheiro",
+            "Matemático",
+            "Mecânico de Aparelhos de Precisão",
+            "Médico",
+            "Médico I",
+            "Médico II",
+            "Médico III",
+            "Médico Legista de 1ª Classe",
+            "Médico Legista de 2ª Classe",
+            "Médico Legista de 3ª Classe",
+            "Médico Legista de 4ª Classe",
+            "Médico Legista de 5ª Classe",
+            "Médico Legista de Classe Especial",
+            "Médico Sanitarista",
+            "Médico Veterinário",
+            "Médico Veterinário Encarregado",
+            "Mestre de Artesanato",
+            "Mestre de Obras",
+            "Mestre de Oficina",
+            "Mestre de Ofício",
+            "Meteorologista",
+            "Monitor de Museus",
+            "Motociclista",
+            "Motorista",
+            "Motorista (EFCJ)",
+            "Motorista de Ambulância",
+            "Motorista de Barco",
+            "Motorista de Lancha",
+            "Motorista Naval",
+            "Museologo",
+            "Nivelador",
+            "Nutricionista",
+            "Nutricionista Encarregado",
+            "Nutricionista Encarrregado de Turno",
+            "Oficial Administrativo",
+            "Oficial de Apoio a Pesquisa Científica e Tecnológica",
+            "Oficial de Apoio Agropecuário",
+            "Oficial de Atendimento de Saúde",
+            "Oficial de Saúde",
+            "Oficial de Serviços e Manutenção",
+            "Oficial de Serviços em Cine e Foto",
+            "Oficial de Serviços Gráficos",
+            "Oficial Operacional",
+            "Oficial Sociocultural",
+            "Operador de Equipamento Hospitalar",
+            "Operador de Máquinas",
+            "Operador de Máquinas Rodoviárias",
+            "Operador de Máquinas Rodoviárias Especiais",
+            "Operador de Praça de Pedágio",
+            "Operador de Praça de Pesagem",
+            "Operador de Telecomunicações",
+            "Operador de Terminal de Computador",
+            "Operador Destilaria",
+            "Orientador  Educacional",
+            "Orientador Artístico",
+            "Orientador Trabalhista",
+            "Papiloscopista Policial de 1ª Classe",
+            "Papiloscopista Policial de 2ª Classe",
+            "Papiloscopista Policial de 3ª Classe",
+            "Papiloscopista Policial de 4ª Classe",
+            "Papiloscopista Policial de 5ª Classe",
+            "Papiloscopista Policial de Classe Especial",
+            "Perito Criminal de 1ª Classe",
+            "Perito Criminal de 2ª Classe",
+            "Perito Criminal de 3ª Classe",
+            "Perito Criminal de 4ª Classe",
+            "Perito Criminal de 5ª Classe",
+            "Perito Criminal de Classe Especial",
+            "Pesquisador Científico I",
+            "Pesquisador Científico II",
+            "Pesquisador Científico III",
+            "Pesquisador Científico IV",
+            "Pesquisador Científico V",
+            "Pesquisador Científico VI",
+            "Procurador de Autarquia Nivel I",
+            "Procurador de Autarquia Nivel II",
+            "Procurador de Autarquia Nivel III",
+            "Procurador de Autarquia Nivel IVIII",
+            "Procurador de Autarquia Nivel V",
+            "Procurador de Autarquia Substituto",
+            "Procurador do Estado Nível I",
+            "Procurador do Estado Nivel II",
+            "Procurador do Estado Nivel III",
+            "Procurador do Estado Nivel IV",
+            "Procurador do Estado Nivel V",
+            "Procurador do Estado Substituto",
+            "Professor de Academia de Polícia I",
+            "Professor de Academia de Polícia II",
+            "Professor de Conservatório Musical",
+            "Professor Educação Básica I",
+            "Professor Educação Básica II",
+            "Professor II",
+            "Psicólogo",
+            "Psicólogo Encarregado",
+            "Químico",
+            "Químico Encarregado",
+            "Recepcionista",
+            "Recepcionista Bilingue",
+            "Recreacionista",
+            "Redator",
+            "Relações Públicas",
+            "Restaurador",
+            "Revisor",
+            "Salva Vidas",
+            "Serviçal de Laboratório",
+            "Sociólogo",
+            "Sondador",
+            "Supervisor de Área Hospitalar",
+            "Supervisor de Ensino",
+            "Supervisor de Saneamento",
+            "Técnico Agricola",
+            "Técnico Agropecuário",
+            "Técnico de Aparelhos de Precisão",
+            "Técnico de Aparelhos Eletrônicos Medico-hospitalares",
+            "Técnico de Apoio a Pesquisa Científica e Tecnológica",
+            "Técnico de Apoio Agropecuário",
+            "Técnico de Apoio Arrecadação Tributária"
+            "Técnico de Apoio de Recursos Humanos"
+            "Técnico de Contabilidade",
+            "Técnico de Eletrônica",
+            "Técnico de Enfermagem",
+            "Técnico de Enfermagem",
+            "Técnico de Higiene Dental",
+            "Técnico de Laboratório",
+            "Técnico de Ortóptica",
+            "Técnico de Radiologia",
+            "Técnico de Reabilitação Física",
+            "Técnico de Saúde Coletiva",
+            "Técnico de Segurança do Trabalho",
+            "Técnico Desportivo",
+            "Técnico em Agrimensura",
+            "Técnico Químico",
+            "Tecnologista",
+            "Técnologo",
+            "Tecnólogo em Radiologia",
+            "Telefonista",
+            "Terapeuta Ocupacional",
+            "Terapeuta Ocupacional Encarregado",
+            "Topógrafo",
+            "Trabalhador Braçal",
+            "Vigia",
+            "Vigilância em Saúde",
+            "Visitador Comunitário",
+            "Visitador Sanitário",
+            "Zootecnista",
+        ]
+    #cargo_origem_combo.focus()

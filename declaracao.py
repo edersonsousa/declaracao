@@ -19,7 +19,8 @@ from tool_box import (
     user_date_a_partir_variable,
     cargo_box_select,
     coordenadoria_box_select,
-    ua_box_select
+    ua_box_select,
+    cargo_de_origem
 )
 import tkinter as tk
 from tkinter.ttk import Combobox
@@ -91,15 +92,15 @@ destinacao_label = Label(text="Destinação :")
 destinacao_label["font"] = ("Montserrat", "12")
 destinacao_label.grid(row=10, column=1, pady=4, sticky="W")
 
-
+regime_label = Label(text="Regime :")
+regime_label["font"] = ("Montserrat", "12")
+regime_label.grid(row=11, column=1, pady=4, sticky="W")
 
 cargo_de_origem_label = Label(text="Cargo de Origem :")
 cargo_de_origem_label["font"] = ("Montserrat", "12")
-cargo_de_origem_label.grid(row=11, column=1, pady=4, sticky="W")
+cargo_de_origem_label.grid(row=12, column=1, pady=4, sticky="W")
 
-regime_label = Label(text="Regime :")
-regime_label["font"] = ("Montserrat", "12")
-regime_label.grid(row=12, column=1, pady=4, sticky="W")
+
 
 # Entries
 
@@ -149,7 +150,7 @@ ato_combo.bind(
 ato_combo.bind(
     "<FocusOut>",
     lambda event: validar_tipo_de_servidor(
-        ato_combo, cargo_de_origem_entry, bnt_n_servidor, bnt_servidor
+        ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor
     ),
 )
 
@@ -230,22 +231,41 @@ ua_combo.bind(
 
 destinacao_entry = Entry(width=75, state="disable")
 destinacao_entry.grid(row=10, column=2, pady=6, columnspan=5, sticky='w')
-
-
-cargo_de_origem_entry = Entry(width=45)
-cargo_de_origem_entry.grid(row=11, column=2)
-cargo_de_origem_entry.bind(
+destinacao_entry.bind(
     "<FocusOut>",
-    lambda event: validar_tipo_de_servidor(
-        ato_combo, cargo_de_origem_entry, bnt_n_servidor, bnt_servidor
+    lambda event: cargo_de_origem(
+        destinacao_entry, ua_combo, cargo_origem_combo
     ),
 )
+
+
+
 
 
 regime_combo = Combobox(
     window, values=["Efetivo", "Lei 500", "Comissão", "CLT"], width=42
 )
-regime_combo.grid(row=12, column=2)
+regime_combo.grid(row=11, column=2)
+
+cargo_origem_combo = Combobox(
+    window,
+    values=[""],
+    width=75,
+    state="disable",
+)
+
+#cargo_de_origem_entry = Entry(width=45)
+
+cargo_origem_combo.grid(row=12, column=2, columnspan=5)
+cargo_origem_combo.bind(
+    "<FocusOut>",
+    lambda event: validar_tipo_de_servidor(
+        ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor
+    ),
+)
+
+
+
 
 a_partir_var = tk.BooleanVar()
 a_partir_checkbutton = Checkbutton(
@@ -258,9 +278,16 @@ a_partir_checkbutton = Checkbutton(
         periodo_fechado_var,
         periodo_fechado_checkbutton,
         ato_combo,
-        window,
+        window, 
+        bnt_servidor, 
+        bnt_n_servidor
     ),
 )
+
+
+
+
+
 a_partir_checkbutton.grid(row=1, sticky=tk.W, column=7, columnspan=4)
 
 periodo_fechado_var = tk.BooleanVar()
@@ -270,7 +297,7 @@ periodo_fechado_checkbutton = Checkbutton(
     variable=periodo_fechado_var,
     font="Montserrat",
     command=lambda: toggle_check_periodo_fechado(
-        periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window
+        periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor
     ),
 )
 periodo_fechado_checkbutton.grid(row=3, sticky=tk.W, column=7, columnspan=4)
@@ -301,6 +328,9 @@ bnt_n_servidor = Button(
     ),
 )
 
+
+
+
 bnt_n_servidor["font"] = ("Montserrat", "12")
 bnt_n_servidor.grid(row=24, column=0, columnspan=2)
 
@@ -324,7 +354,7 @@ bnt_servidor = Button(
             "Destinação": destinacao_entry.get(),
             "UA": ua_combo.get(),
             "Coordenadoria": coordenadoria_combo.get(),
-            "Cargo de Origem": cargo_de_origem_entry.get(),
+            "Cargo de Origem": cargo_origem_combo.get(),
             "Regime": regime_combo.get(),
         }
     ),
@@ -348,7 +378,7 @@ bnt_limpar = Button(
         destinacao_entry,
         ua_combo,
         coordenadoria_combo,
-        cargo_de_origem_entry,
+        cargo_origem_combo,
         a_partir_var,
         a_partir_checkbutton,
         periodo_fechado_var,
@@ -360,6 +390,7 @@ bnt_limpar = Button(
 )
 bnt_limpar["font"] = ("Montserrat", "12")
 bnt_limpar.grid(row=24, column=4, columnspan=2, pady=25, padx=25)
+
 
 bnt_sair = Button(text="SAIR", width=15, bg="red", command=window.quit)
 bnt_sair["font"] = ("Montserrat", "12")
