@@ -445,10 +445,10 @@ def ua_box_select(destinacao_entry):
 
         
 def validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor):
-    if (ato_combo.get() == "Nomeação" and cargo__origem_combo.get() == ""):
+    if (ato_combo.get() == "Nomeação" and cargo_origem_combo.get() == ""):
         bnt_n_servidor.config(state="normal")
         bnt_servidor.config(state="disable")
-    elif (ato_combo.get() != "Nomeação" or cargo_de_origem_entry.get() != ""):
+    elif (ato_combo.get() != "Nomeação" or cargo_origem_combo.get() != ""):
         bnt_n_servidor.config(state="disable")
         bnt_servidor.config(state="normal")
     
@@ -633,10 +633,10 @@ def declaracao_acumulo(c , declara):
     
     c.setFont("Verdana", 12)
     text=f"EU, {declara['Nome']}, RG Nº {declara['RG']},"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=0, leading=(12*1.5), fontName="Verdana-Bold")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 600)
-    p.drawOn(c, 100, 600)
+    p.wrapOn(c, 400, 590)
+    p.drawOn(c, 100, 590)
         
     text=f"não exerço"
     style = ParagraphStyle(name='Justify', alignment=4)
@@ -806,7 +806,7 @@ def anexo_i(c , declara):
     style = ParagraphStyle(name='Justify', alignment=4)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 550)
-    p.drawOn(c, 100, 650 - p.height)
+    p.drawOn(c, 100, 665 - p.height)
 
     c.setFont("Verdana", 11)
     y_position = 650
@@ -815,7 +815,7 @@ def anexo_i(c , declara):
     style = ParagraphStyle(name='Justify', alignment=4)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 532)
-    p.drawOn(c, 100, 632 - p.height)
+    p.drawOn(c, 100, 647- p.height)
     #c.line(90, y + size, x + size, y)
     
     text =f"Nome: {declara['Nome']}"
@@ -852,19 +852,19 @@ def anexo_i(c , declara):
     
     text=f"NÃO"
     style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
-    draw_checkbox(c, 100, 440 , checked=False)
+    draw_checkbox(c, 100, 430 , checked=False)
     #draw_checkbox(c, 238, 300 , checked=False)
     p = Paragraph(text, style)
-    p.wrapOn(c, 200, 440)
-    p.drawOn(c, 120, 400)
+    p.wrapOn(c, 200, 430)
+    p.drawOn(c, 120, 430)
     
     text=f"SIM"
     style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
-    draw_checkbox(c, 100, 400 , checked=False)
+    draw_checkbox(c, 100, 450 , checked=False)
     #draw_checkbox(c, 238, 300 , checked=False)
     p = Paragraph(text, style)
-    p.wrapOn(c, 200, 400)
-    p.drawOn(c, 120, 440)
+    p.wrapOn(c, 200, 450)
+    p.drawOn(c, 120, 450)
     
     y_position = 400
     text_bold =f"Em caso positivo, apontar:"
@@ -938,9 +938,7 @@ def anexo_i(c , declara):
 
     c.setFont("Verdana", 12)
     
-    # c.drawLeftString(400, 150, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
-    # c.setFont("Verdana", 11)
-    # c.drawRightString(400, 120, f"__________________________________________________")
+    
     # c.setFont("Verdana", 11)
     # c.drawRightString(400, 100, f"{declara['Nome']}")
     
@@ -948,8 +946,188 @@ def anexo_i(c , declara):
     text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 110)
-    p.drawOn(c, 100, 120)
+    p.wrapOn(c, 400, 100)
+    p.drawOn(c, 100, 110)
+    
+    text=f"__________________________________________________"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 75)
+    p.drawOn(c, 100, 85)
+    
+    text=f"{declara['Nome']}"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 60)
+    p.drawOn(c, 100, 70)
+    
+def informacoes_adicionais(c , declara):
+    
+    
+    c.rect(50, 750, 500, 40)
+    
+    c.setFont("Verdana-Bold", 12)
+    c.drawCentredString(300, 765, f"INFORMAÇÕES ADICIONAIS")
+    
+    
+    c.rect(50, 480, 500, 270)
+    text_bold =f"<u>DO SERVIDOR</u>"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 550, 720)
+    p.drawOn(c, 60, 730)
+    
+    do_servidor_1 =f"1) Indicar o cargo em comissão ou a função de confiança/gratificada de que é ocupante:\
+                     Cargo/função:___________________________________________________________________________\
+                     Órgão/entidade:_________________________________________________________________________"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_servidor_1, style)
+    p.wrapOn(c, 480, 650)
+    p.drawOn(c, 60, 665)
+    
+    do_servidor_2a =f"2) É ocupante de cargo efetivo/função permanente?"
+    
+    style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_servidor_2a, style)
+    p.wrapOn(c, 490, 625)
+    p.drawOn(c, 60, 635)
+    
+    do_servidor_2b =f"Em caso positivo, indicar:"
+    style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_servidor_2b, style)
+    p.wrapOn(c, 490, 610)
+    p.drawOn(c, 60, 620)
+    
+    text=f"Sim"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 625)
+    p.drawOn(c, 210, 625)
+    draw_checkbox(c, 195, 625 , checked=False)
+    
+    text=f"Não"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 625)
+    p.drawOn(c, 260, 625)
+    draw_checkbox(c, 245, 625 , checked=False)
+    
+    do_servidor_2c =f"Cargo/função:___________________________________________________________________________\
+                      Órgão/entidade:_________________________________________________________________________"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_servidor_2c, style)
+    p.wrapOn(c, 490, 555)
+    p.drawOn(c, 60, 575)
+    
+    do_servidor_3a =f"3) A nomeação/admissão/designação para o cargo em comissão ou função de confiança/gratificada\
+                        ocorreu antes ou após a edição da Súmula Vinculante nº 13 do Supremo Tribunal Federal\
+                        , de 29 de agosto de 2008?"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_servidor_3a, style)
+    p.wrapOn(c, 480, 500)
+    p.drawOn(c, 60, 510)
+    
+    do_servidor_3b =f"Indicar a data: ____ / ____ / ________."
+    
+    style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_servidor_3b, style)
+    p.wrapOn(c, 490, 490)
+    p.drawOn(c, 60, 490)
+    
+    c.rect(50, 150, 500, 330)
+    text_bold =f"<u>DO PARENTE</u>"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 480, 460)
+    p.drawOn(c, 60, 460)
+    
+    do_parente_1 =f"1) Indicar o cargo em comissão ou a função de confiança/gratificada de que o parente é ocupante:\
+                     Cargo/função:___________________________________________________________________________\
+                     Órgão/entidade:_________________________________________________________________________"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_parente_1, style)
+    p.wrapOn(c, 480, 380)
+    p.drawOn(c, 60, 380)
+    
+    
+    do_parente_2a =f"2) O parente é ocupante de cargo efetivo/função permanente?"
+    
+    style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_parente_2a, style)
+    p.wrapOn(c, 490, 340)
+    p.drawOn(c, 60, 340)
+    
+    do_parente_2b =f"Em caso positivo, indicar:"
+    style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_parente_2b, style)
+    p.wrapOn(c, 490, 320)
+    p.drawOn(c, 60, 320)
+    
+    text=f"Sim"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 325)
+    p.drawOn(c, 210, 325)
+    draw_checkbox(c, 195, 325 , checked=False)
+    
+    text=f"Não"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 325)
+    p.drawOn(c, 260, 325)
+    draw_checkbox(c, 245, 325 , checked=False)
+    
+    
+    do_parente_2c =f"Cargo/função:___________________________________________________________________________\
+                      Órgão/entidade:_________________________________________________________________________"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_parente_2c, style)
+    p.wrapOn(c, 490, 280)
+    p.drawOn(c, 60, 280)
+    
+    
+    do_parente_3a =f"3) A nomeação/admissão/designação para o cargo em comissão ou função de confiança/gratificada\
+                        ocorreu antes ou após a edição da Súmula Vinculante nº 13 do Supremo Tribunal Federal\
+                        , de 29 de agosto de 2008?"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_parente_3a, style)
+    p.wrapOn(c, 480, 200)
+    p.drawOn(c, 60, 200)
+    
+    do_parente_3b =f"Indicar a data: ____ / ____ / ________."
+    
+    style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
+    p = Paragraph(do_parente_3b, style)
+    p.wrapOn(c, 490, 150)
+    p.drawOn(c, 60, 150)
+    
+    
+    c.setFont("Verdana", 11)
+    text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 100)
+    p.drawOn(c, 100, 110)
+    
+    text=f"__________________________________________________"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 75)
+    p.drawOn(c, 100, 85)
+    
+    text=f"{declara['Nome']}"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 60)
+    p.drawOn(c, 100, 70)
 
 def declaracao(declara):
     # Cria PDF 
@@ -973,6 +1151,7 @@ def declaracao(declara):
     c.showPage()
     anexo_i(c , declara)
     c.showPage()
+    informacoes_adicionais(c , declara)
     
     c.save()
     #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
@@ -1382,3 +1561,15 @@ def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo ):
             "Zootecnista",
         ]
     #cargo_origem_combo.focus()
+    
+def filter_combobox(event, combobox_entry, combobox, items):
+    typed = combobox_entry.get().lower()
+    if typed == "":
+        combobox['values'] = items
+    else:
+        filtered_items = [item for item in items if typed in item.lower()]
+        combobox['values'] = filtered_items
+
+def on_select(event):
+    selected = event.widget.get()
+    print("Selecionado:", selected)

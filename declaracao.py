@@ -20,8 +20,10 @@ from tool_box import (
     cargo_box_select,
     coordenadoria_box_select,
     ua_box_select,
-    cargo_de_origem
-)
+    cargo_de_origem,
+    filter_combobox, 
+    on_select
+                    )
 import tkinter as tk
 from tkinter.ttk import Combobox
 from tkinter import (
@@ -124,16 +126,29 @@ cpf_entry.grid(row=2, column=2, pady=4)
 cpf_entry.bind("<Return>", lambda event: validar_cpf_entry(event, cpf_entry))
 cpf_entry.bind("<Tab>", lambda event: validar_cpf_entry(event, cpf_entry))
 
-estado_civil_combo = Combobox(
-    window, values=["Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)"], width=42
-)
-estado_civil_combo.grid(row=3, column=2, pady=6)
 
+estado_civil = ["Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)"]
+estado_civil_combo = Combobox(
+    window, values=estado_civil, width=42
+)
+estado_civil_combo_entry = Entry(window)
+
+estado_civil_combo_entry.bind("<KeyRelease>", lambda event: filter_combobox(event, estado_civil_combo_entry, estado_civil_combo, items))
+estado_civil_combo.bind("<<ComboboxSelected>>", on_select)
+
+# estado_civil_combo = Combobox(window, values=estado_civil, width=42)
+# estado_civil_combo.bind("<<ComboboxSelected>>", on_select)
+# estado_civil_combo.bind("<KeyRelease>", lambda event, combo=estado_civil_combo: filter_items(event, combo))
+
+estado_civil_combo.grid(row=3, column=2, pady=6)
+# estado_civil_combo.bind('<KeyRelease>', lambda event, combo=estado_civil_combo: checkkey(event, combo))
 ato_combo = Combobox(
     window,
     values=["Nomeação", "Designação", "Designação com posterior Nomeação"],
     width=42,
 )
+# ato_combo.bind("<KeyRelease>", filter_items(ato_combo))
+
 ato_combo.grid(row=4, column=2, pady=6)
 ato_combo.bind(
     "<<ComboboxSelected>>",
