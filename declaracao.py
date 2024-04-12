@@ -25,7 +25,9 @@ from tool_box import (
     on_select
                     )
 import tkinter as tk
-from tkinter.ttk import Combobox
+from ttkwidgets.autocomplete import AutocompleteCombobox
+
+from tkinter.ttk import *
 from tkinter import (
     Tk,
     Label,
@@ -39,14 +41,10 @@ from tkinter import (
 )
 from PIL import Image, ImageDraw
 
-
 window = Tk()
 window.title("Declarações")
 window.config(padx=20, pady=25, bg="white")
-
-
 # Labels
-
 nome_label = Label(text="Nome :")
 nome_label["font"] = ("Montserrat", "12")
 nome_label.grid(row=0, column=1, pady=4, sticky="W")
@@ -79,9 +77,6 @@ cargo_label = Label(text="Cargo :")
 cargo_label["font"] = ("Montserrat", "12")
 cargo_label.grid(row=7, column=1, pady=4, sticky="W")
 
-
-
-
 coordenadoria_label = Label(text="Coordenadoria :")
 coordenadoria_label["font"] = ("Montserrat", "12")
 coordenadoria_label.grid(row=8, column=1, pady=4, sticky="W")
@@ -102,8 +97,6 @@ cargo_de_origem_label = Label(text="Cargo de Origem :")
 cargo_de_origem_label["font"] = ("Montserrat", "12")
 cargo_de_origem_label.grid(row=12, column=1, pady=4, sticky="W")
 
-
-
 # Entries
 
 nome_entry = Entry(width=45)
@@ -113,7 +106,6 @@ validate_cmd = window.register(lambda P, entry=nome_entry: validar_nome_entry(P,
 nome_entry.config(validate="key", validatecommand=(validate_cmd, "%P"))
 nome_entry.bind("<FocusOut>", lambda event: validate_content)
 nome_entry.focus()
-
 
 rg_entry = Entry(width=45)
 rg_entry.grid(row=1, column=2, pady=4)
@@ -126,28 +118,35 @@ cpf_entry.grid(row=2, column=2, pady=4)
 cpf_entry.bind("<Return>", lambda event: validar_cpf_entry(event, cpf_entry))
 cpf_entry.bind("<Tab>", lambda event: validar_cpf_entry(event, cpf_entry))
 
-
 estado_civil = ["Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)"]
-estado_civil_combo = Combobox(
-    window, values=estado_civil, width=42
-)
-estado_civil_combo_entry = Entry(window)
-
-estado_civil_combo_entry.bind("<KeyRelease>", lambda event: filter_combobox(event, estado_civil_combo_entry, estado_civil_combo, items))
-estado_civil_combo.bind("<<ComboboxSelected>>", on_select)
-
 # estado_civil_combo = Combobox(window, values=estado_civil, width=42)
-# estado_civil_combo.bind("<<ComboboxSelected>>", on_select)
-# estado_civil_combo.bind("<KeyRelease>", lambda event, combo=estado_civil_combo: filter_items(event, combo))
+frame = Frame(window)
+frame.grid(row=3, column=2, padx=0, pady=0)
+# Label(
+#     frame, 
+#     background='#8DBF5A',
+#     font=('Montserrat', 12),
+#     text='Countries in North America '
+#     ).grid(row=0, column=13, pady=10)
 
-estado_civil_combo.grid(row=3, column=2, pady=6)
-# estado_civil_combo.bind('<KeyRelease>', lambda event, combo=estado_civil_combo: checkkey(event, combo))
+estado_civil_combo = AutocompleteCombobox(
+    frame, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=estado_civil
+    )
+estado_civil_combo.grid(row=3, column=2, pady=0)
+# estado_civil_combo.bind("<KeyRelease>", lambda event: filter_combobox(event, estado_civil, estado_civil_combo))
+# estado_civil_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, estado_civil, estado_civil_combo))
+
+
+# estado_civil_combo.grid(row=3, column=2, pady=6)
 ato_combo = Combobox(
     window,
     values=["Nomeação", "Designação", "Designação com posterior Nomeação"],
     width=42,
 )
-# ato_combo.bind("<KeyRelease>", filter_items(ato_combo))
 
 ato_combo.grid(row=4, column=2, pady=6)
 ato_combo.bind(
@@ -168,13 +167,12 @@ ato_combo.bind(
         ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor
     ),
 )
+lei = ["Art.5º da lei complementar nº 1080/2008","Art.8º da lei complementar nº 1157/2011"]
 
 lei_combo = Combobox(
     window,
-    values=[
-        "Art.5º da lei complementar nº 1080/2008",
-        "Art.8º da lei complementar nº 1157/2011",
-    ],
+    values=lei
+    ,
     width=42,
     state="enable",
 )
@@ -182,7 +180,8 @@ lei_combo.grid(row=5, column=2)
 lei_combo.bind(
     "<<ComboboxSelected>>", lambda event: lei_box_select(lei_combo, jornada_combo)
 )
-
+lei_combo.bind("<KeyRelease>", lambda event: filter_combobox(event, lei, lei_combo))
+lei_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, lei, lei_combo))
 
 jornada_combo = Combobox(
     window,
@@ -205,8 +204,6 @@ cargo_combo.grid(row=7, column=2)
 cargo_combo.bind(
     "<<ComboboxSelected>>", lambda event: cargo_box_select(coordenadoria_combo)
 )
-
-
 
 coordenadoria_combo = Combobox(
     window,
@@ -253,10 +250,6 @@ destinacao_entry.bind(
     ),
 )
 
-
-
-
-
 regime_combo = Combobox(
     window, values=["Efetivo", "Lei 500", "Comissão", "CLT"], width=42
 )
@@ -269,8 +262,6 @@ cargo_origem_combo = Combobox(
     state="disable",
 )
 
-#cargo_de_origem_entry = Entry(width=45)
-
 cargo_origem_combo.grid(row=12, column=2, columnspan=5)
 cargo_origem_combo.bind(
     "<FocusOut>",
@@ -278,9 +269,6 @@ cargo_origem_combo.bind(
         ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor
     ),
 )
-
-
-
 
 a_partir_var = tk.BooleanVar()
 a_partir_checkbutton = Checkbutton(
@@ -298,10 +286,6 @@ a_partir_checkbutton = Checkbutton(
         bnt_n_servidor
     ),
 )
-
-
-
-
 
 a_partir_checkbutton.grid(row=1, sticky=tk.W, column=7, columnspan=4)
 
@@ -342,9 +326,6 @@ bnt_n_servidor = Button(
         }
     ),
 )
-
-
-
 
 bnt_n_servidor["font"] = ("Montserrat", "12")
 bnt_n_servidor.grid(row=24, column=0, columnspan=2)
@@ -405,7 +386,6 @@ bnt_limpar = Button(
 )
 bnt_limpar["font"] = ("Montserrat", "12")
 bnt_limpar.grid(row=24, column=4, columnspan=2, pady=25, padx=25)
-
 
 bnt_sair = Button(text="SAIR", width=15, bg="red", command=window.quit)
 bnt_sair["font"] = ("Montserrat", "12")

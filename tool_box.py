@@ -768,12 +768,13 @@ def declaracao_acumulo(c , declara):
     p.wrapOn(c, 320, 198)
     p.drawOn(c, 250, 198)
     draw_checkbox(c, 280, 198 , checked=False)
+    c.drawRightString(500, 198, f"__________________________________")
+
 
 
     c.setFont("Verdana", 12)
     c.drawCentredString(300, 150, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     #c.setFont("Verdana", 11)
-    #c.drawRightString(500, 470, f"__________________________________________________")
     
     c.drawCentredString(300, 100, f"{declara['Nome']}")
 
@@ -845,7 +846,7 @@ def anexo_i(c , declara):
     text_bold =f"É cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, inclusive,\
                 da autoridade nomeante ou de servidor do Poder Executivo investido em cargo de direção, chefia ou assessoramento?"
     
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 425)
     p.drawOn(c, 100, 475)
@@ -1562,14 +1563,26 @@ def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo ):
         ]
     #cargo_origem_combo.focus()
     
-def filter_combobox(event, combobox_entry, combobox, items):
-    typed = combobox_entry.get().lower()
+def filter_combobox(event, valores, combo):
+    print("Event:", event)
+    print("Valores:", valores)
+    print("Combo antes:", combo['values'])
+    typed = combo.get().lower()
+    print("Typed:", typed)
     if typed == "":
-        combobox['values'] = items
+        combo['values'] = valores
     else:
-        filtered_items = [item for item in items if typed in item.lower()]
-        combobox['values'] = filtered_items
+        filtered_items = [item for item in valores if typed in item.lower()]
+        print("Filtrado:", filtered_items)
+        combo['values'] = filtered_items
+    print("Combo depois:", combo['values'])
+    
 
-def on_select(event):
+def on_select(event, valores, combo):
     selected = event.widget.get()
     print("Selecionado:", selected)
+    if selected not in combo['values']:
+        messagebox.showinfo("Atenção", "O valor preenchido não consta na lista atual.")
+        combo.focus()
+    
+    
