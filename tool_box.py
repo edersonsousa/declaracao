@@ -13,6 +13,7 @@ from reportlab.platypus import Paragraph
 import babel.numbers
 import subprocess, os, locale
 from babel.dates import format_date, Locale
+from reportlab.pdfbase.ttfonts import TTFont
 
 locale = Locale('pt', 'BR')
 
@@ -213,6 +214,9 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
     
 def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo):
     selected_value = ato_combo.get()
+    # selected_value = event.widget.get()
+    # print(selected)
+    print(selected_value)
     if selected_value == "Nomeação":
         a_partir_var.set(False)
         periodo_fechado_var.set(False)
@@ -233,8 +237,10 @@ def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir
 
 
 
-def lei_box_select(lei_combo, jornada_combo):
-    selected_value = lei_combo.get()
+def lei_box_select(event, lei_combo, jornada_combo):
+    selected_value = event.widget.get()
+    print(selected_value)
+
     if selected_value == "Art.5º da lei complementar nº 1080/2008":
         jornada_combo["values"] = ["Jornada Completa de Trabalho"]
         jornada_combo.set("Jornada Completa de Trabalho")
@@ -250,194 +256,194 @@ def jornada_box_select(cargo_combo, lei_combo):
     selected_value = lei_combo.get()
     if selected_value == "Art.5º da lei complementar nº 1080/2008":
         cargo_combo.set("")
-        cargo_combo["values"] = [
-                                "Assessor de Gabinete I"                , 
-                                "Assessor de Gabinete II"               , 
-                                "Assessor I"                            ,
-                                "Assessor Técnico de Coordenador"       ,
-                                "Assessor Técnico de Gabinete I"        ,
-                                "Assessor Técnico de Gabinete II"       ,
-                                "Assessor Técnico de Gabinete III"      ,
-                                "Assessor Técnico de Gabinete IV"       ,
-                                "Assessor Técnico I"                ,
-                                "Assessor Técnico II"   	            ,
-                                "Assessor Técnico III"                ,
-                                "Assessor Técnico IV"   	            ,
-                                "Assessor Técnico V"    	            ,
-                                "Chefe de Gabinete"     	            ,
-                                "Chefe I"   	                        ,
-                                "Chefe II"      	                    ,
-                                "Diretor I"                            ,
-                                "Diretor II"    	                    ,
-                                "Diretor III"                           ,
-                                "Diretor Técnico I"                    ,
-                                "Diretor Técnico II"    	            ,
-                                "Diretor Técnico III"   	            ,
-                                "Encarregado I"     	                ,
-                                "Encarregado II"    	                ,
-                                "Supervisor Técnico I"           
-                                ]
+        cargo_combo["completevalues"] = [
+                                                "Assessor de Gabinete I"                , 
+                                                "Assessor de Gabinete II"               , 
+                                                "Assessor I"                            ,
+                                                "Assessor Técnico de Coordenador"       ,
+                                                "Assessor Técnico de Gabinete I"        ,
+                                                "Assessor Técnico de Gabinete II"       ,
+                                                "Assessor Técnico de Gabinete III"      ,
+                                                "Assessor Técnico de Gabinete IV"       ,
+                                                "Assessor Técnico I"                ,
+                                                "Assessor Técnico II"   	            ,
+                                                "Assessor Técnico III"                ,
+                                                "Assessor Técnico IV"   	            ,
+                                                "Assessor Técnico V"    	            ,
+                                                "Chefe de Gabinete"     	            ,
+                                                "Chefe I"   	                        ,
+                                                "Chefe II"      	                    ,
+                                                "Diretor I"                            ,
+                                                "Diretor II"    	                    ,
+                                                "Diretor III"                           ,
+                                                "Diretor Técnico I"                    ,
+                                                "Diretor Técnico II"    	            ,
+                                                "Diretor Técnico III"   	            ,
+                                                "Encarregado I"     	                ,
+                                                "Encarregado II"    	                ,
+                                                "Supervisor Técnico I"           
+                                        ]
         cargo_combo.config(state=tk.NORMAL)
         cargo_combo.set("")
 
     elif selected_value == "Art.8º da lei complementar nº 1157/2011":
         cargo_combo.set("")
-        cargo_combo["values"] = [
-                                "Assessor Técnico de Coordenador de Saúde"  ,
-                                "Assessor Técnico em Saúde Pública I"       ,
-                                "Assessor Técnico em Saúde Pública II"      ,
-                                "Assessor Técnico em Saúde Pública III"     ,
-                                "Chefe de Saúde I"                          ,
-                                "Chefe de Saúde II"                         ,
-                                "Cirurgião Dentista Sanitarista Inspetor"   ,
-                                "Coordenador de Saúde"                      ,
-                                "Diretor Técnico de Saúde I"                ,
-                                "Diretor Técnico de Saúde II"               ,
-                                "Diretor Técnico de Saúde III"              ,
-                                "Encarregado de Saúde I"                    ,
-                                "Encarregado de Saúde II"                   ,
-                                "Enfermeiro Inspetor de Saúde Pública"      ,
-                                "Engenheiro Sanitarista Assessor"           ,
-                                "Médico Inspetor"                           ,
-                                "Supervisor de Equipe Técnica de Saúde"     ,
-                                "Supervisor de Saúde"         
-                                ]
+        cargo_combo["completevalues"] = [
+                                            "Assessor Técnico de Coordenador de Saúde"  ,
+                                            "Assessor Técnico em Saúde Pública I"       ,
+                                            "Assessor Técnico em Saúde Pública II"      ,
+                                            "Assessor Técnico em Saúde Pública III"     ,
+                                            "Chefe de Saúde I"                          ,
+                                            "Chefe de Saúde II"                         ,
+                                            "Cirurgião Dentista Sanitarista Inspetor"   ,
+                                            "Coordenador de Saúde"                      ,
+                                            "Diretor Técnico de Saúde I"                ,
+                                            "Diretor Técnico de Saúde II"               ,
+                                            "Diretor Técnico de Saúde III"              ,
+                                            "Encarregado de Saúde I"                    ,
+                                            "Encarregado de Saúde II"                   ,
+                                            "Enfermeiro Inspetor de Saúde Pública"      ,
+                                            "Engenheiro Sanitarista Assessor"           ,
+                                            "Médico Inspetor"                           ,
+                                            "Supervisor de Equipe Técnica de Saúde"     ,
+                                            "Supervisor de Saúde"         
+                                        ]
         cargo_combo.config(state=tk.NORMAL)
         cargo_combo.set("")
 
 def cargo_box_select(coordenadoria_combo):
-    coordenadoria_combo.config(state="normal")
+    # coordenadoria_combo.config(state="normal")
+    coordenadoria_combo.config(state=tk.NORMAL)
     
 def coordenadoria_box_select(ua_combo, coordenadoria_combo):
     selected_value = coordenadoria_combo.get()
     ua_combo.set('')
     if selected_value == 'Administração Superior da Secretaria e da Sede':
-        ua_combo["values"] = [
-                                "Gabinete do Coordenador",
-                                "Gabinete do Secretário e Assessorias",
-                                "Grupo de Assistência Farmacêutica",
-                                "Coordenadoria de Gestão Orçamentária e Financeira  - CGOF",
-                                "Coordenadoria de Planejamento de Saúde",
-                                "Coordenadoria de Recursos Humanos",
-                                "Coordenadoria Geral de Administração",
-                                "Departamento de Gerenciamento Ambulatorial da Capital - DGAC"
+        ua_combo["completevalues"] = [
+                                        "Gabinete do Coordenador",
+                                        "Gabinete do Secretário e Assessorias",
+                                        "Grupo de Assistência Farmacêutica",
+                                        "Coordenadoria de Gestão Orçamentária e Financeira  - CGOF",
+                                        "Coordenadoria de Planejamento de Saúde",
+                                        "Coordenadoria de Recursos Humanos",
+                                        "Coordenadoria Geral de Administração",
+                                        "Departamento de Gerenciamento Ambulatorial da Capital - DGAC"
                                 
-                              ]
+                                    ]
     elif selected_value =="Coordenadoria de Serviços de Saúde":
-        ua_combo["values"] = [
-                                'Centro de Atenção Integrada em Saúde Mental "Philippe Pinel" - CAISM Philippe Pinel',
-                                'Centro de Atenção Integral à Saúde "Clemente Ferreira" de Lins',
-                                'Centro de Atenção Integral à Saúde "Professor Cantídio de Moura Campos"',
-                                "Centro de Atenção Integral à Saúde de Santa Rita - C.A.I.S./SR",
-                                "Centro de Desenvolvimento do Portador de Deficiência Mental, em Itu",
-                                "Centro de Reabilitação de Casa Branca",
-                                "Centro de Referência da Saúde da Mulher",
-                                'Centro de Referência de Álcool, Tabaco e Outras Drogas',
-                                'Centro Especializado em Reabilitação "Doutor Arnaldo Pezzuti Cavalcanti", em Mogi das Cruzes',
-                                'Centro Pioneiro em Atenção Psicossocial "Arquiteto Januário José Ezemplari"- CPAP',
-                                'Complexo Hospitalar "Padre Bento" de Guarulhos',
-                                "Complexo Hospitalar do Juquery, em Franco da Rocha",
-                                "Conjunto Hospitalar de Sorocaba",
-                                "Conjunto Hospitalar do Mandaqui",
-                                "Grupo de Resgate - GRAU",
-                                'Hospital "Adhemar de Barros" em Divinolândia',
-                                'Hospital "Dr. Francisco Ribeiro Arantes", em Itu',
-                                'Hospital "Guilherme Álvaro" em Santos',
-                                'Hospital "Manoel de Abreu" de Bauru',
-                                'Hospital "Nestor Goulart Reis" em Américo Brasiliense',
-                                'Hospital das Clínicas "Luzia de Pinho Melo" em Mogi das Cruzes	',
-                                'Hospital Estadual "Dr. Odilo Antunes de Siqueira" em Presidente Prudente',
-                                'Hospital Estadual "Dr. Oswaldo Brandi Faria" em Mirandópolis	',
-                                'Hospital Estadual Especializado em Reabilitação "Dr. Francisco Ribeiro Arantes", em Itu',
-                                'Hospital Geral "Dr. Álvaro Simões de Souza" em Vila Nova Cachoeirinha	',
-                                'Hospital Geral "Dr. José Pangella" de Vila Penteado',
-                                'Hospital Geral "Dr. Manoel Bifulco" em São Mateus',
-                                'Hospital Geral "Jesus Teixeira da Costa" em Guaianazes',
-                                'Hospital Geral "Prefeito Miguel Martin Gualda", de Promissão',
-                                "Hospital Geral de Taipas",
-                                'Hospital Infantil "Cândido Fontoura"',
-                                'Hospital Maternidade Interlagos "Waldemar Seyssel - Arrelia"',
-                                "Hospital Psiquiátrico Pinel, em Pirituba",
-                                'Hospital Regional "Doutor Leopoldo Bevilacqua" do Vale do Ribeira, em Pariquera-Açu',
-                                'Hospital Regional "Dr. Osíris Florindo Coelho" em Ferraz de Vasconcelos	',
-                                'Hospital Regional "Dr. Vivaldo Martins Simões" em Osasco	',
-                                "Hospital Regional de Assis",
-                                "Hospital Regional Sul",
-                                "Hospital Santa Tereza em Ribeirão Preto",
-                                "Instituto Clemente Ferreira - ICF",
-                                'Instituto de Infectologia "Emílio Ribas"',
-                                'Instituto "Dante Pazzanese" de Cardiologia',
-                                'Instituto "Lauro de Souza Lima" em Bauru',
-                                'Instituto Paulista de Geriatria e Gerontologia - IPGG "José Ermírio de Moraes"',
-                                "Núcleo de Gestão Assistencial 14 - Campos Elíseos",
-                                "Unidade de Gestão Assistencial I",
-                                "Unidade de Gestão Assistencial II",
-                                "Unidade de Gestão Assistencial III",
-                                "Unidade de Gestão Assistencial IV",
-                                "Unidade de Gestão Assistencial V"
-                            ]
+        ua_combo["completevalues"] = [
+                                            'Centro de Atenção Integrada em Saúde Mental "Philippe Pinel" - CAISM Philippe Pinel',
+                                            'Centro de Atenção Integral à Saúde "Clemente Ferreira" de Lins',
+                                            'Centro de Atenção Integral à Saúde "Professor Cantídio de Moura Campos"',
+                                            "Centro de Atenção Integral à Saúde de Santa Rita - C.A.I.S./SR",
+                                            "Centro de Desenvolvimento do Portador de Deficiência Mental, em Itu",
+                                            "Centro de Reabilitação de Casa Branca",
+                                            "Centro de Referência da Saúde da Mulher",
+                                            'Centro de Referência de Álcool, Tabaco e Outras Drogas',
+                                            'Centro Especializado em Reabilitação "Doutor Arnaldo Pezzuti Cavalcanti", em Mogi das Cruzes',
+                                            'Centro Pioneiro em Atenção Psicossocial "Arquiteto Januário José Ezemplari"- CPAP',
+                                            'Complexo Hospitalar "Padre Bento" de Guarulhos',
+                                            "Complexo Hospitalar do Juquery, em Franco da Rocha",
+                                            "Conjunto Hospitalar de Sorocaba",
+                                            "Conjunto Hospitalar do Mandaqui",
+                                            "Grupo de Resgate - GRAU",
+                                            'Hospital "Adhemar de Barros" em Divinolândia',
+                                            'Hospital "Dr. Francisco Ribeiro Arantes", em Itu',
+                                            'Hospital "Guilherme Álvaro" em Santos',
+                                            'Hospital "Manoel de Abreu" de Bauru',
+                                            'Hospital "Nestor Goulart Reis" em Américo Brasiliense',
+                                            'Hospital das Clínicas "Luzia de Pinho Melo" em Mogi das Cruzes	',
+                                            'Hospital Estadual "Dr. Odilo Antunes de Siqueira" em Presidente Prudente',
+                                            'Hospital Estadual "Dr. Oswaldo Brandi Faria" em Mirandópolis	',
+                                            'Hospital Estadual Especializado em Reabilitação "Dr. Francisco Ribeiro Arantes", em Itu',
+                                            'Hospital Geral "Dr. Álvaro Simões de Souza" em Vila Nova Cachoeirinha	',
+                                            'Hospital Geral "Dr. José Pangella" de Vila Penteado',
+                                            'Hospital Geral "Dr. Manoel Bifulco" em São Mateus',
+                                            'Hospital Geral "Jesus Teixeira da Costa" em Guaianazes',
+                                            'Hospital Geral "Prefeito Miguel Martin Gualda", de Promissão',
+                                            "Hospital Geral de Taipas",
+                                            'Hospital Infantil "Cândido Fontoura"',
+                                            'Hospital Maternidade Interlagos "Waldemar Seyssel - Arrelia"',
+                                            "Hospital Psiquiátrico Pinel, em Pirituba",
+                                            'Hospital Regional "Doutor Leopoldo Bevilacqua" do Vale do Ribeira, em Pariquera-Açu',
+                                            'Hospital Regional "Dr. Osíris Florindo Coelho" em Ferraz de Vasconcelos	',
+                                            'Hospital Regional "Dr. Vivaldo Martins Simões" em Osasco	',
+                                            "Hospital Regional de Assis",
+                                            "Hospital Regional Sul",
+                                            "Hospital Santa Tereza em Ribeirão Preto",
+                                            "Instituto Clemente Ferreira - ICF",
+                                            'Instituto de Infectologia "Emílio Ribas"',
+                                            'Instituto "Dante Pazzanese" de Cardiologia',
+                                            'Instituto "Lauro de Souza Lima" em Bauru',
+                                            'Instituto Paulista de Geriatria e Gerontologia - IPGG "José Ermírio de Moraes"',
+                                            "Núcleo de Gestão Assistencial 14 - Campos Elíseos",
+                                            "Unidade de Gestão Assistencial I",
+                                            "Unidade de Gestão Assistencial II",
+                                            "Unidade de Gestão Assistencial III",
+                                            "Unidade de Gestão Assistencial IV",
+                                            "Unidade de Gestão Assistencial V"
+                                    ]
     elif selected_value == "Coordenadoria de Assistência Farmacêutica":
-        ua_combo["values"] = [
-                            ""
-                             ]
+        ua_combo["completevalues"] = [
+                                            "Coordenadoria de Assistência Farmacêutica"
+                                     ]
     elif selected_value == "Coordenadoria de Ciência, Tecnologia e Insumos Estratégicos de Saúde":
-        ua_combo["values"] = [
-                            "Instituto Butantan",
-                            "Instituto de Saúde"
-                            ]
+        ua_combo["completevalues"] = [
+                                        "Instituto Butantan",
+                                        "Instituto de Saúde"
+                                    ]
     elif selected_value == "Coordenadoria de Controle de Doenças":
-        ua_combo["values"] = [
-                                'Centro de Referência e Treinamento - "DST/AIDS"',
-                                'Centro de Vigilância Epidemiológica "Professor Alexandre Vranjac"',
-                                "Centro de Vigilância Sanitária",
-                                'Instituto "Adolfo Lutz" - IAL',
-                                "Instituto Pasteur"
-                            ]
+        ua_combo["completevalues"] = [
+                                        'Centro de Referência e Treinamento - "DST/AIDS"',
+                                        'Centro de Vigilância Epidemiológica "Professor Alexandre Vranjac"',
+                                        "Centro de Vigilância Sanitária",
+                                        'Instituto "Adolfo Lutz" - IAL',
+                                        "Instituto Pasteur"
+                                    ]
     elif selected_value == "Coordenadoria de Defesa e Saúde Animal":
-        ua_combo["values"] = [
-                            "Coordenadoria de Defesa e Saúde Animal"            
-                            ]
+        ua_combo["completevalues"] = [
+                                        "Coordenadoria de Defesa e Saúde Animal"            
+                                    ]
     
     elif selected_value == "Coordenadoria de Gestão de Contratos de Serviços de Saúde":
-        ua_combo["values"] = [
-                            ""
-            
-                            ]
+        ua_combo["completevalues"] = [
+                                        "Coordenadoria de Gestão de Contratos de Serviços de Saúde"
+                                     ]
     elif selected_value == "Coordenadoria de Gestão Orçamentaria e Financeira":
-        ua_combo["values"] = [
-                            ""
-                            ]
+        ua_combo["completevalues"] = [
+                                        "Coordenadoria de Gestão Orçamentaria e Financeira"
+                                    ]
     elif selected_value == "Coordenadoria de Planejamento de Saúde":
-        ua_combo["values"] = [
-                            ""
-            
-                            ]
+        ua_combo["completevalues"] = [
+                                        "Coordenadoria de Planejamento de Saúde"
+                                    ]
     elif selected_value == "Coordenadoria de Regiões de Saúde":
-        ua_combo["values"] = [
-                                    "DRS I - Grande São Paulo",
-                                    "DRS II - Araçatuba",
-                                    "DRS III - Araraquara",
-                                    'DRS IV "Dr. Maurício Fang" - Baixada Santista	',
-                                    "DRS IX - Marília",
-                                    "DRS V - Barretos",
-                                    "DRS VI - Bauru",
-                                    'DRS VII "Dr. Leôncio de Souza Queiroz" - Campinas',
-                                    "DRS VIII - Franca",
-                                    "DRS X  - Piracicaba",
-                                    "DRS XI - Presidente Prudente",
-                                    "DRS XII - Registro",
-                                    "DRS XIII - Ribeirão Preto",
-                                    "DRS XIV - São João da Boa Vista",
-                                    "DRS XV - São José do Rio Preto",
-                                    "DRS XVI - Sorocaba",
-                                    "DRS XVII - Taubaté",
-                                    "DRS XVIII - Botucatu"
-                            ]
+        ua_combo["completevalues"] = [
+                                        "DRS I - Grande São Paulo",
+                                        "DRS II - Araçatuba",
+                                        "DRS III - Araraquara",
+                                        'DRS IV "Dr. Maurício Fang" - Baixada Santista	',
+                                        "DRS IX - Marília",
+                                        "DRS V - Barretos",
+                                        "DRS VI - Bauru",
+                                        'DRS VII "Dr. Leôncio de Souza Queiroz" - Campinas',
+                                        "DRS VIII - Franca",
+                                        "DRS X  - Piracicaba",
+                                        "DRS XI - Presidente Prudente",
+                                        "DRS XII - Registro",
+                                        "DRS XIII - Ribeirão Preto",
+                                        "DRS XIV - São João da Boa Vista",
+                                        "DRS XV - São José do Rio Preto",
+                                        "DRS XVI - Sorocaba",
+                                        "DRS XVII - Taubaté",
+                                        "DRS XVIII - Botucatu"
+                                    ]
     elif selected_value == "Coordenadoria Geral de Administração":
-        ua_combo["values"] = [
-                            ""
-                            ]
+        ua_combo["completevalues"] = [
+                                        "Coordenadoria Geral de Administração"
+                                    ]
     ua_combo.config(state="normal")
+    ua_combo.config(state=tk.NORMAL)
 
     
 def ua_box_select(destinacao_entry):
@@ -456,6 +462,7 @@ def validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_
     #print(cargo_de_origem_entry.get())
     
 def path_check(declara):
+    messagebox.showinfo("Calma ae!", f"Pasta '{declara['Nome']}' dentro de '{declara['Ato']}' Vou tentar!")
     if not (os.path.exists(f'{declara['Ato']}/{declara['Nome']}/')): 
         print(f"Não temos a pasta {declara['Ato']}/{declara['Nome']}")
         try:
@@ -506,7 +513,7 @@ def declaracao_experiencia(c , declara):
 def termo_de_anuencia(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
-    c.drawCentredString(300, 750, "Termo de Anuência")
+    c.drawCentredString(300, 750, "TERMO DE ANUÊNCIA")
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
     c.setFont("Verdana", 12)
     y_position = 700
@@ -1132,11 +1139,16 @@ def informacoes_adicionais(c , declara):
 
 def declaracao(declara):
     # Cria PDF 
-    pdfmetrics.registerFont(TTFont('Verdana', 'Vera.ttf'))
-    pdfmetrics.registerFont(TTFont('Verdana-Bold', 'VeraBd.ttf'))
+    pdfmetrics.registerFont(TTFont('Verdana', './Vera.ttf'))
+    pdfmetrics.registerFont(TTFont('Verdana-Bold', './VeraBd.ttf'))
+    
+    pdfmetrics.registerFont(ttfonts.TTFont("Vera", "Vera.ttf"))
+    pdfmetrics.registerFont(ttfonts.TTFont("VeraBd", "VeraBd.ttf"))
+
+    
     #pdfmetrics.registerFont(TTFont('ZapfDingbats', './ZapfDingbats.ttf'))
     nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
-    
+    # print(declara)
     path_check(declara)
             
     c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}", pagesize=A4) 
@@ -1171,9 +1183,10 @@ def draw_checkbox(c, x, y, size=10, checked=False):
 
 def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo ):
     cargo_origem_combo.config(state="enable")
+    
     ua = ua_combo.get() 
     if ua != '':
-        cargo_origem_combo["values"] = [
+        cargo_origem_combo["completevalues"] = [
             "Agente Administrativo",
             "Agente Administrativo de Ensino",
             "Agente de Administração Pública",
@@ -1561,7 +1574,7 @@ def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo ):
             "Visitador Sanitário",
             "Zootecnista",
         ]
-    #cargo_origem_combo.focus()
+    cargo_origem_combo.focus()
     
 def filter_combobox(event, valores, combo):
     print("Event:", event)

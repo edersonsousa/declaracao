@@ -120,94 +120,118 @@ cpf_entry.bind("<Tab>", lambda event: validar_cpf_entry(event, cpf_entry))
 
 estado_civil = ["Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)"]
 # estado_civil_combo = Combobox(window, values=estado_civil, width=42)
-frame = Frame(window)
-frame.grid(row=3, column=2, padx=0, pady=0)
-# Label(
-#     frame, 
-#     background='#8DBF5A',
-#     font=('Montserrat', 12),
-#     text='Countries in North America '
-#     ).grid(row=0, column=13, pady=10)
+frame_estado_civil = Frame(window)
+frame_estado_civil.grid(row=3, column=2, padx=0, pady=0)
 
 estado_civil_combo = AutocompleteCombobox(
-    frame, 
+    frame_estado_civil, 
     width=36, 
     font=('Montserrat', 10),
     background='#ffffff',
     completevalues=estado_civil
     )
 estado_civil_combo.grid(row=3, column=2, pady=0)
-# estado_civil_combo.bind("<KeyRelease>", lambda event: filter_combobox(event, estado_civil, estado_civil_combo))
-# estado_civil_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, estado_civil, estado_civil_combo))
-
-
+#estado_civil_combo.bind("<KeyRelease>", lambda event: filter_combobox(event, estado_civil, estado_civil_combo))
+estado_civil_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, estado_civil, estado_civil_combo))
 # estado_civil_combo.grid(row=3, column=2, pady=6)
-ato_combo = Combobox(
-    window,
-    values=["Nomeação", "Designação", "Designação com posterior Nomeação"],
-    width=42,
-)
+######################################################################################################################
+ato =["Nomeação", "Designação", "Designação com posterior Nomeação"]
+frame_ato = Frame(window)
+frame_ato.grid(row=4, column=2, padx=0, pady=0)
+ato_combo = AutocompleteCombobox(
+    frame_ato, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=ato
+    )
+ato_combo.grid(row=4, column=2, pady=0)
+ato_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, ato, ato_combo))
+ato_combo.bind("<FocusOut>",lambda event: validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor))
+ato_combo.bind("<<ComboboxSelected>>", lambda event: ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo))
+# ato_combo = Combobox(
+#     window,
+#     values=["Nomeação", "Designação", "Designação com posterior Nomeação"],
+#     width=42,
+# )
 
-ato_combo.grid(row=4, column=2, pady=6)
-ato_combo.bind(
-    "<<ComboboxSelected>>",
-    lambda event: ato_box_select(
-        event,
-        ato_combo,
-        a_partir_var,
-        periodo_fechado_var,
-        a_partir_checkbutton,
-        periodo_fechado_checkbutton,
-        lei_combo,
-    ),
-)
-ato_combo.bind(
-    "<FocusOut>",
-    lambda event: validar_tipo_de_servidor(
-        ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor
-    ),
-)
+# ato_combo.grid(row=4, column=2, pady=6)
+
+
+
+
+# lei_combo = Combobox(
+#     window,
+#     values=lei,
+#     width=42,
+#     state="enable",
+# )
+frame_lei = Frame(window)
+frame_lei.grid(row=5, column=2, padx=0, pady=0)
 lei = ["Art.5º da lei complementar nº 1080/2008","Art.8º da lei complementar nº 1157/2011"]
-
-lei_combo = Combobox(
-    window,
-    values=lei
-    ,
-    width=42,
-    state="enable",
-)
-lei_combo.grid(row=5, column=2)
-lei_combo.bind(
-    "<<ComboboxSelected>>", lambda event: lei_box_select(lei_combo, jornada_combo)
-)
-lei_combo.bind("<KeyRelease>", lambda event: filter_combobox(event, lei, lei_combo))
-lei_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, lei, lei_combo))
-
-jornada_combo = Combobox(
-    window,
-    values=[
-        "Jornada Básica de Trabalho",
-        "Jornada Completa de Trabalho",
-        "Jornada Parcial de Trabalho",
-        "Jornada de 30(trinta) horas de Trabalho",
-    ],
-    width=42,
+lei_combo = AutocompleteCombobox(
+    frame_lei, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=lei
+    )
+lei_combo.grid(row=5, column=2, pady=0)
+# lei_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, lei, lei_combo))
+lei_combo.bind("<<ComboboxSelected>>", lambda event: lei_box_select(event, lei_combo, jornada_combo))
+# lei_combo.bind("<KeyRelease>", lambda event: filter_combobox(event, lei, lei_combo))
+# print(lei_combo.get())
+# jornada_combo = Combobox(
+#     window,
+#     values=[
+#         "Jornada Básica de Trabalho",
+#         "Jornada Completa de Trabalho",
+#         "Jornada Parcial de Trabalho",
+#         "Jornada de 30(trinta) horas de Trabalho",
+#     ],
+#     width=42,
+#     state="disable"
+# )
+# jornada_combo.grid(row=6, column=2)
+frame_jornada = Frame(window)
+frame_jornada.grid(row=6, column=2, padx=0, pady=0)
+jornada = ["Jornada Básica de Trabalho","Jornada Completa de Trabalho","Jornada Parcial de Trabalho","Jornada de 30(trinta) horas de Trabalho"]
+jornada_combo = AutocompleteCombobox(
+    frame_jornada, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=jornada,
     state="disable"
-)
-jornada_combo.grid(row=6, column=2)
-jornada_combo.bind(
-    "<<ComboboxSelected>>", lambda event: jornada_box_select(cargo_combo, lei_combo)
-)
+    )
+# jornada_combo.config(state=tk.DISABLED)
+jornada_combo.grid(row=6, column=2, pady=0)
+jornada_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, jornada, jornada_combo))
+####### Ao escolher a jornada ativa o campo cargo e exibe os correspondentes  #########################
+jornada_combo.bind("<<ComboboxSelected>>", lambda event: jornada_box_select(cargo_combo, lei_combo))
+#######################################################################################################
+# cargo_combo = Combobox(window, width=42, state="disable")
+# cargo_combo.grid(row=7, column=2)
+# cargo_combo.bind(
+#     "<<ComboboxSelected>>", lambda event: cargo_box_select(coordenadoria_combo)
+# )
+##########################################################################################
+frame_cargo = Frame(window)
+frame_cargo.grid(row=7, column=2, padx=0, pady=0)
+cargo = [""]
+cargo_combo = AutocompleteCombobox(
+    frame_cargo, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=cargo,
+    state="disable"
+    )
+cargo_combo.grid(row=7, column=2, pady=0)
+cargo_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, cargo, cargo_combo))
+cargo_combo.bind("<<ComboboxSelected>>", lambda event: cargo_box_select(coordenadoria_combo))
 
-cargo_combo = Combobox(window, width=42, state="disable")
-cargo_combo.grid(row=7, column=2)
-cargo_combo.bind(
-    "<<ComboboxSelected>>", lambda event: cargo_box_select(coordenadoria_combo)
-)
-
-coordenadoria_combo = Combobox(
-    window,
-    values=[
+coordenadoria = [
         'Administração Superior da Secretaria e da Sede',
         "Coordenadoria de Assistência Farmacêutica",
         "Coordenadoria de Ciência, Tecnologia e Insumos Estratégicos de Saúde",
@@ -219,27 +243,59 @@ coordenadoria_combo = Combobox(
         "Coordenadoria de Regiões de Saúde",
         "Coordenadoria de Serviços de Saúde",
         "Coordenadoria Geral de Administração",
-    ],
-    width=72,
-    state="disable",
-)
-coordenadoria_combo.grid(row=8, column=2, columnspan=3, sticky='w')
-coordenadoria_combo.bind(
-    "<<ComboboxSelected>>", lambda event: coordenadoria_box_select(ua_combo, coordenadoria_combo)
-)
-
-ua_combo = Combobox(
-    window,
-    values=[
-        ""
-    ],
-    width=75,
-    state="disable",
-)
-ua_combo.grid(row=9, column=2, pady=6, columnspan=5, sticky='w')
-ua_combo.bind(
-    "<<ComboboxSelected>>", lambda event: ua_box_select(destinacao_entry)
-)
+                    ]
+################################################################################################### 
+# coordenadoria_combo = Combobox(
+#     window,
+#     values=coordenadoria,
+#     width=72,
+#     state="disable",
+# )
+# coordenadoria_combo.grid(row=8, column=2, columnspan=3, sticky='w')
+####################################################################################################
+frame_coordenadoria = Frame(window)
+frame_coordenadoria.grid(row=8, column=2, padx=0, pady=0)
+#coordenadoria = [""]
+coordenadoria_combo = AutocompleteCombobox(
+    frame_coordenadoria, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=coordenadoria,
+    state="disable"
+    )
+coordenadoria_combo.grid(row=8, column=2, pady=0)
+coordenadoria_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, coordenadoria, coordenadoria_combo))
+coordenadoria_combo.bind("<<ComboboxSelected>>", lambda event: coordenadoria_box_select(ua_combo, coordenadoria_combo))
+###################################################################################################
+# ua_combo = Combobox(
+#     window,
+#     values=[
+#         ""
+#     ],
+#     width=75,
+#     state="disable",
+# )
+# ua_combo.grid(row=9, column=2, pady=6, columnspan=5, sticky='w')
+# ua_combo.bind(
+#     "<<ComboboxSelected>>", lambda event: ua_box_select(destinacao_entry)
+# )
+####################################################################################################
+frame_ua = Frame(window)
+frame_ua.grid(row=9, column=2, padx=0, pady=0)
+ua = [""]
+ua_combo = AutocompleteCombobox(
+    frame_ua, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=ua,
+    state="disable"
+    )
+ua_combo.grid(row=9, column=2, pady=0)
+ua_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, ua, ua_combo))
+ua_combo.bind("<<ComboboxSelected>>", lambda event: ua_box_select(destinacao_entry))
+###################################################################################################
 
 destinacao_entry = Entry(width=75, state="disable")
 destinacao_entry.grid(row=10, column=2, pady=6, columnspan=5, sticky='w')
@@ -250,25 +306,49 @@ destinacao_entry.bind(
     ),
 )
 
-regime_combo = Combobox(
-    window, values=["Efetivo", "Lei 500", "Comissão", "CLT"], width=42
-)
-regime_combo.grid(row=11, column=2)
+# regime_combo = Combobox(
+#     window, values=["Efetivo", "Lei 500", "Comissão", "CLT"], width=42
+# )
+# regime_combo.grid(row=11, column=2)
+####################################################################################################
+frame_regime = Frame(window)
+frame_regime.grid(row=11, column=2, padx=0, pady=0)
+regime = ["Efetivo", "Lei 500", "Comissão", "CLT"]
+regime_combo = AutocompleteCombobox(
+    frame_regime, 
+    width=36, 
+    font=('Montserrat', 10),
+    background='#ffffff',
+    completevalues=regime
+    #state="disable"
+    )
+regime_combo.grid(row=11, column=2, pady=0)
+regime_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, regime, regime_combo))
+###################################################################################################
+# cargo_origem_combo = Combobox(
+#     window,
+#     values=[""],
+#     width=75,
+#     state="disable",
+# )
+# cargo_origem_combo.grid(row=12, column=2, columnspan=5)
+##############################################################################################################################################
+frame_cargo_origem = Frame(window)
+frame_cargo_origem.grid(row=12, column=2, padx=0, pady=0)
+cargo_origem = [""]
+cargo_origem_combo = AutocompleteCombobox(
+                                        frame_cargo_origem, 
+                                        width=36, 
+                                        font=('Montserrat', 10),
+                                        background='#ffffff',
+                                        completevalues=cargo_origem,
+                                        state="disable"
+                                        )
+cargo_origem_combo.grid(row=12, column=2, pady=0)
+cargo_origem_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, cargo_origem, cargo_origem_combo))
+cargo_origem_combo.bind("<FocusOut>", lambda event: validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor))
+#############################################################################################################################################
 
-cargo_origem_combo = Combobox(
-    window,
-    values=[""],
-    width=75,
-    state="disable",
-)
-
-cargo_origem_combo.grid(row=12, column=2, columnspan=5)
-cargo_origem_combo.bind(
-    "<FocusOut>",
-    lambda event: validar_tipo_de_servidor(
-        ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor
-    ),
-)
 
 a_partir_var = tk.BooleanVar()
 a_partir_checkbutton = Checkbutton(
@@ -321,7 +401,7 @@ bnt_n_servidor = Button(
             "Destinação": destinacao_entry.get(),
             "UA": ua_combo.get(),
             "Coordenadoria": coordenadoria_combo.get(),
-            "Cargo de Origem": cargo_de_origem_entry.get(),
+            "Cargo de Origem": cargo_origem_combo.get(),
             "Regime": regime_combo.get(),
         }
     ),
