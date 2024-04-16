@@ -14,6 +14,12 @@ import babel.numbers
 import subprocess, os, locale
 from babel.dates import format_date, Locale
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen.canvas import Canvas
+import os
+
+# Conteúdo dos arquivos de fonte TTF
+
+
 
 locale = Locale('pt', 'BR')
 
@@ -132,6 +138,7 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     a_partir_checkbutton.config(state="normal")
     periodo_fechado_checkbutton.config(state="normal")
     regime_combo.set('')
+    regime_combo.config(state="disable")
     bnt_n_servidor.config(state="disable")
     bnt_servidor.config(state="disable")
 
@@ -545,6 +552,34 @@ def termo_de_anuencia(c , declara):
     c.setFont("Verdana", 10)
     c.drawRightString(500, 450, f"{declara['Nome']}")
     
+def termo_de_compromisso_clt(c , declara):
+    #Define título
+    c.setFont("Verdana-Bold", 14)
+    c.drawCentredString(300, 750, "TERMO DE COMPROMISSO")
+    c.setFont("Verdana", 10)
+    c.drawCentredString(300, 735, "(para servidores celetistas)")
+    # Adiciona informações do dicionário do PDF em um parágrafo justificado
+    c.setFont("Verdana", 12)
+    y_position = 700
+    text = f"Eu, {declara['Nome']}, RG. {declara['RG']}, {declara['Cargo de Origem']}, CLT, concordo em ser \
+            {declara['Ato']} para exercer o cargo de {declara['Cargo']}, do SQC-I, no(a) {declara['Destinação']},\
+             do(a) {declara['UA']}, da {declara['Coordenadoria']}, comprometo-me a exercer o referido cargo em \
+            {declara['Jornada']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700 - p.height)
+   
+    
+    c.setFont("Verdana", 12)
+    
+    c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
+    c.setFont("Verdana", 11)
+    c.drawRightString(500, 470, f"__________________________________________________")
+    c.setFont("Verdana", 10)
+    c.drawRightString(500, 450, f"{declara['Nome']}")
+    
+    
 def declaracao_hipotese_inelegibilidade(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
@@ -775,7 +810,7 @@ def declaracao_acumulo(c , declara):
     p.wrapOn(c, 320, 198)
     p.drawOn(c, 250, 198)
     draw_checkbox(c, 280, 198 , checked=False)
-    c.drawRightString(500, 198, f"__________________________________")
+    c.drawRightString(500, 198, f"_________________________")
 
 
 
@@ -892,7 +927,7 @@ def anexo_i(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 380)
     p.drawOn(c, 100, 360)
-    c.drawRightString(500, 360, f"_________________________________________________________________")
+    c.drawRightString(500, 360, f"__________________________________________________")
     
     y_position = 240
     text_bold =f"Relação de Parentesco:"
@@ -901,7 +936,7 @@ def anexo_i(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 358)
     p.drawOn(c, 100, 340)
-    c.drawRightString(500, 340, f"__________________________________________________")
+    c.drawRightString(500, 340, f"_______________________________________")
 
     y_position = 240
     text_bold =f"Cargo:"
@@ -910,7 +945,7 @@ def anexo_i(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 348)
     p.drawOn(c, 100, 320)
-    c.drawRightString(500, 320, f"_________________________________________________________________")
+    c.drawRightString(500, 320, f"___________________________________________________")
 
     c.rect(90, 222, 450, 70)
     
@@ -970,30 +1005,26 @@ def anexo_i(c , declara):
     p.drawOn(c, 100, 70)
     
 def informacoes_adicionais(c , declara):
-    
-    
     c.rect(50, 750, 500, 40)
-    
     c.setFont("Verdana-Bold", 12)
     c.drawCentredString(300, 765, f"INFORMAÇÕES ADICIONAIS")
-    
-    
+        
     c.rect(50, 480, 500, 270)
     text_bold =f"<u>DO SERVIDOR</u>"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
     p = Paragraph(text_bold, style)
-    p.wrapOn(c, 550, 720)
-    p.drawOn(c, 60, 730)
+    p.wrapOn(c, 550, 725)
+    p.drawOn(c, 60, 735)
     
-    do_servidor_1 =f"1) Indicar o cargo em comissão ou a função de confiança/gratificada de que é ocupante:\
-                     Cargo/função:___________________________________________________________________________\
-                     Órgão/entidade:_________________________________________________________________________"
+    do_servidor_1 =f"1) Indicar o cargo em comissão ou a função de confiança/gratificada de que é ocupante:\v\
+                     Cargo/função:_______________________________________________________________\v\
+                     Órgão/entidade:_____________________________________________________________\v"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
     p = Paragraph(do_servidor_1, style)
     p.wrapOn(c, 480, 650)
-    p.drawOn(c, 60, 665)
+    p.drawOn(c, 60, 670)
     
     do_servidor_2a =f"2) É ocupante de cargo efetivo/função permanente?"
     
@@ -1005,25 +1036,25 @@ def informacoes_adicionais(c , declara):
     do_servidor_2b =f"Em caso positivo, indicar:"
     style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
     p = Paragraph(do_servidor_2b, style)
-    p.wrapOn(c, 490, 610)
-    p.drawOn(c, 60, 620)
+    p.wrapOn(c, 490, 605)
+    p.drawOn(c, 60, 615)
     
     text=f"Sim"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 625)
-    p.drawOn(c, 210, 625)
-    draw_checkbox(c, 195, 625 , checked=False)
+    p.wrapOn(c, 400, 610)
+    p.drawOn(c, 210, 620)
+    draw_checkbox(c, 195, 620 , checked=False)
     
     text=f"Não"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 625)
-    p.drawOn(c, 260, 625)
-    draw_checkbox(c, 245, 625 , checked=False)
+    p.wrapOn(c, 400, 610)
+    p.drawOn(c, 260, 620)
+    draw_checkbox(c, 245, 620 , checked=False)
     
-    do_servidor_2c =f"Cargo/função:___________________________________________________________________________\
-                      Órgão/entidade:_________________________________________________________________________"
+    do_servidor_2c =f"Cargo/função:_______________________________________________________________\v\
+                     Órgão/entidade:_____________________________________________________________\v"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
     p = Paragraph(do_servidor_2c, style)
@@ -1054,9 +1085,9 @@ def informacoes_adicionais(c , declara):
     p.wrapOn(c, 480, 460)
     p.drawOn(c, 60, 460)
     
-    do_parente_1 =f"1) Indicar o cargo em comissão ou a função de confiança/gratificada de que o parente é ocupante:\
-                     Cargo/função:___________________________________________________________________________\
-                     Órgão/entidade:_________________________________________________________________________"
+    do_parente_1 =f"1) Indicar o cargo em comissão ou a função de confiança/gratificada de que o parente é ocupante:\v\
+                     Cargo/função:______________________________________________________________\v\
+                     Órgão/entidade:____________________________________________________________\v"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
     p = Paragraph(do_parente_1, style)
@@ -1074,26 +1105,26 @@ def informacoes_adicionais(c , declara):
     do_parente_2b =f"Em caso positivo, indicar:"
     style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
     p = Paragraph(do_parente_2b, style)
-    p.wrapOn(c, 490, 320)
-    p.drawOn(c, 60, 320)
+    p.wrapOn(c, 490, 325)
+    p.drawOn(c, 60, 325)
     
     text=f"Sim"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 325)
-    p.drawOn(c, 210, 325)
-    draw_checkbox(c, 195, 325 , checked=False)
+    p.wrapOn(c, 400, 330)
+    p.drawOn(c, 210, 330)
+    draw_checkbox(c, 195, 330 , checked=False)
     
     text=f"Não"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 325)
-    p.drawOn(c, 260, 325)
-    draw_checkbox(c, 245, 325 , checked=False)
+    p.wrapOn(c, 400, 330)
+    p.drawOn(c, 260, 330)
+    draw_checkbox(c, 245, 330 , checked=False)
     
     
-    do_parente_2c =f"Cargo/função:___________________________________________________________________________\
-                      Órgão/entidade:_________________________________________________________________________"
+    do_parente_2c =f"Cargo/função:_______________________________________________________________\v\
+                     Órgão/entidade:_____________________________________________________________\v"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", leading=(12*1.5))
     p = Paragraph(do_parente_2c, style)
@@ -1136,17 +1167,195 @@ def informacoes_adicionais(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 60)
     p.drawOn(c, 100, 70)
+    
+def anexo_iii(c , declara):
+       
+    #c.setFont("Verdana-Bold", 11)
+    y_position = 780
+    text =f"ANEXO III"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 730)
+    p.drawOn(c, 100, 780 - p.height)
+
+    #c.setFont("Verdana-Bold", 11)
+    y_position = 600
+    text_bold =f"a que se referem o artigo 5º do Decreto nº 54.376,\
+                    de 26 de maio de 2009 alterado pelo artigo\
+                    1º do Decreto nº 67.445, de 12 de janeiro de 2023"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700)
+
+    c.setFont("Verdana", 11)
+    y_position = 700
+    text_bold =f"DECLARAÇÃO DE PARENTESCO"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 550)
+    p.drawOn(c, 100, 665 - p.height)
+
+    c.setFont("Verdana", 11)
+    y_position = 650
+    text_bold =f"( SÚMULA VINCULANTE Nº 13 DO STF )"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 532)
+    p.drawOn(c, 100, 647- p.height)
+    #c.line(90, y + size, x + size, y)
+    
+    text =f"Nome: {declara['Nome']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 618)
+    p.drawOn(c, 100, 600 - p.height)
+    #c.rect(90, 500, 400, 50)
+    c.rect(90, 550, 450, 50)
+    #c.rect(95, 600, 400, 50)
+    
+    
+    text =f"RG : {declara['RG']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 582 - p.height)
+
+    text =f"CPF : {declara['CPF']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 582)
+    p.drawOn(c, 100, 564 - p.height)
+
+    c.rect(90, 300, 450, 236)
+    y_position = 350
+    text_bold =f"É cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, inclusive,\
+                da autoridade nomeante ou de servidor do Poder Executivo investido em cargo de direção, chefia ou assessoramento?"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 425)
+    p.drawOn(c, 100, 475)
+    
+    text=f"NÃO"
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
+    draw_checkbox(c, 100, 430 , checked=False)
+    #draw_checkbox(c, 238, 300 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 200, 430)
+    p.drawOn(c, 120, 430)
+    
+    text=f"SIM"
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
+    draw_checkbox(c, 100, 450 , checked=False)
+    #draw_checkbox(c, 238, 300 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 200, 450)
+    p.drawOn(c, 120, 450)
+    
+    y_position = 400
+    text_bold =f"Em caso positivo, apontar:"
+    
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 400)
+    p.drawOn(c, 100, 380)
+    c.setFont("Verdana", 11)
+    
+    
+    y_position = 420
+    text_bold =f"Nome:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 380)
+    p.drawOn(c, 100, 360)
+    c.drawRightString(500, 360, f"_____________________________________________________")
+    
+    y_position = 240
+    text_bold =f"Relação de Parentesco:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 358)
+    p.drawOn(c, 100, 340)
+    c.drawRightString(500, 340, f"_______________________________________")
+
+    y_position = 240
+    text_bold =f"Cargo:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 348)
+    p.drawOn(c, 100, 320)
+    c.drawRightString(500, 320, f"_____________________________________________")
+
+    c.rect(90, 222, 450, 70)
+    
+    text =f"Informe também a existência de cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade,\
+            até o terceiro grau, inclusive, no exercício de cargo de direção, chefia ou assessoramento no âmbito dos \
+            Poderes Judiciário ou Legislativo, do Ministério Público, da Defensoria Pública, das Autarquias \
+            (inclusive das universidades públicas), das empresas controladas pelo Estado e das fundações \
+            instituídas e mantidas pelo Poder Público:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 425, 220)
+    p.drawOn(c, 100, 145)
+    
+    c.rect(90, 140, 450, 75)
+    
+    text_bold =f"OBSERVAÇÕES:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 260)
+    p.drawOn(c, 100, 278)
+    
+    text_bold =f"   Parentes em linha reta: pais, avós, bisavós, filho[a], neto[a] e bisneto[a].\
+                    Parentes em linha colateral: irmão(ã), tio(a) e sobrinho(a).\
+                    Parentes por afinidade: genro, nora, sogro(a), enteado(a), \
+                    madrasta, padrasto e cunhado(a) e concunhado(a)."
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 190)
+    p.drawOn(c, 100, 240)
+
+    c.setFont("Verdana", 12)
+    
+    
+    # c.setFont("Verdana", 11)
+    # c.drawRightString(400, 100, f"{declara['Nome']}")
+    
+    c.setFont("Verdana", 11)
+    text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 100)
+    p.drawOn(c, 100, 110)
+    
+    text=f"__________________________________________________"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 75)
+    p.drawOn(c, 100, 85)
+    
+    text=f"{declara['Nome']}"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 60)
+    p.drawOn(c, 100, 70)
 
 def declaracao(declara):
+    
+    search_font_verdana()
     # Cria PDF 
-    pdfmetrics.registerFont(TTFont('Verdana', './Vera.ttf'))
-    pdfmetrics.registerFont(TTFont('Verdana-Bold', './VeraBd.ttf'))
-    
-    pdfmetrics.registerFont(ttfonts.TTFont("Vera", "Vera.ttf"))
-    pdfmetrics.registerFont(ttfonts.TTFont("VeraBd", "VeraBd.ttf"))
-
-    
-    #pdfmetrics.registerFont(TTFont('ZapfDingbats', './ZapfDingbats.ttf'))
     nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
     # print(declara)
     path_check(declara)
@@ -1156,6 +1365,9 @@ def declaracao(declara):
     c.showPage()
     termo_de_anuencia(c , declara)
     c.showPage()
+    if declara['Regime'] == 'CLT':
+        termo_de_compromisso_clt(c , declara)
+        c.showPage()
     declaracao_hipotese_inelegibilidade(c, declara)
     c.showPage()
     declaracao_cargo_funcao(c , declara)
@@ -1165,7 +1377,11 @@ def declaracao(declara):
     anexo_i(c , declara)
     c.showPage()
     informacoes_adicionais(c , declara)
-    
+    c.showPage()
+    if declara['Ato'] =='Designação com posterior Nomeação':
+        anexo_iii(c , declara)
+        c.showPage()
+        informacoes_adicionais(c , declara)
     c.save()
     #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
     subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}"], shell=True)
@@ -1181,7 +1397,7 @@ def draw_checkbox(c, x, y, size=10, checked=False):
         c.line(x, y, x + size, y + size)
         c.line(x, y + size, x + size, y)
 
-def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo ):
+def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo, regime_combo):
     cargo_origem_combo.config(state="enable")
     
     ua = ua_combo.get() 
@@ -1574,7 +1790,10 @@ def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo ):
             "Visitador Sanitário",
             "Zootecnista",
         ]
-    cargo_origem_combo.focus()
+    #cargo_origem_combo.focus()
+    regime_combo.config(state="enable")
+    regime_combo.focus()
+    
     
 def filter_combobox(event, valores, combo):
     print("Event:", event)
@@ -1599,3 +1818,31 @@ def on_select(event, valores, combo):
         combo.focus()
     
     
+def search_font_verdana():
+    # Diretório padrão de fontes do Windows
+    fonts_directory = "C:\\Windows\\Fonts\\"
+
+    # Nomes dos arquivos de fonte que estamos procurando
+    font_files = {
+        "Verdana": "verdana.ttf",
+        "Verdana-Bold": "verdanab.ttf"
+    }
+
+    # Verifica se os arquivos de fonte existem
+    existing_fonts = {}
+    for font_name, font_file in font_files.items():
+        font_path = os.path.join(fonts_directory, font_file)
+        if os.path.exists(font_path):
+            existing_fonts[font_name] = font_path
+
+    # Registra as fontes existentes no ReportLab
+    for font_name, font_path in existing_fonts.items():
+        pdfmetrics.registerFont(TTFont(font_name, font_path))
+
+    # Exibe as fontes registradas
+    if existing_fonts:
+        print("As seguintes fontes foram registradas:")
+        for font_name, font_path in existing_fonts.items():
+            print(f"{font_name}: {font_path}")
+    else:
+        print("Nenhuma das fontes foi encontrada.")

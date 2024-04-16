@@ -41,6 +41,10 @@ from tkinter import (
 )
 from PIL import Image, ImageDraw
 
+
+
+
+
 window = Tk()
 window.title("Declarações")
 window.config(padx=20, pady=25, bg="white")
@@ -98,6 +102,8 @@ cargo_de_origem_label["font"] = ("Montserrat", "12")
 cargo_de_origem_label.grid(row=12, column=1, pady=4, sticky="W")
 
 # Entries
+#################################################################
+
 
 nome_entry = Entry(width=45)
 nome_entry.grid(row=0, column=2)
@@ -302,10 +308,11 @@ destinacao_entry.grid(row=10, column=2, pady=6, columnspan=5, sticky='w')
 destinacao_entry.bind(
     "<FocusOut>",
     lambda event: cargo_de_origem(
-        destinacao_entry, ua_combo, cargo_origem_combo
+        destinacao_entry, ua_combo, cargo_origem_combo, regime_combo
     ),
 )
 
+#############################################################################################################################################
 # regime_combo = Combobox(
 #     window, values=["Efetivo", "Lei 500", "Comissão", "CLT"], width=42
 # )
@@ -319,11 +326,14 @@ regime_combo = AutocompleteCombobox(
     width=36, 
     font=('Montserrat', 10),
     background='#ffffff',
-    completevalues=regime
-    #state="disable"
+    completevalues=regime,
+    state="disable"
     )
 regime_combo.grid(row=11, column=2, pady=0)
 regime_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, regime, regime_combo))
+
+####################################################################################################
+
 ###################################################################################################
 # cargo_origem_combo = Combobox(
 #     window,
@@ -347,8 +357,6 @@ cargo_origem_combo = AutocompleteCombobox(
 cargo_origem_combo.grid(row=12, column=2, pady=0)
 cargo_origem_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, cargo_origem, cargo_origem_combo))
 cargo_origem_combo.bind("<FocusOut>", lambda event: validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor))
-#############################################################################################################################################
-
 
 a_partir_var = tk.BooleanVar()
 a_partir_checkbutton = Checkbutton(
