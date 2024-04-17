@@ -491,9 +491,15 @@ def declaracao_experiencia(c , declara):
     #    text += f"{key}: {value}\n"
     c.setFont("Verdana", 12)
     y_position = 700
-    text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, \
-            para {declara['Ato']} e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
-            que a indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, \
+    text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, para {declara['Ato']}"
+    ######################## Para o caso de 'A Partir' ###############################################
+    if {user_date_a_partir_variable} != {None}: 
+        text +=f" a partir de {user_date_a_partir_variable}"
+    elif (({date_periodofechado_inicio_variable} != {None}) and ({date_periodofechado_fim_variable} != {None})):
+        text +=f" no período {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}"
+    ##################################################################################################
+    text +=f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
+            que o(a) indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, \
             no tocante a experiência profissional exigida com relação aos assuntos relacionados as atividades a serem desempenhadas \
             no cargo de {declara['Cargo']} classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
     
@@ -525,18 +531,18 @@ def termo_de_anuencia(c , declara):
     c.setFont("Verdana", 12)
     y_position = 700
     text = f"Eu, {declara['Nome']}, "
-    # Para o caso de Servidor ou Não Servidor
+    # Para o caso de Servidor ou Não Servidor RAI
     if (declara['Cargo de Origem'] != ''):
         text += f"{declara['Cargo de Origem']}, "
-    text += f"{declara['Regime']}, RG. {declara['RG']}, concordo com a {declara['Ato']} \
-                , em {declara['Jornada']}, para o cargo de {declara['Cargo']}"
-    # Para o caso de "A partir" ou "Período Fechado" 
-    if date_periodofechado_inicio_variable is not None and date_periodofechado_fim_variable is not None:
-        text += f"no período de {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable} "
-    elif  user_date_a_partir_variable is not None:
+    text += f"{declara['Regime']}, RG. {declara['RG']}, concordo com\
+                a {declara['Ato']}, em {declara['Jornada']}, para o cargo de {declara['Cargo']}"
+    # Para o caso do "A partir" CAIeIII AP
+    if  user_date_a_partir_variable is not None:
         text += f", a partir de {user_date_a_partir_variable}"
-             
-    text += f", do(a) {declara['Destinação']}, da {declara['UA']}, da {declara['Coordenadoria']}. "
+    # Para o caso de "Período Fechado" CAIII PF
+    if date_periodofechado_inicio_variable is not None and date_periodofechado_fim_variable is not None:
+        text += f", no período de {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}, "
+    text += f", no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}. "
     
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
@@ -561,10 +567,10 @@ def termo_de_compromisso_clt(c , declara):
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
     c.setFont("Verdana", 12)
     y_position = 700
-    text = f"Eu, {declara['Nome']}, RG. {declara['RG']}, {declara['Cargo de Origem']}, CLT, concordo em ser \
+    text = f"Eu, {declara['Nome']}, RG. {declara['RG']}, {declara['Cargo de Origem']}, CLT, concordo com a \
             {declara['Ato']} para exercer o cargo de {declara['Cargo']}, do SQC-I, no(a) {declara['Destinação']},\
              do(a) {declara['UA']}, da {declara['Coordenadoria']}, comprometo-me a exercer o referido cargo em \
-            {declara['Jornada']}"
+            {declara['Jornada']}."
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
@@ -591,30 +597,48 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     c.setFont("Verdana", 12)
     y_position = 700
     text =f"Eu, {declara['Nome']}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
-            declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012. \
-            Declaro ainda, sob as penas da lei, não incorrer em nenhuma das hipóteses de inelegibilidade previstas em lei federal. \
-            Assumo, por fim, o compromisso de comunicar a meu superior hierárquico, no prazo de 30 (trinta) dias subsequentes \
-            à respectiva ciência, a superveniência de:"
+            declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012."
     
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     
+    
+    text2 =f"Declaro ainda, sob as penas da lei, não incorrer em nenhuma das hipóteses de inelegibilidade previstas em lei federal."
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text2, style)
+    p.wrapOn(c, 400, 540)
+    p.drawOn(c, 100, 640 - p.height)
+    
+    
+    
+    
+    text3 =f"Assumo, por fim, o compromisso de comunicar a meu superior hierárquico, no prazo de 30 (trinta) dias subsequentes \
+            à respectiva ciência, a superveniência de:"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text3, style)
+    p.wrapOn(c, 400, 500)
+    p.drawOn(c, 100, 600 - p.height)
+    
+    
+    
+    
     text =f"a) enquadramento em qualquer hipótese de inelegibilidade prevista em lei federal;"
     
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 530)
-    p.drawOn(c, 100, 568)
+    p.wrapOn(c, 400, 480)
+    p.drawOn(c, 100, 518)
     
     text =f"b) instauração de processos administrativos ou judiciais cuja decisão possa importar \
             em inelegibilidade, nos termos de lei federal."
     
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 500)
-    p.drawOn(c, 100, 530)
+    p.wrapOn(c, 400, 440)
+    p.drawOn(c, 100, 470)
     
     
     
@@ -632,8 +656,14 @@ def declaracao_cargo_funcao(c , declara):
     
     c.setFont("Verdana", 12)
     y_position = 700
-    text =f"Eu, {declara['Nome']}, {declara['Cargo de Origem']}, {declara['Regime']}, RG. {declara['RG']}, \
-            DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, do(a) {declara['Destinação']}, do(a) \
+    text =f"Eu, {declara['Nome']}, {declara['Cargo de Origem']}, {declara['Regime']}, " 
+    # print("Origem e Regime?")
+    # print(f"Teste Origem ....{declara['Cargo de Origem']}")
+    # print(f"Teste Regime....{declara['Regime']}")
+    ########## Corrigir isso!!
+    # if {declara['Cargo de Origem']} != cargo_origem_combo["completevalues"]: text +=f"{declara['Cargo de Origem']},"     
+    # if {declara['Regime']} != regime_combo["completevalues"]: text+=f"{declara['Regime']}, "
+    text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, do(a) {declara['Destinação']}, do(a) \
             {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
             gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \
             de Saúde - SUS/SP ou sejam por este credenciadas."
@@ -1042,16 +1072,16 @@ def informacoes_adicionais(c , declara):
     text=f"Sim"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 610)
-    p.drawOn(c, 210, 620)
-    draw_checkbox(c, 195, 620 , checked=False)
+    p.wrapOn(c, 500, 630)
+    p.drawOn(c, 410, 640)
+    draw_checkbox(c, 390, 640 , checked=False)
     
     text=f"Não"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 610)
-    p.drawOn(c, 260, 620)
-    draw_checkbox(c, 245, 620 , checked=False)
+    p.wrapOn(c, 600, 630)
+    p.drawOn(c, 460, 640)
+    draw_checkbox(c, 440, 640 , checked=False)
     
     do_servidor_2c =f"Cargo/função:_______________________________________________________________\v\
                      Órgão/entidade:_____________________________________________________________\v"
@@ -1105,22 +1135,22 @@ def informacoes_adicionais(c , declara):
     do_parente_2b =f"Em caso positivo, indicar:"
     style = ParagraphStyle(name='Justify', alignment=0, fontName="Verdana", leading=(12*1.5))
     p = Paragraph(do_parente_2b, style)
-    p.wrapOn(c, 490, 325)
-    p.drawOn(c, 60, 325)
+    p.wrapOn(c, 490, 320)
+    p.drawOn(c, 60, 320)
     
     text=f"Sim"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 330)
-    p.drawOn(c, 210, 330)
-    draw_checkbox(c, 195, 330 , checked=False)
+    p.wrapOn(c, 500, 345)
+    p.drawOn(c, 410, 345)
+    draw_checkbox(c, 390, 345 , checked=False)
     
     text=f"Não"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 330)
-    p.drawOn(c, 260, 330)
-    draw_checkbox(c, 245, 330 , checked=False)
+    p.wrapOn(c, 600, 345)
+    p.drawOn(c, 460, 345)
+    draw_checkbox(c, 440, 345 , checked=False)
     
     
     do_parente_2c =f"Cargo/função:_______________________________________________________________\v\
@@ -1374,14 +1404,32 @@ def declaracao(declara):
     c.showPage()
     declaracao_acumulo(c , declara)
     c.showPage()
-    anexo_i(c , declara)
-    c.showPage()
-    informacoes_adicionais(c , declara)
-    c.showPage()
-    if declara['Ato'] =='Designação com posterior Nomeação':
+    print(declara['Ato'])
+    print(declara['Regime'])
+    print({user_date_a_partir_variable})
+    ##################################### Para o caso de Designação e não CLT... ######################################
+    
+    if ((declara['Ato'] == 'Designação' and declara['Regime'] != 'CLT') 
+            or ((declara['Ato'] == 'Designação' and declara['Regime'] == 'CLT' 
+            and {user_date_a_partir_variable} == {None} and {date_periodofechado_inicio_variable} == {None}
+            and {date_periodofechado_fim_variable} == {None}))
+                or ((declara['Ato'] == 'Designação' and declara['Regime'] == 'CLT' 
+                and (({date_periodofechado_inicio_variable} is not None) and ({date_periodofechado_fim_variable} is not None))))):
         anexo_iii(c , declara)
         c.showPage()
         informacoes_adicionais(c , declara)
+        c.showPage()
+    ###################################################### Outros #####################################################
+    else:
+        anexo_i(c , declara)
+        c.showPage()
+        informacoes_adicionais(c , declara)
+        c.showPage()
+        if declara['Ato'] =='Designação com posterior Nomeação':
+            anexo_iii(c , declara)
+            c.showPage()
+            informacoes_adicionais(c , declara)
+            c.showPage()
     c.save()
     #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
     subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}"], shell=True)
