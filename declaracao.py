@@ -4,7 +4,7 @@ import reportlab.rl_config
 from tool_box import (
     validar_nome_entry,
     validar_rg_entry,
-    validar_cpf_entry,
+    validar_cpf,
     limpar_campos,
     toggle_check_a_partir,
     toggle_check_periodo_fechado,
@@ -22,8 +22,9 @@ from tool_box import (
     ua_box_select,
     cargo_de_origem,
     filter_combobox, 
-    on_select
-                    )
+    on_select,
+    mascara_cpf
+                        )
 import tkinter as tk
 from ttkwidgets.autocomplete import AutocompleteCombobox
 
@@ -121,8 +122,10 @@ rg_entry.config(validate="key", validatecommand=(validate_rg_cmd, "%P"))
 cpf_entry = Entry(width=45)
 cpf_entry.grid(row=2, column=2, pady=4)
 
-cpf_entry.bind("<Return>", lambda event: validar_cpf_entry(event, cpf_entry))
-cpf_entry.bind("<Tab>", lambda event: validar_cpf_entry(event, cpf_entry))
+cpf_entry.bind("<KeyRelease>", lambda event: mascara_cpf(event, cpf_entry))
+cpf_entry.bind("<Return>", lambda event: validar_cpf(event, cpf_entry))
+cpf_entry.bind("<Tab>", lambda event: validar_cpf(event, cpf_entry))
+
 
 estado_civil = ["Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)"]
 # estado_civil_combo = Combobox(window, values=estado_civil, width=42)
@@ -320,13 +323,13 @@ destinacao_entry.bind(
 ####################################################################################################
 frame_regime = Frame(window)
 frame_regime.grid(row=11, column=2, padx=0, pady=0)
-regime = ["Efetivo", "Lei 500", "Comissão", "CLT"]
+regime_list = ["Efetivo", "Lei 500", "Comissão", "CLT"]
 regime_combo = AutocompleteCombobox(
     frame_regime, 
     width=36, 
     font=('Montserrat', 10),
     background='#ffffff',
-    completevalues=regime,
+    completevalues=regime_list,
     state="disable"
     )
 regime_combo.grid(row=11, column=2, pady=0)
@@ -345,17 +348,17 @@ regime_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, regime,
 ##############################################################################################################################################
 frame_cargo_origem = Frame(window)
 frame_cargo_origem.grid(row=12, column=2, padx=0, pady=0)
-cargo_origem = [""]
+cargo_origem_list = [""]
 cargo_origem_combo = AutocompleteCombobox(
                                         frame_cargo_origem, 
                                         width=36, 
                                         font=('Montserrat', 10),
                                         background='#ffffff',
-                                        completevalues=cargo_origem,
+                                        completevalues=cargo_origem_list,
                                         state="disable"
                                         )
 cargo_origem_combo.grid(row=12, column=2, pady=0)
-cargo_origem_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, cargo_origem, cargo_origem_combo))
+cargo_origem_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, cargo_origem_list, cargo_origem_combo))
 cargo_origem_combo.bind("<FocusOut>", lambda event: validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor))
 
 a_partir_var = tk.BooleanVar()
@@ -411,6 +414,7 @@ bnt_n_servidor = Button(
             "Coordenadoria": coordenadoria_combo.get(),
             "Cargo de Origem": cargo_origem_combo.get(),
             "Regime": regime_combo.get(),
+            "regime_list": regime_list
         }
     ),
 )
@@ -439,7 +443,10 @@ bnt_servidor = Button(
             "UA": ua_combo.get(),
             "Coordenadoria": coordenadoria_combo.get(),
             "Cargo de Origem": cargo_origem_combo.get(),
+            "cargo_origem_list": cargo_origem_list,
             "Regime": regime_combo.get(),
+            "regime_list": regime_list
+
         }
     ),
 )

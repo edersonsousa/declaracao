@@ -80,33 +80,72 @@ def validar_rg_entry(new_value, rg_entry):
         return True
     else:
         return False
-
-
-def validar_cpf_entry(event):
-    new_value = cpf_entry.get()
-
-    # Remover caracteres não numéricos do valor inserido
-    new_value = ''.join(filter(str.isdigit, new_value))
-
-    # Aplicar máscara de CPF (XXX.XXX.XXX-XX)
-    formatted_value = ""
-    for i, char in enumerate(new_value):
-        if i == 3 or i == 6:
-            formatted_value += char + "."
-        elif i == 9:
-            formatted_value += char + "-"
-        else:
-            formatted_value += char
-    formatted_value = formatted_value[:14]  # Limitar o comprimento máximo
-
-    # Verificar se o CPF é válido
-    if len(new_value) == 11:
+def mascara_cpf(event, cpf_entry):
+    cpf = cpf_entry.get()
+    cpf = ''.join(filter(str.isdigit, cpf))  # Mantém apenas os dígitos do CPF
+    #cpf = cpf.replace(".", "").replace("-", "")  # Remove pontos e hífen anteriores (se houver)
+    
+    # Verifica se o tamanho do CPF é menor que 11 para continuar formatando
+    if len(cpf) < 11:
+        cpf_formatado = ""
+        for i in range(len(cpf)):
+            if i == 3 or i == 6:
+                cpf_formatado += "."  # Adiciona o ponto nos locais corretos
+            elif i == 9:
+                cpf_formatado += "-"  # Adiciona o hífen no local correto
+            cpf_formatado += cpf[i]
+        
+        # Atualiza o valor do campo de entrada com o CPF formatado
         cpf_entry.delete(0, "end")
-        cpf_entry.insert(0, formatted_value)
-        return True
-    else:
-        return False
+        cpf_entry.insert(0, cpf_formatado)
+    elif len(cpf) == 11:
+        cpf_formatado = cpf[:3] + "." + cpf[3:6] + "." + cpf[6:9] + "-" + cpf[9:]
+        # Atualiza o valor do campo de entrada com o CPF formatado
+        cpf_entry.delete(0, "end")
+        cpf_entry.insert(0, cpf_formatado)
+    elif len(cpf) > 11:
+        # Impede que caracteres adicionais sejam inseridos
+        cpf_entry.delete(14, "end")  # Remove apenas o último caractere
+    #print(cpf)
+    
+    
+    
+def validar_cpf(event, cpf_entry):
+    cpf_enviado_usuario = cpf_entry.get()
+    cpf_enviado_usuario = cpf_enviado_usuario.replace(".", "").replace("-", "")  # Remove pontos e hífen anteriores (se houver)
+    nove_digitos = cpf_enviado_usuario[:9]
+    contador_regressivo_1 = 10
 
+    resultado_digito_1 = 0
+    for digito in nove_digitos:
+        resultado_digito_1 += int(digito) * contador_regressivo_1
+        contador_regressivo_1 -= 1
+    digito_1 = (resultado_digito_1 * 10) % 11
+    digito_1 = digito_1 if digito_1 <= 9 else 0
+
+    dez_digitos = nove_digitos + str(digito_1)
+    contador_regressivo_2 = 11
+
+    resultado_digito_2 = 0
+    for digito in dez_digitos:
+        resultado_digito_2 += int(digito) * contador_regressivo_2
+        contador_regressivo_2 -= 1
+    digito_2 = (resultado_digito_2 * 10) % 11
+    digito_2 = digito_2 if digito_2 <= 9 else 0
+
+    cpf_gerado_pelo_calculo = f'{nove_digitos}{digito_1}{digito_2}'
+
+    if cpf_enviado_usuario == cpf_gerado_pelo_calculo:
+        print(f'{cpf_enviado_usuario} é válido')
+    else:
+        cpf_entry.focus()
+        print('CPF inválido')
+        messagebox.showerror("CPF inválido", "CPF inválido\n Digite novamente.")
+        cpf_entry.delete(0, "end")
+        cpf_entry.focus()
+
+    
+    
 def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo, jornada_combo, lei_combo, cargo_combo, 
                   destinacao_entry, ua_combo, coordenadoria_combo, cargo_origem_combo, a_partir_var, a_partir_checkbutton, periodo_fechado_var, 
                   periodo_fechado_checkbutton, regime_combo, bnt_n_servidor, bnt_servidor):
@@ -119,7 +158,7 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     ato_combo.set('')
     jornada_combo.set('')
     jornada_combo.config(state="disable")
-    ato_combo["values"] = "Nomeação","Designação","Designação com posterior Nomeação"
+    #ato_combo["values"] = "Nomeação","Designação","Designação com posterior Nomeação"
     #ato_combo.config(state="disable")
     lei_combo.set('')
     #lei_combo.config(state="disable")
@@ -319,7 +358,6 @@ def jornada_box_select(cargo_combo, lei_combo):
         cargo_combo.set("")
 
 def cargo_box_select(coordenadoria_combo):
-    # coordenadoria_combo.config(state="normal")
     coordenadoria_combo.config(state=tk.NORMAL)
     
 def coordenadoria_box_select(ua_combo, coordenadoria_combo):
@@ -516,7 +554,7 @@ def declaracao_experiencia(c , declara):
     c.setFont("Verdana", 12)
     c.drawCentredString(300, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
     c.setFont("Verdana", 11)
-    c.drawCentredString(300, 470, f"__________________________________________________")
+    c.drawCentredString(300, 470, f"_________________________________________")
     c.setFont("Verdana", 10)
     c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
     #c.drawCentredString(300, 500, f"{datetime.now().strftime('%A, %d de %B de %Y')}")
@@ -554,7 +592,7 @@ def termo_de_anuencia(c , declara):
     
     c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
-    c.drawRightString(500, 470, f"__________________________________________________")
+    c.drawRightString(500, 470, f"______________________________________")
     c.setFont("Verdana", 10)
     c.drawRightString(500, 450, f"{declara['Nome']}")
     
@@ -656,14 +694,12 @@ def declaracao_cargo_funcao(c , declara):
     
     c.setFont("Verdana", 12)
     y_position = 700
-    text =f"Eu, {declara['Nome']}, {declara['Cargo de Origem']}, {declara['Regime']}, " 
-    # print("Origem e Regime?")
-    # print(f"Teste Origem ....{declara['Cargo de Origem']}")
-    # print(f"Teste Regime....{declara['Regime']}")
-    ########## Corrigir isso!!
-    # if {declara['Cargo de Origem']} != cargo_origem_combo["completevalues"]: text +=f"{declara['Cargo de Origem']},"     
-    # if {declara['Regime']} != regime_combo["completevalues"]: text+=f"{declara['Regime']}, "
-    text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, do(a) {declara['Destinação']}, do(a) \
+    text =f"Eu, {declara['Nome']}, "
+    ####### Se o que consta no formulário também consta no autocompletar do campo este é exibido aqui   ############
+    if declara['Cargo de Origem'] in cargo_origem_list: text +=f"{declara['Cargo de Origem']}, "
+    if declara['Regime'] in declara['regime_list']: text+=f"{declara['Regime']}, "
+    print(declara['regime_list'])
+    text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, no(a) {declara['Destinação']}, do(a) \
             {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
             gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \
             de Saúde - SUS/SP ou sejam por este credenciadas."
@@ -1447,6 +1483,7 @@ def draw_checkbox(c, x, y, size=10, checked=False):
 
 def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo, regime_combo):
     cargo_origem_combo.config(state="enable")
+    global cargo_origem_list
     
     ua = ua_combo.get() 
     if ua != '':
@@ -1841,6 +1878,8 @@ def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo, regime_combo
     #cargo_origem_combo.focus()
     regime_combo.config(state="enable")
     regime_combo.focus()
+    cargo_origem_list = cargo_origem_combo["completevalues"]
+    
     
     
 def filter_combobox(event, valores, combo):
