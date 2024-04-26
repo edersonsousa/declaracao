@@ -19,11 +19,12 @@ import os
 
 # Conteúdo dos arquivos de fonte TTF
 
-
+global date_periodofechado_inicio 
+global date_periodofechado_fim
 
 locale = Locale('pt', 'BR')
 
-def validar_nome_entry(new_value, nome_entry):
+def validar_nome_entry(new_value, nome_entry, statusbar_text):
     # Verifica se a entrada está vazia
     if not new_value:
         return True
@@ -32,54 +33,73 @@ def validar_nome_entry(new_value, nome_entry):
     new_value = new_value.title()
 
     # Verifica se a entrada contém apenas letras e espaços
-    if re.match(r'^[a-zA-Z\s]+$', new_value):
+    if re.match(r'^[a-záÀÁéÉíÍóÓúÚüÜçÇñÑA-Z\s]+$', new_value):
         return True
     else:
         if any(char.isdigit() for char in new_value):
-            messagebox.showerror("Erro", "A entrada não pode conter números.")
+            # messagebox.showerror("Erro", "A entrada não pode conter números.")
+            statusbar_text.set("O campo nome não pode conter números")
         else:
-            messagebox.showerror("Erro", "A entrada deve conter apenas letras e espaços.")
-        nome_entry.delete(0, "end")
+            statusbar_text.set("A entrada deve conter apenas letras e espaços.")
+            # messagebox.showerror("Erro", "A entrada deve conter apenas letras e espaços.")
+        nome_entry.delete(len(nome_entry.get()), "end")
         return False
 
 def on_validate(P, nome_entry):
     return validar_nome_entry(P, nome_entry)
 
-def validate_content(event):
-    content = nome_entry.get()
-    validar_nome_entry(content, nome_entry)
-    atualizar_declara()
+def validate_name(event, entry):
+    content = entry.get()
+    content = capitalize_long_words(content)
+    entry.delete(0, "end")
+    entry.insert(0, content)
+
+def capitalize_long_words(content):
+    words = content.split()
+    for i in range(len(words)):
+        if len(words[i]) >= 3:
+            words[i] = words[i].capitalize()
+    return " ".join(words)
+
+
+
+
+# def validate_content(event):
+#     content = nome_entry.get()
+#     validar_nome_entry(content, nome_entry)
+    # atualizar_declara()
     
-def atualizar_declara():
-    global declara
-    declara["nome"] = nome_entry.get()
-    declara["rg_entry"] = rg_entry.get()
-    # Adicione outras variáveis conforme necessário
+# def atualizar_declara():
+#     global declara
+#     declara["nome"] = nome_entry.get()
+#     declara["rg_entry"] = rg_entry.get()
+#     # Adicione outras variáveis conforme necessário
 
     # Exibir os valores armazenados no dicionário de variáveis
-    return(declara)
+    # return(declara)
 
-    
-def validar_rg_entry(new_value, rg_entry):
-    # Remover caracteres não numéricos do valor inserido
-    new_value = ''.join(filter(str.isdigit, new_value))
+############ Buscando uma forma de validar o RG ainda #####################
+############## No momento tal campo fica "livre"  #########################
+# def validar_rg_entry(new_value, rg_entry):
+#     # Remover caracteres não numéricos do valor inserido
+#     new_value = ''.join(filter(str.isdigit, new_value))
 
-    # Aplicar máscara de RG (XX.XXX.XXX-X)
-    formatted_value = ""
-    for i, char in enumerate(new_value):
-        if i == 2 or i == 5:
-            formatted_value += char + "."
-        else:
-            formatted_value += char
-    formatted_value = formatted_value[:11]  # Limitar o comprimento máximo
+#     # Aplicar máscara de RG (XX.XXX.XXX-X)
+#     formatted_value = ""
+#     for i, char in enumerate(new_value):
+#         if i == 2 or i == 5:
+#             formatted_value += char + "."
+#         else:
+#             formatted_value += char
+#     formatted_value = formatted_value[:11]  # Limitar o comprimento máximo
 
-    # Verificar se o RG é válido
-    if len(new_value) <= 9:
-        rg_entry.delete(0, END)
-        rg_entry.insert(0, formatted_value)
-        return True
-    else:
-        return False
+#     # Verificar se o RG é válido
+#     if len(new_value) <= 9:
+#         rg_entry.delete(0, END)
+#         rg_entry.insert(0, formatted_value)
+#         return True
+#     else:
+#         return False
 def mascara_cpf(event, cpf_entry):
     cpf = cpf_entry.get()
     cpf = ''.join(filter(str.isdigit, cpf))  # Mantém apenas os dígitos do CPF
@@ -110,7 +130,7 @@ def mascara_cpf(event, cpf_entry):
     
     
     
-def validar_cpf(event, cpf_entry):
+def validar_cpf(event, cpf_entry, statusbar_text):
     cpf_enviado_usuario = cpf_entry.get()
     cpf_enviado_usuario = cpf_enviado_usuario.replace(".", "").replace("-", "")  # Remove pontos e hífen anteriores (se houver)
     nove_digitos = cpf_enviado_usuario[:9]
@@ -134,21 +154,32 @@ def validar_cpf(event, cpf_entry):
     digito_2 = digito_2 if digito_2 <= 9 else 0
 
     cpf_gerado_pelo_calculo = f'{nove_digitos}{digito_1}{digito_2}'
+    if cpf_enviado_usuario == cpf_gerado_pelo_calculo: statusbar_text.set("CPF digitado é válido")
+    # statusbar_text.set("")
 
-    if cpf_enviado_usuario == cpf_gerado_pelo_calculo:
-        print(f'{cpf_enviado_usuario} é válido')
-    else:
-        cpf_entry.focus()
-        print('CPF inválido')
-        messagebox.showerror("CPF inválido", "CPF inválido\n Digite novamente.")
+    # elif cpf_enviado_usuario == cpf_gerado_pelo_calculo:
+    #    statusbar_text.set("CPF digitado é válido")
+    #    print(f'{cpf_enviado_usuario} é válido')
+    #    print(type(cpf_enviado_usuario))
+    elif cpf_enviado_usuario != cpf_gerado_pelo_calculo:
+        # cpf_entry.focus_force()
+        statusbar_text.set("CPF digitado inválido favor verificar.")
         cpf_entry.delete(0, "end")
-        cpf_entry.focus()
-
-    
+        # status_atual = statusbar_text.get()
+        # print(statusbar_text.get())
+        # novo_status = "CPF digitado inválido " + status_atual + "  Testeeee"
+        # print(novo_status)
+        # statusbar_text.set("CPF digitado inválido ")
+        # print('CPF inválido')
+        # cpf_entry.focus()
+        # print(cpf_enviado_usuario)
+        # print(type(cpf_enviado_usuario))
+        # messagebox.showerror("CPF inválido", "CPF inválido\n Digite novamente.")
+            
     
 def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo, jornada_combo, lei_combo, cargo_combo, 
                   destinacao_entry, ua_combo, coordenadoria_combo, cargo_origem_combo, a_partir_var, a_partir_checkbutton, periodo_fechado_var, 
-                  periodo_fechado_checkbutton, regime_combo, bnt_n_servidor, bnt_servidor):
+                  periodo_fechado_checkbutton, regime_combo, bnt_n_servidor, bnt_servidor, statusbar_text):
     # Limpa o valor de todos os campos de entrada
     nome_entry.delete(0, END)
     nome_entry.focus()
@@ -158,7 +189,7 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     ato_combo.set('')
     jornada_combo.set('')
     jornada_combo.config(state="disable")
-    #ato_combo["values"] = "Nomeação","Designação","Designação com posterior Nomeação"
+    ato_combo["values"] = "Nomeação","Designação","Designação com posterior Nomeação"
     #ato_combo.config(state="disable")
     lei_combo.set('')
     #lei_combo.config(state="disable")
@@ -174,39 +205,96 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     cargo_origem_combo.config(state="disable")
     periodo_fechado_var.set(False)
     a_partir_var.set(False)
+    a_partir_var = None
+    # user_date_a_partir_variable = None
     a_partir_checkbutton.config(state="normal")
+    user_date_a_partir_variable = None
     periodo_fechado_checkbutton.config(state="normal")
     regime_combo.set('')
     regime_combo.config(state="disable")
     bnt_n_servidor.config(state="disable")
     bnt_servidor.config(state="disable")
+    statusbar_text.set("GADI")
+    # print(user_date_a_partir_variable)
 
  
 user_date_a_partir_variable = None
 
+# def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor):
+#     global user_date_a_partir_variable
+#     if a_partir_var.get():
+#         periodo_fechado_var.set(False)
+#         periodo_fechado_checkbutton.config(state="disabled")
+#         # Exibir caixa de diálogo para solicitar uma data
+#         window.withdraw() 
+#         user_date = simpledialog.askstring("Data", "Qual a data do a partir? Ex:(dd/mm/aaaa)", initialvalue = datetime.now().strftime('%d/%m/%Y'))
+#         # Verificar se a data está no formato correto
+#         if user_date and len(user_date) == 10 and user_date[2] == '/' and user_date[5] == '/':
+        
+#             # print("Data selecionada:", user_date)
+#             # Use a data fornecida pelo usuário como desejar
+#             user_date_a_partir_variable = user_date
+#             # Atualizar valores do Combobox
+#             ato_combo["values"] = "Designação", "Designação com posterior Nomeação" 
+#             ato_combo.config(state="normal")
+#         elif user_date == None or user_date_a_partir_variable == None:
+#             #print(user_date)
+#             #print(user_date_a_partir_variable)
+#             window.deiconify()
+#         else:
+#             tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+#             toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo)
+#     else:
+#         periodo_fechado_checkbutton.config(state="normal")
+#     window.deiconify()
+#     if bnt_servidor.cget("state") == "disable":
+#         bnt_n_servidor.focus()
+#     elif bnt_n_servidor.cget("state") == "disable":
+#         bnt_servidor.focus()
+# date_periodofechado_inicio_variable = None
+# date_periodofechado_fim_variable = None
+
 def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor):
     global user_date_a_partir_variable
+    
+    # print("Teste  antes ",user_date_a_partir_variable)
+    if user_date_a_partir_variable is not True: user_date_a_partir_variable = None
+    # print("Teste  depois ",user_date_a_partir_variable)
     if a_partir_var.get():
+        # print(a_partir_var.get())
         periodo_fechado_var.set(False)
         periodo_fechado_checkbutton.config(state="disabled")
         # Exibir caixa de diálogo para solicitar uma data
         window.withdraw() 
-        user_date = simpledialog.askstring("Data", "Qual a data do a partir? Ex:(dd/mm/aaaa)", initialvalue = datetime.now().strftime('%d/%m/%Y'))
+        user_date = simpledialog.askstring("Data", "Qual a data do a partir? Ex:(dd/mm/aaaa)", initialvalue=datetime.now().strftime('%d/%m/%Y'))
         # Verificar se a data está no formato correto
         if user_date and len(user_date) == 10 and user_date[2] == '/' and user_date[5] == '/':
-            # print("Data selecionada:", user_date)
-            # Use a data fornecida pelo usuário como desejar
-            user_date_a_partir_variable = user_date
-            # Atualizar valores do Combobox
-            ato_combo["values"] = "Designação", "Designação com posterior Nomeação" 
-            ato_combo.config(state="normal")
+            dia = int(user_date[:2])
+            mes = int(user_date[3:5])
+            ano = int(user_date[6:])
+            # Verificar se o dia, mês e ano são válidos
+            if (1 <= mes <= 12) and (ano == 2024):
+                if (mes in [1, 3, 5, 7, 8, 10, 12] and 1 <= dia <= 31) or \
+                   (mes in [4, 6, 9, 11] and 1 <= dia <= 30) or \
+                   (mes == 2 and ((ano % 4 == 0 and ano % 100 != 0) or ano % 400 == 0) and 1 <= dia <= 29) or \
+                   (mes == 2 and 1 <= dia <= 28):
+                    # Use a data fornecida pelo usuário como desejar
+                    user_date_a_partir_variable = user_date
+                    # Atualizar valores do Combobox
+                    ato_combo["values"] = "Designação", "Designação com posterior Nomeação" 
+                    ato_combo.config(state="normal")
+                else:
+                    messagebox.showerror("Erro", "Dia inválido para o mês fornecido.")
+                    toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
+            else:
+                messagebox.showerror("Erro", "Mês inválido ou ano diferente de 2024.")
+                toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
+
         elif user_date == None or user_date_a_partir_variable == None:
-            #print(user_date)
-            #print(user_date_a_partir_variable)
             window.deiconify()
         else:
-            tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
-            toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo)
+            messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+            toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
     else:
         periodo_fechado_checkbutton.config(state="normal")
     window.deiconify()
@@ -214,41 +302,116 @@ def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_che
         bnt_n_servidor.focus()
     elif bnt_n_servidor.cget("state") == "disable":
         bnt_servidor.focus()
-date_periodofechado_inicio_variable = None
-date_periodofechado_fim_variable = None
+    date_periodofechado_inicio_variable = None
+user_date_a_partir_variable = None
+
+
     
+
+# def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor):
+#     global date_periodofechado_inicio_variable
+#     global date_periodofechado_fim_variable
+#     if periodo_fechado_var.get():
+#         a_partir_var.set(False)
+#         a_partir_checkbutton.config(state="disabled")
+#         ato_combo["values"] = "Designação"        
+#         #Escondendo a janela principal(window)
+#         window.withdraw() 
+#         date_periodofechado_inicio = simpledialog.askstring("A Partir", "Qual a data do a partir \n para o período fechado? Ex:(dd/mm/aaaa)",
+#                                                             initialvalue = datetime.now().strftime('%d/%m/%Y'))
+#         print(date_periodofechado_inicio)
+#         if date_periodofechado_inicio and len(date_periodofechado_inicio) == 10 and date_periodofechado_inicio[2] == '/' and date_periodofechado_inicio[5] == '/':
+#             # Use a data fornecida pelo usuário como desejar
+#             date_periodofechado_inicio_variable = date_periodofechado_inicio
+#             # Atualizar valores do Combobox
+#         elif date_periodofechado_inicio == None:
+#             window.deiconify()
+#         else:
+#             tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+#             toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo)
+#         date_periodofechado_fim = simpledialog.askstring("Data fim...", "Qual a data fim para o período fechado? Ex:(dd/mm/aaaa)",                                                         
+#                                                          initialvalue = 'dd/mm/aaaa')
+#         print(date_periodofechado_fim)
+#         if date_periodofechado_fim and len(date_periodofechado_fim) == 10 and date_periodofechado_fim[2] == '/' and date_periodofechado_fim[5] == '/':
+#             date_periodofechado_fim_variable = date_periodofechado_fim            
+#         elif date_periodofechado_fim == None:
+#             window.deiconify()
+#         else:
+#             tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+#             toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo)
+#     else:
+#         a_partir_checkbutton.config(state="normal")
+#     #Volta a principal janela(window)
+#     window.deiconify()
+#     if bnt_servidor.cget("state") == "disable":
+#         bnt_n_servidor.focus()
+#     elif bnt_n_servidor.cget("state") == "disable":
+#         bnt_servidor.focus()
 
 def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor):
     global date_periodofechado_inicio_variable
     global date_periodofechado_fim_variable
+    date_periodofechado_inicio = None
+    date_periodofechado_fim = None
     if periodo_fechado_var.get():
         a_partir_var.set(False)
         a_partir_checkbutton.config(state="disabled")
+        user_date_a_partir_variable = None
         ato_combo["values"] = "Designação"        
         #Escondendo a janela principal(window)
         window.withdraw() 
         date_periodofechado_inicio = simpledialog.askstring("A Partir", "Qual a data do a partir \n para o período fechado? Ex:(dd/mm/aaaa)",
-                                                            initialvalue = datetime.now().strftime('%d/%m/%Y'))
-        print(date_periodofechado_inicio)
+                                                            initialvalue=datetime.now().strftime('%d/%m/%Y'))
+        # print(date_periodofechado_inicio)
         if date_periodofechado_inicio and len(date_periodofechado_inicio) == 10 and date_periodofechado_inicio[2] == '/' and date_periodofechado_inicio[5] == '/':
-            # Use a data fornecida pelo usuário como desejar
-            date_periodofechado_inicio_variable = date_periodofechado_inicio
-            # Atualizar valores do Combobox
+            dia_inicio = int(date_periodofechado_inicio[:2])
+            mes_inicio = int(date_periodofechado_inicio[3:5])
+            ano_inicio = int(date_periodofechado_inicio[6:])
+            # Verificar se o dia, mês e ano são válidos
+            if (1 <= mes_inicio <= 12) and (ano_inicio == 2024):
+                if (mes_inicio in [1, 3, 5, 7, 8, 10, 12] and 1 <= dia_inicio <= 31) or \
+                   (mes_inicio in [4, 6, 9, 11] and 1 <= dia_inicio <= 30) or \
+                   (mes_inicio == 2 and ((ano_inicio % 4 == 0 and ano_inicio % 100 != 0) or ano_inicio % 400 == 0) and 1 <= dia_inicio <= 29) or \
+                   (mes_inicio == 2 and 1 <= dia_inicio <= 28):
+                    # Use a data fornecida pelo usuário como desejar
+                    date_periodofechado_inicio_variable = date_periodofechado_inicio
+                else:
+                    tk.messagebox.showerror("Erro", "Dia inicial inválido para o mês fornecido.")
+                    toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
+            else:
+                tk.messagebox.showerror("Erro", "Mês inicial inválido ou ano diferente de 2024.")
+                toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
         elif date_periodofechado_inicio == None:
             window.deiconify()
         else:
             tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
-            toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo)
+            toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
         date_periodofechado_fim = simpledialog.askstring("Data fim...", "Qual a data fim para o período fechado? Ex:(dd/mm/aaaa)",                                                         
-                                                         initialvalue = 'dd/mm/aaaa')
-        print(date_periodofechado_fim)
+                                                         initialvalue=datetime(datetime.now().year, 12, 31).strftime('%d/%m/%Y'))
+        #print(date_periodofechado_fim)
         if date_periodofechado_fim and len(date_periodofechado_fim) == 10 and date_periodofechado_fim[2] == '/' and date_periodofechado_fim[5] == '/':
-            date_periodofechado_fim_variable = date_periodofechado_fim            
+            dia_fim = int(date_periodofechado_fim[:2])
+            mes_fim = int(date_periodofechado_fim[3:5])
+            ano_fim = int(date_periodofechado_fim[6:])
+            # Verificar se o dia, mês e ano são válidos
+            if (1 <= mes_fim <= 12) and (ano_fim == 2024):
+                if (mes_fim in [1, 3, 5, 7, 8, 10, 12] and 1 <= dia_fim <= 31) or \
+                   (mes_fim in [4, 6, 9, 11] and 1 <= dia_fim <= 30) or \
+                   (mes_fim == 2 and ((ano_fim % 4 == 0 and ano_fim % 100 != 0) or ano_fim % 400 == 0) and 1 <= dia_fim <= 29) or \
+                   (mes_fim == 2 and 1 <= dia_fim <= 28):
+                    # Use a data fornecida pelo usuário como desejar
+                    date_periodofechado_fim_variable = date_periodofechado_fim            
+                else:
+                    tk.messagebox.showerror("Erro", "Dia final inválido para o mês fornecido.")
+                    toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
+            else:
+                tk.messagebox.showerror("Erro", "Mês final inválido ou ano diferente de 2024.")
+                toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
         elif date_periodofechado_fim == None:
             window.deiconify()
         else:
             tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
-            toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo)
+            toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, bnt_servidor, bnt_n_servidor)
     else:
         a_partir_checkbutton.config(state="normal")
     #Volta a principal janela(window)
@@ -257,12 +420,15 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
         bnt_n_servidor.focus()
     elif bnt_n_servidor.cget("state") == "disable":
         bnt_servidor.focus()
+# date_periodofechado_inicio_variable = date_periodofechado_inicio
+# date_periodofechado_fim_variable = date_periodofechado_fim
+
     
 def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo):
     selected_value = ato_combo.get()
     # selected_value = event.widget.get()
     # print(selected)
-    print(selected_value)
+    # print(selected_value)
     if selected_value == "Nomeação":
         a_partir_var.set(False)
         periodo_fechado_var.set(False)
@@ -285,7 +451,7 @@ def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir
 
 def lei_box_select(event, lei_combo, jornada_combo):
     selected_value = event.widget.get()
-    print(selected_value)
+    # print(selected_value)
 
     if selected_value == "Art.5º da lei complementar nº 1080/2008":
         jornada_combo["values"] = ["Jornada Completa de Trabalho"]
@@ -372,7 +538,8 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                         "Coordenadoria de Planejamento de Saúde",
                                         "Coordenadoria de Recursos Humanos",
                                         "Coordenadoria Geral de Administração",
-                                        "Departamento de Gerenciamento Ambulatorial da Capital - DGAC"
+                                        "Coordenadoria de Gestão de Contratos de Serviços de Saúde",
+                                        "Coordenadoria de Gestão Orçamentaria e Financeira"
                                 
                                     ]
     elif selected_value =="Coordenadoria de Serviços de Saúde":
@@ -391,6 +558,7 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                             "Complexo Hospitalar do Juquery, em Franco da Rocha",
                                             "Conjunto Hospitalar de Sorocaba",
                                             "Conjunto Hospitalar do Mandaqui",
+                                            "Departamento de Gerenciamento Ambulatorial da Capital - DGAC",
                                             "Grupo de Resgate - GRAU",
                                             'Hospital "Adhemar de Barros" em Divinolândia',
                                             'Hospital "Dr. Francisco Ribeiro Arantes", em Itu',
@@ -430,10 +598,11 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                     ]
     elif selected_value == "Coordenadoria de Assistência Farmacêutica":
         ua_combo["completevalues"] = [
-                                            "Coordenadoria de Assistência Farmacêutica"
+                                            "Sede"
                                      ]
     elif selected_value == "Coordenadoria de Ciência, Tecnologia e Insumos Estratégicos de Saúde":
         ua_combo["completevalues"] = [
+                                        "Sede",
                                         "Instituto Butantan",
                                         "Instituto de Saúde"
                                     ]
@@ -445,22 +614,22 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                         'Instituto "Adolfo Lutz" - IAL',
                                         "Instituto Pasteur"
                                     ]
-    elif selected_value == "Coordenadoria de Defesa e Saúde Animal":
-        ua_combo["completevalues"] = [
-                                        "Coordenadoria de Defesa e Saúde Animal"            
-                                    ]
+    # elif selected_value == "Coordenadoria de Defesa e Saúde Animal":
+    #     ua_combo["completevalues"] = [
+    #                                     " "            
+    #                                 ]
     
     elif selected_value == "Coordenadoria de Gestão de Contratos de Serviços de Saúde":
         ua_combo["completevalues"] = [
-                                        "Coordenadoria de Gestão de Contratos de Serviços de Saúde"
+                                        "Sede"
                                      ]
     elif selected_value == "Coordenadoria de Gestão Orçamentaria e Financeira":
         ua_combo["completevalues"] = [
-                                        "Coordenadoria de Gestão Orçamentaria e Financeira"
+                                        " "
                                     ]
     elif selected_value == "Coordenadoria de Planejamento de Saúde":
         ua_combo["completevalues"] = [
-                                        "Coordenadoria de Planejamento de Saúde"
+                                        " "
                                     ]
     elif selected_value == "Coordenadoria de Regiões de Saúde":
         ua_combo["completevalues"] = [
@@ -483,10 +652,10 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                         "DRS XVII - Taubaté",
                                         "DRS XVIII - Botucatu"
                                     ]
-    elif selected_value == "Coordenadoria Geral de Administração":
-        ua_combo["completevalues"] = [
-                                        "Coordenadoria Geral de Administração"
-                                    ]
+    # elif selected_value == "Coordenadoria Geral de Administração":
+    #     ua_combo["completevalues"] = [
+    #                                     "Coordenadoria Geral de Administração"
+    #                                 ]
     ua_combo.config(state="normal")
     ua_combo.config(state=tk.NORMAL)
 
@@ -495,28 +664,72 @@ def ua_box_select(destinacao_entry):
     destinacao_entry.config(state="normal")
 
         
-def validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor):
-    if (ato_combo.get() == "Nomeação" and cargo_origem_combo.get() == ""):
-        bnt_n_servidor.config(state="normal")
-        bnt_servidor.config(state="disable")
-    elif (ato_combo.get() != "Nomeação" or cargo_origem_combo.get() != ""):
-        bnt_n_servidor.config(state="disable")
-        bnt_servidor.config(state="normal")
+# def validar_tipo_de_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor):
+#     if (ato_combo.get() == "Nomeação" and cargo_origem_combo.get() == ""):
+#         bnt_n_servidor.config(state="normal")
+#         bnt_servidor.config(state="disable")
+#     elif (ato_combo.get() != "Nomeação" or cargo_origem_combo.get() != ""):
+#         bnt_n_servidor.config(state="disable")
+#         bnt_servidor.config(state="normal")
+def btn_on(bnt_n_servidor, bnt_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
+           estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
+           coordenadoria_combo, regime_combo):
+    if validar_dados_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor, nome_entry, rg_entry, 
+                             cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, 
+                             ua_combo, coordenadoria_combo, regime_combo):
+        print("Dados Válidos...")
+        if (ato_combo.get() == "Nomeação" and ((cargo_origem_combo.get()) == "" or (cargo_origem_combo.get() == "Não Servidor"))):
+            bnt_n_servidor.config(state="normal")
+            bnt_servidor.config(state="disable")
+            
+            print("Não Servidor")
+        elif (ato_combo.get() != "Nomeação" or cargo_origem_combo.get() != ""):
+            bnt_n_servidor.config(state="disable")
+            bnt_servidor.config(state="normal")
+            print("Servidor....")
+            
+            
+            
+def validar_dados_servidor(ato_combo, cargo_origem_combo, bnt_n_servidor, bnt_servidor, nome_entry, rg_entry, 
+                             cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, 
+                             ua_combo, coordenadoria_combo, regime_combo):
+    
+    if  nome_entry.get() and rg_entry.get() and cpf_entry.get() and estado_civil_combo.get() and ato_combo.get() and \
+        jornada_combo.get() and lei_combo.get() and cargo_combo.get() and destinacao_entry.get() and \
+        ua_combo.get() and coordenadoria_combo.get() and cargo_origem_combo.get() and regime_combo.get():
+        print("Validando dados....")
+        return True
+
     
     #print(ato_combo.get())
     #print(cargo_de_origem_entry.get())
     
-def path_check(declara):
-    messagebox.showinfo("Calma ae!", f"Pasta '{declara['Nome']}' dentro de '{declara['Ato']}' Vou tentar!")
+def path_check(declara, statusbar_text):
+    # messagebox.showinfo("Calma ae!", f"Pasta '{declara['Nome']}' dentro de '{declara['Ato']}'")
     if not (os.path.exists(f'{declara['Ato']}/{declara['Nome']}/')): 
-        print(f"Não temos a pasta {declara['Ato']}/{declara['Nome']}")
+        # status_atual = statusbar_text.get()
+        statusbar_text.set("...Criando a pasta...")
+        # novo_status = f"Não temos a pasta '{declara['Nome']}' dentro de '{declara['Ato']}' mas vamos providenciar" + status_atual
+        # statusbar_text.set(novo_status)
+        # print(f"Não temos a pasta {declara['Ato']}/{declara['Nome']}")
         try:
             os.makedirs(f'./{declara['Ato']}/{declara['Nome']}/')  # Tenta criar a pasta
-            messagebox.showinfo("Pasta criada!", f"Pasta '{declara['Nome']}' dentro de '{declara['Ato']}' criada com sucesso!")
+            # status_atual = statusbar_text.get()
+            # novo_status = f"Pasta '{declara['Nome']}' dentro de '{declara['Ato']}' criada com sucesso!" + status_atual
+            # statusbar_text.set(novo_status)
+            statusbar_text.set("GADI")
+            # messagebox.showinfo("Pasta criada!", f"Pasta '{declara['Nome']}' dentro de '{declara['Ato']}' criada com sucesso!")
         except OSError as e:
-            messagebox.showerror("Falha ao criar a pasta!!!", f"Falha ao criar a pasta '{declara['Ato']}': {e}")
+            # status_atual = statusbar_text.get()
+            # novo_status = f"Falha ao criar a pasta '{declara['Ato']}': {e} verifique suas permissões" + status_atual
+            # statusbar_text.set(novo_status)
+            statusbar_text.set("Falha ao tentar criar a pasta. Verifique as permissões...")
+            # messagebox.showerror("Falha ao criar a pasta!!!", f"Falha ao criar a pasta '{declara['Ato']}': {e}")
     else:
-        messagebox.showinfo("Pasta já existe!", f"A pasta '{declara['Nome']}' dentro de '{declara['Ato']} já existe.")
+        status_atual = statusbar_text.get()
+        novo_status = f"A pasta '{declara['Nome']}' dentro de '{declara['Ato']} já existe."
+        statusbar_text.set("GADI")
+        # messagebox.showinfo("Pasta já existe!", f"A pasta '{declara['Nome']}' dentro de '{declara['Ato']} já existe.")
 
 def declaracao_experiencia(c , declara):
     #Define título
@@ -530,10 +743,15 @@ def declaracao_experiencia(c , declara):
     c.setFont("Verdana", 12)
     y_position = 700
     text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, para {declara['Ato']}"
+    # print(declara)
+    # print({date_periodofechado_inicio_variable})
+    # print({date_periodofechado_fim_variable})
+    
     ######################## Para o caso de 'A Partir' ###############################################
     if {user_date_a_partir_variable} != {None}: 
         text +=f" a partir de {user_date_a_partir_variable}"
-    elif (({date_periodofechado_inicio_variable} != {None}) and ({date_periodofechado_fim_variable} != {None})):
+   
+    elif (declara['Periodo Fechado']):
         text +=f" no período {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}"
     ##################################################################################################
     text +=f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
@@ -578,7 +796,8 @@ def termo_de_anuencia(c , declara):
     if  user_date_a_partir_variable is not None:
         text += f", a partir de {user_date_a_partir_variable}"
     # Para o caso de "Período Fechado" CAIII PF
-    if date_periodofechado_inicio_variable is not None and date_periodofechado_fim_variable is not None:
+    # print(declara)
+    if {declara['Periodo Fechado']} is True:
         text += f", no período de {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}, "
     text += f", no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}. "
     
@@ -698,7 +917,7 @@ def declaracao_cargo_funcao(c , declara):
     ####### Se o que consta no formulário também consta no autocompletar do campo este é exibido aqui   ############
     if declara['Cargo de Origem'] in cargo_origem_list: text +=f"{declara['Cargo de Origem']}, "
     if declara['Regime'] in declara['regime_list']: text+=f"{declara['Regime']}, "
-    print(declara['regime_list'])
+    # print(declara['regime_list'])
     text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, no(a) {declara['Destinação']}, do(a) \
             {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
             gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \
@@ -1069,6 +1288,8 @@ def anexo_i(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 60)
     p.drawOn(c, 100, 70)
+    c.showPage()
+    informacoes_adicionais(c, declara)
     
 def informacoes_adicionais(c , declara):
     c.rect(50, 750, 500, 40)
@@ -1417,62 +1638,151 @@ def anexo_iii(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 60)
     p.drawOn(c, 100, 70)
+    c.showPage()
+    informacoes_adicionais(c, declara)
 
-def declaracao(declara):
+# def declaracao(declara, statusbar_text):
     
-    search_font_verdana()
-    # Cria PDF 
-    nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
-    # print(declara)
-    path_check(declara)
+#     search_font_verdana()
+#     # Cria PDF 
+#     nomearquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
+#     # print(declara)
+#     path_check(declara, statusbar_text)
             
-    c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}", pagesize=A4) 
-    declaracao_experiencia(c , declara)
+#     c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}", pagesize=A4) 
+#     declaracao_experiencia(c , declara)
+#     c.showPage()
+#     termo_de_anuencia(c , declara)
+#     c.showPage()
+#     if declara['Regime'] == 'CLT':
+#         termo_de_compromisso_clt(c , declara)
+#         c.showPage()
+#     declaracao_hipotese_inelegibilidade(c, declara)
+#     c.showPage()
+#     declaracao_cargo_funcao(c , declara)
+#     c.showPage()
+#     declaracao_acumulo(c , declara)
+#     c.showPage()
+#     # print(declara['Ato'])
+#     # print(declara['Regime'])
+#     # print({user_date_a_partir_variable})
+#     # print(declara)
+#     ##################################### Para o caso de Designação e não CLT... ######################################
+    
+#     if ((declara['Ato'] == 'Designação' and declara['Regime'] != 'CLT') 
+#             or ((declara['Ato'] == 'Designação' and declara['Regime'] == 'CLT' 
+#             and {user_date_a_partir_variable} == {None} and {date_periodofechado_inicio_variable} == {None}
+#             and {date_periodofechado_fim_variable} == {None}))
+#                 or ((declara['Ato'] == 'Designação' and declara['Regime'] == 'CLT' 
+#                 and (({date_periodofechado_inicio_variable} is not None) and ({date_periodofechado_fim_variable} is not None))))):
+#         anexo_iii(c , declara)
+#         c.showPage()
+#         informacoes_adicionais(c , declara)
+#         c.showPage()
+#     ###################################################### Outros #####################################################
+#     else:
+#         anexo_i(c , declara)
+#         c.showPage()
+#         informacoes_adicionais(c , declara)
+#         c.showPage()
+#         if declara['Ato'] =='Designação com posterior Nomeação':
+#             anexo_iii(c , declara)
+#             c.showPage()
+#             informacoes_adicionais(c , declara)
+#             c.showPage()
+#     c.save()
+#     #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
+#     subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}"], shell=True)
+#     #subprocess.Popen(["start", f"./{declara['Ato']}/{nomearquivo}"], shell=True)
+#     #print(f"{declara['Nome']} + Teste + {declara['Cargo']}")
+#     # def verifica_pasta()
+#     #     pass
+
+# def declaracao(declara, statusbar_text):
+#     search_font_verdana()
+#     nome_arquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
+#     path_check(declara, statusbar_text)
+
+#     with canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}", pagesize=A4) as c:
+#         gerar_declaracoes(c, declara)
+#         c.save()
+
+#     subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}"], shell=True)
+
+def declaracao(declara, statusbar_text):
+    search_font_verdana()
+    nome_arquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
+    path_check(declara, statusbar_text)
+
+    c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}", pagesize=A4)
+    try:
+        gerar_declaracoes(c, declara)
+    finally:
+        c.save()  # Salva o conteúdo do canvas em um arquivo PDF
+        del c     # Libera os recursos do canvas
+
+    subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}"], shell=True)
+
+
+
+
+def gerar_declaracoes(c, declara):
+    declaracao_experiencia(c, declara)
     c.showPage()
-    termo_de_anuencia(c , declara)
+    termo_de_anuencia(c, declara)
     c.showPage()
-    if declara['Regime'] == 'CLT':
-        termo_de_compromisso_clt(c , declara)
+    # Se for CLT entra aqui o Termo de Compromisso CLT
+    if is_clt(declara):
+        termo_de_compromisso_clt(c, declara)
         c.showPage()
     declaracao_hipotese_inelegibilidade(c, declara)
     c.showPage()
-    declaracao_cargo_funcao(c , declara)
+    declaracao_cargo_funcao(c, declara)
     c.showPage()
-    declaracao_acumulo(c , declara)
+    declaracao_acumulo(c, declara)
     c.showPage()
-    print(declara['Ato'])
-    print(declara['Regime'])
-    print({user_date_a_partir_variable})
-    ##################################### Para o caso de Designação e não CLT... ######################################
-    
-    if ((declara['Ato'] == 'Designação' and declara['Regime'] != 'CLT') 
-            or ((declara['Ato'] == 'Designação' and declara['Regime'] == 'CLT' 
-            and {user_date_a_partir_variable} == {None} and {date_periodofechado_inicio_variable} == {None}
-            and {date_periodofechado_fim_variable} == {None}))
-                or ((declara['Ato'] == 'Designação' and declara['Regime'] == 'CLT' 
-                and (({date_periodofechado_inicio_variable} is not None) and ({date_periodofechado_fim_variable} is not None))))):
-        anexo_iii(c , declara)
+
+    # Designação => Anexo III
+    if is_designacao(declara):
+        anexo_iii(c, declara)
         c.showPage()
-        informacoes_adicionais(c , declara)
+    # Designação com posterior Nomeação => Temos os dois anexos
+    elif is_designacao_nomeacao(declara):
+        anexo_i(c, declara)
         c.showPage()
-    ###################################################### Outros #####################################################
-    else:
-        anexo_i(c , declara)
+        anexo_iii(c, declara)  # Adiciona também o anexo III
         c.showPage()
-        informacoes_adicionais(c , declara)
+    # Nomeação => Anexo I
+    elif is_nomeacao(declara):
+        anexo_i(c, declara)
         c.showPage()
-        if declara['Ato'] =='Designação com posterior Nomeação':
-            anexo_iii(c , declara)
-            c.showPage()
-            informacoes_adicionais(c , declara)
-            c.showPage()
-    c.save()
-    #print(f"./{declara['Ato']}/{declara['Nome']}/{declara['Nome']}/{nomearquivo}")
-    subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nomearquivo}"], shell=True)
-    #subprocess.Popen(["start", f"./{declara['Ato']}/{nomearquivo}"], shell=True)
-    #print(f"{declara['Nome']} + Teste + {declara['Cargo']}")
-    # def verifica_pasta()
-    #     pass
+    # informacoes_adicionais(c, declara) ### Embutido nos anexos....
+    # c.showPage()
+
+
+def is_designacao(declara):
+    return declara['Ato'] == 'Designação'
+
+def is_designacao_nomeacao(declara):
+    return declara['Ato'] == 'Designação com posterior Nomeação'
+
+def is_nomeacao(declara):
+    return declara['Ato'] == 'Nomeação'
+
+def is_clt(declara):
+    return declara['Regime'] == 'CLT'
+
+def has_date_period_closed(declara):
+    inicio_var = declara.get('date_periodofechado_inicio_variable')
+    fim_var = declara.get('date_periodofechado_fim_variable')
+    return inicio_var is not None and fim_var is not None
+
+def is_designacao_com_nomeacao(declara):
+    return declara['Ato'] == 'Designação com posterior Nomeação'
+
+
+
+
 def draw_checkbox(c, x, y, size=10, checked=False):
 # Desenha o quadrado
     c.rect(x, y, size, size)
@@ -1486,7 +1796,7 @@ def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo, regime_combo
     global cargo_origem_list
     
     ua = ua_combo.get() 
-    if ua != '':
+    if ua != '' :
         cargo_origem_combo["completevalues"] = [
             "Agente Administrativo",
             "Agente Administrativo de Ensino",
@@ -1877,29 +2187,30 @@ def cargo_de_origem(destinacao_entry, ua_combo, cargo_origem_combo, regime_combo
         ]
     #cargo_origem_combo.focus()
     regime_combo.config(state="enable")
-    regime_combo.focus()
+    # regime_combo.focus()
+    # destinacao_entry.focus()
     cargo_origem_list = cargo_origem_combo["completevalues"]
     
     
     
 def filter_combobox(event, valores, combo):
-    print("Event:", event)
-    print("Valores:", valores)
-    print("Combo antes:", combo['values'])
+    # print("Event:", event)
+    # print("Valores:", valores)
+    # print("Combo antes:", combo['values'])
     typed = combo.get().lower()
-    print("Typed:", typed)
+    # print("Typed:", typed)
     if typed == "":
         combo['values'] = valores
     else:
         filtered_items = [item for item in valores if typed in item.lower()]
-        print("Filtrado:", filtered_items)
+        # print("Filtrado:", filtered_items)
         combo['values'] = filtered_items
-    print("Combo depois:", combo['values'])
+    # print("Combo depois:", combo['values'])
     
 
 def on_select(event, valores, combo):
     selected = event.widget.get()
-    print("Selecionado:", selected)
+    # print("Selecionado:", selected)
     if selected not in combo['values']:
         messagebox.showinfo("Atenção", "O valor preenchido não consta na lista atual.")
         combo.focus()
@@ -1927,9 +2238,10 @@ def search_font_verdana():
         pdfmetrics.registerFont(TTFont(font_name, font_path))
 
     # Exibe as fontes registradas
-    if existing_fonts:
-        print("As seguintes fontes foram registradas:")
-        for font_name, font_path in existing_fonts.items():
-            print(f"{font_name}: {font_path}")
-    else:
-        print("Nenhuma das fontes foi encontrada.")
+    # if existing_fonts:
+    #     #print("As seguintes fontes foram registradas:")
+    #     for font_name, font_path in existing_fonts.items():
+    #         #print(f"{font_name}: {font_path}")
+    # else:
+    #     statusbar_text.set("")
+    #     # print("Nenhuma das fontes foi encontrada.")
