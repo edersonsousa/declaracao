@@ -43,13 +43,16 @@ from tkinter import (
     END,
     simpledialog,
 )
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageTk
 global statusbar_text
 window = ttk.Window("lumen", resizable=(True, True))
-
+try:
+    window.iconbitmap("ico.ico")
+except:
+    pass
 window.title("Declarações")
 window.config(padx=20, pady=20)
-# Labels
+# Labels                                        
 nome_label = ttk.Label(text="Nome :", bootstyle="primary")
 nome_label.grid(row=0, column=1, pady=4, sticky="W")
 rg_label = ttk.Label(text="RG :", bootstyle="primary")
@@ -310,12 +313,50 @@ cargo_origem_combo.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_serv
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
                         coordenadoria_combo, regime_combo),)
 
-a_partir_var = ttk.BooleanVar()
+# a_partir_var = ttk.BooleanVar()
+# a_partir_checkbutton = ttk.Checkbutton(
+#     window,
+#     text="A partir",
+#     variable=a_partir_var,
+#     bootstyle="primary",
+#     command=lambda: toggle_check_a_partir(
+#         a_partir_var,
+#         periodo_fechado_var,
+#         periodo_fechado_checkbutton,
+#         ato_combo,
+#         window, 
+#         btn_servidor, 
+#         btn_n_servidor
+#     ),
+# )
+
+# a_partir_checkbutton.grid(row=1, sticky=tk.W, column=6, columnspan=2)
+
+# Criar um estilo
+style = ttk.Style()
+
+# Aplicar o estilo ao Checkbutton
+# style.configure('Primary.TCheckbutton', background='blue', foreground='white', font=('Arial', 12))
+
+# Definir as propriedades do estilo para se assemelharem ao estilo Lumen
+style.configure(
+    'Primary.TCheckbutton', 
+    # background='#F0F0F0',  # Cor de fundo semelhante ao Lumen
+    foreground='#376cfe',    # Cor do texto semelhante ao Lumen
+    font=('Verdana', 10),   # Fonte semelhante ao Lumen
+    fontcolor='blue',
+)
+# Criar a variável do Checkbutton
+a_partir_var = tk.BooleanVar()
+
+# Criar o Checkbutton usando o ttk
 a_partir_checkbutton = ttk.Checkbutton(
     window,
-    text="A partir",
+    text=" A partir           ",
+    # text="  Período Fechado  ",
+
     variable=a_partir_var,
-    bootstyle="primary",
+    style='Primary.TCheckbutton',  # Aplicar o estilo
     command=lambda: toggle_check_a_partir(
         a_partir_var,
         periodo_fechado_var,
@@ -327,20 +368,45 @@ a_partir_checkbutton = ttk.Checkbutton(
     ),
 )
 
-a_partir_checkbutton.grid(row=1, sticky=tk.W, column=7, columnspan=4)
+# Adicionar o Checkbutton à janela usando grid
+a_partir_checkbutton.grid(row=1, column=4, columnspan=2, padx=25, sticky="w")
+# bnt_limpar.grid(row=24, column=4, columnspan=2, pady=25, padx=25)
 
 periodo_fechado_var = tk.BooleanVar()
 periodo_fechado_checkbutton = ttk.Checkbutton(
     window,
-    text="Período Fechado",
+    text="  Período Fechado  ",
     variable=periodo_fechado_var,
-    bootstyle="primary",
+
+    style='Primary.TCheckbutton',  # Aplicar o estilo
     command=lambda: toggle_check_periodo_fechado(
         periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor
     ),
 )
+periodo_fechado_checkbutton.grid(row=3, column=4, columnspan=2, padx=25)
 
-periodo_fechado_checkbutton.grid(row=3, sticky=tk.W, column=7, columnspan=4)
+try:
+    # Carregar a imagem usando PIL
+    image = Image.open("logo.png")
+
+    # Redimensionar a imagem para o tamanho do grid
+    width, height = 300, 200  # Tamanho desejado para a imagem (ajuste conforme necessário)
+    # Redimensionar a imagem para o tamanho do grid
+    image = image.resize((width, height))
+    # Converter a imagem para o formato suportado pelo Tkinter
+    photo = ImageTk.PhotoImage(image)
+
+    # Exibir a imagem em um widget Label
+    image_label = tk.Label(window, image=photo)
+    image_label.grid(row=4, column=5, columnspan=6, rowspan=10)  # Ajuste as opções de grid conforme necessário
+except:
+    pass
+
+
+
+
+
+
 btn_n_servidor = ttk.Button(
     text="Gerar Dados \n Não Servidor",
     width=15,
@@ -433,7 +499,7 @@ bnt_limpar = ttk.Button(
 bnt_limpar.grid(row=24, column=4, columnspan=2, pady=25, padx=25)
 
 bnt_sair = ttk.Button(text="SAIR", width=15, command=window.quit, bootstyle="danger")
-bnt_sair.grid(row=24, column=8, columnspan=2)
+bnt_sair.grid(row=24, column=6, columnspan=2)
 
 # Definindo a barra de status
 statusbar_text = tk.StringVar()

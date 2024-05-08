@@ -164,7 +164,7 @@ def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_che
         periodo_fechado_checkbutton.config(state="disabled")
         # Exibir caixa de diálogo para solicitar uma data
         window.withdraw() 
-        user_date = simpledialog.askstring("Data", "Qual a data do a partir? Ex:(dd/mm/aaaa)", initialvalue=datetime.now().strftime('%d/%m/%Y'))
+        user_date = simpledialog.askstring("Declarações", "Qual a data do a partir? \nEx:(dd/mm/aaaa)", initialvalue=datetime.now().strftime('%d/%m/%Y'))
         # Verificar se a data está no formato correto
         if user_date and len(user_date) == 10 and user_date[2] == '/' and user_date[5] == '/':
             dia = int(user_date[:2])
@@ -215,7 +215,7 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
         ato_combo["values"] = "Designação"        
         #    Escondendo a janela principal(window)
         window.withdraw() 
-        date_periodofechado_inicio = simpledialog.askstring("A Partir", "Qual a data do a partir \n para o período fechado? Ex:(dd/mm/aaaa)",
+        date_periodofechado_inicio = simpledialog.askstring("Período Fechado", "Qual a data do a partir para o período fechado?\nEx:(dd/mm/aaaa)",
                                                             initialvalue=datetime.now().strftime('%d/%m/%Y'))
         if date_periodofechado_inicio and len(date_periodofechado_inicio) == 10 and date_periodofechado_inicio[2] == '/' and date_periodofechado_inicio[5] == '/':
             dia_inicio = int(date_periodofechado_inicio[:2])
@@ -525,6 +525,16 @@ def path_check(declara, statusbar_text):
         novo_status = f"[GADI] - A pasta '{declara['Nome']}' dentro de '{declara['Ato']} já existe."
         statusbar_text.set(novo_status)
         
+def rodape(c):    
+    # Definir o texto e suas coordenadas
+    texto = "CRH-GADI-V1.4"
+    x, y = 500, 25  # Posição do texto
+
+    # Adicionar o texto como marca d'água
+    c.setFillColorRGB(0.5, 0.5, 0.5)  # Define a cor do texto como cinza (RGB)
+    c.setFont("Verdana", 6)  # Define a fonte e o tamanho do texto
+    c.drawString(x, y, texto)  # Desenha o texto na posição especificada
+        
 def declaracao_experiencia(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
@@ -553,6 +563,7 @@ def declaracao_experiencia(c , declara):
     c.drawCentredString(300, 470, f"_________________________________________")
     c.setFont("Verdana", 10)
     c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
+    rodape(c)
     
 def termo_de_anuencia(c , declara):
     #Define título
@@ -584,6 +595,7 @@ def termo_de_anuencia(c , declara):
     c.drawRightString(500, 470, f"______________________________________")
     c.setFont("Verdana", 10)
     c.drawRightString(500, 450, f"{declara['Nome']}")
+    rodape(c)
     
 def termo_de_compromisso_clt(c , declara):
     #Define título
@@ -608,6 +620,8 @@ def termo_de_compromisso_clt(c , declara):
     c.drawRightString(500, 470, f"__________________________________________________")
     c.setFont("Verdana", 10)
     c.drawRightString(500, 450, f"{declara['Nome']}")
+    rodape(c)
+    
     
 def declaracao_hipotese_inelegibilidade(c , declara):
     #Define título
@@ -648,6 +662,7 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     c.drawRightString(500, 350, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 10)
     c.drawRightString(500, 300, f"{declara['Nome']}")
+    rodape(c)
     
 def declaracao_cargo_funcao(c , declara):
     c.setFont("Verdana-Bold", 14)
@@ -669,6 +684,7 @@ def declaracao_cargo_funcao(c , declara):
     c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 12)
     c.drawRightString(500, 450, f"{declara['Nome']}")
+    rodape(c)
     
 def declaracao_acumulo(c , declara):
     c.setFont("Verdana-Bold", 14)
@@ -821,7 +837,8 @@ def declaracao_acumulo(c , declara):
     c.setFont("Verdana", 12)
     c.drawCentredString(300, 150, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.drawCentredString(300, 100, f"{declara['Nome']}")
-
+    rodape(c)
+    
 def anexo_i(c , declara):
        
     y_position = 780
@@ -982,6 +999,7 @@ def anexo_i(c , declara):
     p.drawOn(c, 100, 70)
     c.showPage()
     informacoes_adicionais(c, declara)
+    rodape(c)
     
 def informacoes_adicionais(c , declara):
     c.rect(50, 750, 500, 40)
@@ -1132,6 +1150,8 @@ def informacoes_adicionais(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 60)
     p.drawOn(c, 100, 70)
+    rodape(c)
+    
     
 def anexo_iii(c , declara):
     y_position = 780
@@ -1285,6 +1305,7 @@ def anexo_iii(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 60)
     p.drawOn(c, 100, 70)
+    rodape(c)
     c.showPage()
     informacoes_adicionais(c, declara)
 
