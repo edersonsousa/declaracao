@@ -115,9 +115,14 @@ def validar_cpf(event, cpf_entry, statusbar_text):
         cpf_entry.delete(0, "end")
     
 def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo, jornada_combo, lei_combo, cargo_combo, 
-                  destinacao_entry, ua_combo, coordenadoria_combo, cargo_origem_combo, a_partir_var, a_partir_checkbutton, periodo_fechado_var, 
-                  periodo_fechado_checkbutton, regime_combo, btn_n_servidor, btn_servidor, statusbar_text):
+                  destinacao_entry, ua_combo, coordenadoria_combo, cargo_origem_combo, a_partir_checkbutton, periodo_fechado_var, 
+                  periodo_fechado_checkbutton, regime_combo, btn_n_servidor, btn_servidor, statusbar_text, user_date_a_partir_variable, a_partir_var):
     # Limpa o valor de todos os campos de entrada
+    # global date_periodofechado_inicio_variable, date_periodofechado_fim_variable
+    # user_date_a_partir_variable = None
+    # date_periodofechado_inicio_variable = None
+    # date_periodofechado_fim_variable = None
+    
     nome_entry.delete(0, END)
     nome_entry.focus()
     rg_entry.delete(0, END)
@@ -143,7 +148,7 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     periodo_fechado_var.set(False)
     a_partir_var.set(False)
     a_partir_var = None
-    # user_date_a_partir_variable = None
+    # a_partir_var.set(False)
     a_partir_checkbutton.config(state="normal")
     user_date_a_partir_variable = None
     periodo_fechado_checkbutton.config(state="normal")
@@ -152,8 +157,10 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     btn_n_servidor.config(state="disable")
     btn_servidor.config(state="disable")
     statusbar_text.set("GADI")
-
-user_date_a_partir_variable = None
+    #print(user_date_a_partir_variable != None)
+    #print(user_date_a_partir_variable)
+global user_date_a_partir_variable
+# user_date_a_partir_variable = None
 
 def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor):
     global user_date_a_partir_variable
@@ -545,9 +552,13 @@ def declaracao_experiencia(c , declara):
     y_position = 700
     text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, para {declara['Ato']}"
     ######################## Para o caso de 'A Partir' ###############################################
-    if {user_date_a_partir_variable} != {None}: 
+    if {declara['A partir']} != {False}:
+        # print(user_date_a_partir_variable) 
+        # print({declara['A partir']})
         text +=f" a partir de {user_date_a_partir_variable}"
+        # print(f" a partir de {user_date_a_partir_variable}")
     elif (declara['Periodo Fechado']):
+        # print(declara['Periodo Fechado'])
         text +=f" no período {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}"
     text +=f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
             que o(a) indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, \

@@ -339,13 +339,31 @@ style = ttk.Style()
 # style.configure('Primary.TCheckbutton', background='blue', foreground='white', font=('Arial', 12))
 
 # Definir as propriedades do estilo para se assemelharem ao estilo Lumen
-style.configure(
-    'Primary.TCheckbutton', 
-    # background='#F0F0F0',  # Cor de fundo semelhante ao Lumen
-    foreground='#376cfe',    # Cor do texto semelhante ao Lumen
-    font=('Verdana', 10),   # Fonte semelhante ao Lumen
-    fontcolor='blue',
-)
+# style.configure(
+#     'Primary.TCheckbutton', 
+#     # background='#F0F0F0',  # Cor de fundo semelhante ao Lumen
+#     foreground='#376cfe',    # Cor do texto semelhante ao Lumen
+#     font=('Verdana', 10),   # Fonte semelhante ao Lumen
+#     fontcolor='#376cfe',
+#     indicatorforeground="white",
+#     # background="black",
+#     disabledforeground='white',  # Cor do texto quando desabilitado
+
+# )
+
+style.configure('Custom.TCheckbutton', indicatorrelief='flat', indicatordiameter=0, indicatormargin=(0, 0, 0, 0),
+                indicatordistance=0, borderwidth=0, padding=10, foreground='#376cfe')
+
+style.layout('CustomCheckbutton',
+             [('Checkbutton.padding', {'sticky': 'nswe', 'children':
+                                       [('Checkbutton.indicator', {'side': 'left', 'sticky': ''}),
+                                        ('Checkbutton.focus', {'side': 'left', 'sticky': '', 'children':
+                                                               [('Checkbutton.label', {'sticky': 'nswe'})]})]})])
+
+
+
+style.map("CustomCheckbutton", foreground=[("disabled", "lightgray")], highlightcolor=[("disabled", "white")], relief=[("disabled", "flat"), ("!disabled", "flat")])
+
 # Criar a variável do Checkbutton
 a_partir_var = tk.BooleanVar()
 
@@ -356,7 +374,7 @@ a_partir_checkbutton = ttk.Checkbutton(
     # text="  Período Fechado  ",
 
     variable=a_partir_var,
-    style='Primary.TCheckbutton',  # Aplicar o estilo
+    style='Custom.TCheckbutton',  # Aplicar o estilo
     command=lambda: toggle_check_a_partir(
         a_partir_var,
         periodo_fechado_var,
@@ -378,7 +396,7 @@ periodo_fechado_checkbutton = ttk.Checkbutton(
     text="  Período Fechado  ",
     variable=periodo_fechado_var,
 
-    style='Primary.TCheckbutton',  # Aplicar o estilo
+    style='Custom.TCheckbutton',  # Aplicar o estilo
     command=lambda: toggle_check_periodo_fechado(
         periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor
     ),
@@ -388,7 +406,6 @@ periodo_fechado_checkbutton.grid(row=3, column=4, columnspan=2, padx=25)
 try:
     # Carregar a imagem usando PIL
     image = Image.open("logo.png")
-
     # Redimensionar a imagem para o tamanho do grid
     width, height = 300, 200  # Tamanho desejado para a imagem (ajuste conforme necessário)
     # Redimensionar a imagem para o tamanho do grid
@@ -473,27 +490,29 @@ bnt_limpar = ttk.Button(
     width=15,
     bootstyle="secondary",
     command=lambda: limpar_campos(
-        nome_entry,
-        rg_entry,
-        cpf_entry,
-        estado_civil_combo,
-        ato_combo,
-        jornada_combo,
-        lei_combo,
-        cargo_combo,
-        destinacao_entry,
-        ua_combo,
-        coordenadoria_combo,
-        cargo_origem_combo,
-        a_partir_var,
-        a_partir_checkbutton,
-        periodo_fechado_var,
-        periodo_fechado_checkbutton,
-        regime_combo,
-        btn_n_servidor, 
-        btn_servidor,
-        statusbar_text
-    ),
+    nome_entry,
+    rg_entry,
+    cpf_entry,
+    estado_civil_combo,
+    ato_combo,
+    jornada_combo,
+    lei_combo,
+    cargo_combo,
+    destinacao_entry,
+    ua_combo,
+    coordenadoria_combo,
+    cargo_origem_combo,
+    a_partir_checkbutton,
+    periodo_fechado_var,
+    periodo_fechado_checkbutton,
+    regime_combo,
+    btn_n_servidor,
+    btn_servidor,
+    statusbar_text,
+    user_date_a_partir_variable,
+    a_partir_var  # Passando como argumento posicional, não como argumento de palavra-chave
+)
+,
 )
 
 bnt_limpar.grid(row=24, column=4, columnspan=2, pady=25, padx=25)
