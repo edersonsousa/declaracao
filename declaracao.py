@@ -1,4 +1,4 @@
-import subprocess, os, locale
+import subprocess, os, locale, sys
 import babel.numbers
 import reportlab.rl_config
 from tool_box import (
@@ -44,6 +44,10 @@ from tkinter import (
     simpledialog,
 )
 from PIL import Image, ImageDraw, ImageTk
+############### Loading #############
+if getattr(sys, 'frozen', False):
+    import pyi_splash
+#####################################
 global statusbar_text
 window = ttk.Window("lumen", resizable=(True, True))
 try:
@@ -525,4 +529,8 @@ statusbar_text = tk.StringVar()
 statusbar = ttk.Label(window, textvariable=statusbar_text, borderwidth=0, relief="sunken", anchor="w", bootstyle="primary", justify="center")
 statusbar_text.set("GADI")
 statusbar.grid(row=32, column=0, columnspan=999, sticky="ew")
+####################### Loading off ###########################
+if getattr(sys, 'frozen', False):
+    pyi_splash.close()
+###############################################################
 window.mainloop()
