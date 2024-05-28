@@ -1,10 +1,13 @@
+Para compilar 'python -m auto_py_to_exe'
+
+
 Neste repositório temos a continuação do <a href="https://drive.google.com/file/d/1Ryd6T_pFONlM9o2Zmuj2TQwidjIeKv4Q/view?usp=sharing">frmDeclara</a> que consta <a href="https://saude.sp.gov.br/coordenadoria-de-recursos-humanos/areas-da-crh/grupo-de-apoio-ao-desenvolvimento-institucional/material-tecnico-do-centro-de-controle-de-recursos-humanos-comando/material-tecnico-do-centro-de-controle-de-recursos-humanos-comando">neste link </a> 
 
 O objetivo é automatizar confecção de documentos para NOMEAÇÃO E DESIGNAÇÃO EM CARGOS EM COMISSÃO.
 
 NOMEAÇÃO
 
-SQC-I – CARGOS EM COMISSÃO – LIVRE PROVIMENTO: 
+SQC-I – CARGOS EM COMISSÃO – LIVRE PROVIMENTO:
 
 A nomeação, bem como a exoneração à critério da Administração, são deliberações de competência do Governador do Estado, por meio de Decreto de nomeação ou exoneração;
 Exoneração critério: deverá constar ofício de solicitação do Diretor da Unidade e manifestação da Coordenadoria; exoneração por aposentadoria é o único que pode constar data de a partir.
@@ -97,9 +100,10 @@ Declaração convênio SUS;
 Publicação do acúmulo em Diário Oficial do Estado, nos casos de servidores com duplo vínculo;
 Declaração de experiência;
 Manifestação da unidade de origem;
-RG; Currículo; Súmula vinculante; Declaração de inelegibilidade; diplomas sempre cópia frente e verso; Declaração do Tribunal Regional Eleitoral de que está quite com a Justiça Eleitoral; Declaração de acúmulo; 
-
+RG; Currículo; Súmula vinculante; Declaração de inelegibilidade; diplomas sempre cópia frente e verso; Declaração do Tribunal Regional Eleitoral de que está quite com a Justiça Eleitoral; Declaração de acúmulo;
 
 Por questão de falta de paciência deixei elementos gráficos ocutos no arquivo compactado e fiz referência a eles no código na pasta raiz.
 
 Para compilar usei o comando 'python -m auto_py_to_exe'
+
+* 28/05/2024 - Adicionada na função toggle_check_periodo_fechado o requisito quando a "Periodo Fechado". Permitindo que a data seja apenas ao dia atual sendo possível a data fim ser a data atual.

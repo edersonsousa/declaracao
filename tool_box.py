@@ -213,75 +213,75 @@ user_date_a_partir_variable = None
 def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor):
     global date_periodofechado_inicio_variable
     global date_periodofechado_fim_variable
-    date_periodofechado_inicio = None
-    date_periodofechado_fim = None
+    date_periodofechado_inicio_variable = None
+    date_periodofechado_fim_variable = None
+    current_year = datetime.now().year
+
     if periodo_fechado_var.get():
         a_partir_var.set(False)
         a_partir_checkbutton.config(state="disabled")
         user_date_a_partir_variable = None
-        ato_combo["values"] = "Designação"        
-        #    Escondendo a janela principal(window)
-        window.withdraw() 
-        date_periodofechado_inicio = simpledialog.askstring("Período Fechado", "Qual a data do a partir para o período fechado?\nEx:(dd/mm/aaaa)",
-                                                            initialvalue=datetime.now().strftime('%d/%m/%Y'))
+        ato_combo["values"] = "Designação"
+        window.withdraw()
+
+        date_periodofechado_inicio = simpledialog.askstring("Período Fechado", "Qual a data do início para o período fechado?\nEx:(dd/mm/aaaa)")
         if date_periodofechado_inicio and len(date_periodofechado_inicio) == 10 and date_periodofechado_inicio[2] == '/' and date_periodofechado_inicio[5] == '/':
             dia_inicio = int(date_periodofechado_inicio[:2])
             mes_inicio = int(date_periodofechado_inicio[3:5])
             ano_inicio = int(date_periodofechado_inicio[6:])
-        # Verificar se o dia, mês e ano são válidos
-            if (1 <= mes_inicio <= 12) and (ano_inicio == 2024):
-                if (mes_inicio in [1, 3, 5, 7, 8, 10, 12] and 1 <= dia_inicio <= 31) or \
-                   (mes_inicio in [4, 6, 9, 11] and 1 <= dia_inicio <= 30) or \
-                   (mes_inicio == 2 and ((ano_inicio % 4 == 0 and ano_inicio % 100 != 0) or ano_inicio % 400 == 0) and 1 <= dia_inicio <= 29) or \
-                   (mes_inicio == 2 and 1 <= dia_inicio <= 28):
-        # Use a data fornecida pelo usuário como desejar
+            try:
+                data_inicio = datetime(ano_inicio, mes_inicio, dia_inicio)
+                if data_inicio < datetime.now():
                     date_periodofechado_inicio_variable = date_periodofechado_inicio
                 else:
-                    tk.messagebox.showerror("Erro", "Dia inicial inválido para o mês fornecido.")
+                    messagebox.showerror("Erro", "Data inicial inválida. A data deve ser anterior ao dia atual.")
                     toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
-            else:
-                tk.messagebox.showerror("Erro", "Mês inicial inválido ou ano diferente de 2024.")
+                    return
+            except ValueError:
+                messagebox.showerror("Erro", "Data inicial inválida. Por favor, insira uma data válida no formato dd/mm/aaaa.")
                 toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
-        elif date_periodofechado_inicio == None:
+                return
+        elif date_periodofechado_inicio is None:
             window.deiconify()
+            return
         else:
-            tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+            messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
             toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
-        date_periodofechado_fim = simpledialog.askstring("Data fim...", "Qual a data fim para o período fechado? Ex:(dd/mm/aaaa)",                                                         
-                                                         initialvalue=datetime(datetime.now().year, 12, 31).strftime('%d/%m/%Y'))
+            return
+
+        date_periodofechado_fim = simpledialog.askstring("Data fim...", "Qual a data fim para o período fechado? Ex:(dd/mm/aaaa)")
         if date_periodofechado_fim and len(date_periodofechado_fim) == 10 and date_periodofechado_fim[2] == '/' and date_periodofechado_fim[5] == '/':
             dia_fim = int(date_periodofechado_fim[:2])
             mes_fim = int(date_periodofechado_fim[3:5])
             ano_fim = int(date_periodofechado_fim[6:])
-        # Verificar se o dia, mês e ano são válidos
-            if (1 <= mes_fim <= 12) and (ano_fim == 2024):
-                if (mes_fim in [1, 3, 5, 7, 8, 10, 12] and 1 <= dia_fim <= 31) or \
-                   (mes_fim in [4, 6, 9, 11] and 1 <= dia_fim <= 30) or \
-                   (mes_fim == 2 and ((ano_fim % 4 == 0 and ano_fim % 100 != 0) or ano_fim % 400 == 0) and 1 <= dia_fim <= 29) or \
-                   (mes_fim == 2 and 1 <= dia_fim <= 28):
-        # Use a data fornecida pelo usuário como desejar
-                    date_periodofechado_fim_variable = date_periodofechado_fim            
+            try:
+                data_fim = datetime(ano_fim, mes_fim, dia_fim)
+                if data_fim < datetime.now() and data_fim > data_inicio:
+                    date_periodofechado_fim_variable = date_periodofechado_fim
                 else:
-                    tk.messagebox.showerror("Erro", "Dia final inválido para o mês fornecido.")
+                    messagebox.showerror("Erro", "Data final inválida. A data deve ser anterior ao dia atual e posterior à data inicial.")
                     toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
-            else:
-                tk.messagebox.showerror("Erro", "Mês final inválido ou ano diferente de 2024.")
+                    return
+            except ValueError:
+                messagebox.showerror("Erro", "Data final inválida. Por favor, insira uma data válida no formato dd/mm/aaaa.")
                 toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
-        elif date_periodofechado_fim == None:
+                return
+        elif date_periodofechado_fim is None:
             window.deiconify()
+            return
         else:
-            tk.messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
+            messagebox.showerror("Erro", "Formato de data inválido. Por favor, insira uma data no formato dd/mm/aaaa.")
             toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
+            return
+
     else:
         a_partir_checkbutton.config(state="normal")
-        #Volta a principal janela(window)
+        window.deiconify()
+        if btn_servidor.cget("state") == "disable":
+            btn_n_servidor.focus()
+        elif btn_n_servidor.cget("state") == "disable":
+            btn_servidor.focus()
     window.deiconify()
-    if btn_servidor.cget("state") == "disable":
-        btn_n_servidor.focus()
-    elif btn_n_servidor.cget("state") == "disable":
-        btn_servidor.focus()
-# date_periodofechado_inicio_variable = date_periodofechado_inicio
-# date_periodofechado_fim_variable = date_periodofechado_fim
     
 def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo):
     selected_value = ato_combo.get()
