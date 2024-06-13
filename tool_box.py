@@ -520,11 +520,11 @@ def validar_dados_servidor(ato_combo, cargo_origem_combo, btn_n_servidor, btn_se
         return True
     
 def path_check(declara, statusbar_text):
-    if not (os.path.exists(f'{declara['Ato']}/{declara['Nome']}/')): 
+    if not (os.path.exists(f"{declara['Ato']}/{declara['Nome']}/")): 
         statusbar_text.set("...Criando a pasta...")
         try:
-            os.makedirs(f'./{declara['Ato']}/{declara['Nome']}/')  # Tenta criar a pasta
-            statusbar_text.set(f'[GADI] - Pasta {declara['Nome']} criada dentro da pasta {declara['Ato']}...')
+            os.makedirs(f"./{declara['Ato']}/{declara['Nome']}/")  # Tenta criar a pasta
+            statusbar_text.set(f"[GADI] - Pasta {declara['Nome']} criada dentro da pasta {declara['Ato']}...")
         except OSError as e:
             statusbar_text.set("Falha ao tentar criar a pasta. Verifique as permissões...")
     else:
