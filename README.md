@@ -107,3 +107,6 @@ Por questão de falta de paciência deixei elementos gráficos ocutos no arquivo
 Para compilar usei o comando 'python -m auto_py_to_exe'
 
 * 28/05/2024 - Adicionada na função toggle_check_periodo_fechado o requisito quando a "Periodo Fechado". Permitindo que a data seja apenas ao dia atual sendo possível a data fim ser a data atual.
+
+* 13/06/2024 - Novos ajustes na ferramenta. A equipe está revisando a documentação gerada. 
+        - Alterada a regra que deixava o nome maiúsculo prevendo o caso de um sobrenome "dos Santos". Agora ele tolera até 3 caracteres mais que isso ele deixa maiúsculo.

@@ -52,7 +52,7 @@ def validate_name(event, entry):
 def capitalize_long_words(content):
     words = content.split()
     for i in range(len(words)):
-        if len(words[i]) >= 3:
+        if len(words[i]) > 3:
             words[i] = words[i].capitalize()
     return " ".join(words)
 
