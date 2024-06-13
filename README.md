@@ -110,3 +110,4 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
 
 * 13/06/2024 - Novos ajustes na ferramenta. A equipe está revisando a documentação gerada. 
         - Alterada a regra que deixava o nome maiúsculo prevendo o caso de um sobrenome "dos Santos". Agora ele tolera até 3 caracteres mais que isso ele deixa maiúsculo.
+        - Ajustado rodape no anexo_i

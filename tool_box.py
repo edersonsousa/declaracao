@@ -1008,9 +1008,10 @@ def anexo_i(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 60)
     p.drawOn(c, 100, 70)
+    rodape(c)
     c.showPage()
     informacoes_adicionais(c, declara)
-    rodape(c)
+
     
 def informacoes_adicionais(c , declara):
     c.rect(50, 750, 500, 40)
