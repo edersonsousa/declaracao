@@ -111,3 +111,8 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
 * 13/06/2024 - Novos ajustes na ferramenta. A equipe está revisando a documentação gerada. 
         - Alterada a regra que deixava o nome maiúsculo prevendo o caso de um sobrenome "dos Santos". Agora ele tolera até 3 caracteres mais que isso ele deixa maiúsculo.
         - Ajustado rodape no anexo_i
+
+* 25/06/2024 - Ajustes na declaração gerada(Declaração de Experiência)
+               - Mudanças na página de Declaração de Experiência
+               - Realce no nome do Servidor(testando)
+               - Realinhamento....

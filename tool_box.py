@@ -305,12 +305,12 @@ def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir
 
 def lei_box_select(event, lei_combo, jornada_combo):
     selected_value = event.widget.get()
-    if selected_value == "Art.5º da lei complementar nº 1080/2008":
+    if selected_value == "Art.5º da Lei Complementar nº 1.080/2008":
         jornada_combo.config(state=tk.NORMAL)
         jornada_combo.set("")
         jornada_combo["values"] = ["Jornada Completa de Trabalho"]
         jornada_combo.focus()
-    elif selected_value == "Art.8º da lei complementar nº 1157/2011":
+    elif selected_value == "Art.8º da Lei Complementar nº 1.157/2011":
         jornada_combo.config(state=tk.NORMAL)
         jornada_combo.set("")
         jornada_combo["values"] = "Jornada Básica de Trabalho", "Jornada Parcial de Trabalho", "Jornada de 30(trinta) horas de Trabalho"
@@ -318,7 +318,7 @@ def lei_box_select(event, lei_combo, jornada_combo):
         
 def jornada_box_select(cargo_combo, lei_combo):
     selected_value = lei_combo.get()
-    if selected_value == "Art.5º da lei complementar nº 1080/2008":
+    if selected_value == "Art.5º da Lei Complementar nº 1.080/2008":
         cargo_combo.set("")
         cargo_combo["completevalues"] = [
                                                 "Assessor de Gabinete I"                , 
@@ -349,7 +349,7 @@ def jornada_box_select(cargo_combo, lei_combo):
                                         ]
         cargo_combo.config(state=tk.NORMAL)
         cargo_combo.set("")
-    elif selected_value == "Art.8º da lei complementar nº 1157/2011":
+    elif selected_value == "Art.8º da Lei Complementar nº 1.157/2011":
         cargo_combo.set("")
         cargo_combo["completevalues"] = [
                                             "Assessor Técnico de Coordenador de Saúde"  ,
@@ -534,7 +534,7 @@ def path_check(declara, statusbar_text):
         
 def rodape(c):    
     # Definir o texto e suas coordenadas
-    texto = "CRH-GADI-V1.4"
+    texto = "CRH-GADI-V1.4.1"
     x, y = 500, 25  # Posição do texto
 
     # Adicionar o texto como marca d'água
@@ -542,7 +542,7 @@ def rodape(c):
     c.setFont("Verdana", 6)  # Define a fonte e o tamanho do texto
     c.drawString(x, y, texto)  # Desenha o texto na posição especificada
         
-def declaracao_experiencia(c , declara):
+def declaracao_experiencia_old(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 750, "Declaração de Experiência")
@@ -576,6 +576,56 @@ def declaracao_experiencia(c , declara):
     c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
     rodape(c)
     
+def declaracao_experiencia(c, declara):
+    # Define título
+    c.setFont("Verdana-Bold", 14)
+    c.drawCentredString(300, 750, "Declaração de Experiência")
+
+    # Adiciona informações do dicionário do PDF em um parágrafo justificado
+    y_position = 700
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text = f"Tendo em vista, a indicação por esta Unidade de {nome_em_negrito}, RG. {declara['RG']}, para {declara['Ato']}"
+    
+    # Para o caso de 'A Partir'
+    if declara['A partir'] != False:
+        text += f" a partir de {declara['A partir']}"
+    elif declara['Periodo Fechado']:
+        text += f" no período {declara['Periodo Fechado']['Inicio']} a {declara['Periodo Fechado']['Fim']}"
+
+    text += f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
+            que o(a) indicado(a) atende ao estabelecido no anexo IV da referida Lei Complementar, \
+            no tocante a experiência profissional exigida nos assuntos relacionados com as atividades a serem desempenhadas \
+            no cargo de {declara['Cargo']}, classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
+    
+    #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=30, leading=(12*1.5))
+    #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=60, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=90, leading=(12*1.5))
+    
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+ 
+
+    p.drawOn(c, 100, y_position - p.height)
+
+    # Adiciona a data atual formatada
+    c.setFont("Verdana", 11)
+    data_atual = format_date(datetime.now(), format='full', locale='pt_BR').split(',')[1].strip()
+    #c.drawCentredString(300, 500, f"São Paulo, {data_atual}")
+    c.setFont("Verdana", 10)
+    #c.drawCentredString(300, 470, f"São Paulo, {data_atual}")
+    c.drawCentredString(300, 300, f"São Paulo, {data_atual}")
+
+    # Assinatura
+    c.setFont("Verdana", 11)
+    #c.drawCentredString(300, 470, "_________________________________________")
+    #c.drawCentredString(300, 400, "_________________________________________")
+    c.drawCentredString(300, 175, "_________________________________________")
+    c.setFont("Verdana", 10)
+    #c.drawCentredString(300, 450, "(Assinatura e Carimbo)")
+    #c.drawCentredString(300, 380, "(Assinatura e Carimbo)")
+    c.drawCentredString(300, 160, "(Assinatura e Carimbo)")
+    rodape(c)
+    
 def termo_de_anuencia(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
@@ -583,7 +633,8 @@ def termo_de_anuencia(c , declara):
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
     c.setFont("Verdana", 12)
     y_position = 700
-    text = f"Eu, {declara['Nome']}, "
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text = f"Eu, {nome_em_negrito}, "
     # Para o caso de Servidor ou Não Servidor RAI(da rua)
     if (declara['Cargo de Origem'] != ''):
         text += f"{declara['Cargo de Origem']}, "
@@ -617,7 +668,8 @@ def termo_de_compromisso_clt(c , declara):
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
     c.setFont("Verdana", 12)
     y_position = 700
-    text = f"Eu, {declara['Nome']}, RG. {declara['RG']}, {declara['Cargo de Origem']}, CLT, concordo com a \
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text = f"Eu, {nome_em_negrito}, RG. {declara['RG']}, {declara['Cargo de Origem']}, CLT, concordo com a \
             {declara['Ato']} para exercer o cargo de {declara['Cargo']}, do SQC-I, no(a) {declara['Destinação']},\
              do(a) {declara['UA']}, da {declara['Coordenadoria']}, comprometo-me a exercer o referido cargo em \
             {declara['Jornada']}."
@@ -642,7 +694,8 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     c.drawCentredString(300, 735, "(hipóteses de inelegibilidade)")
     c.setFont("Verdana", 12)
     y_position = 700
-    text =f"Eu, {declara['Nome']}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text =f"Eu, {nome_em_negrito}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
             declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012."
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
@@ -680,7 +733,8 @@ def declaracao_cargo_funcao(c , declara):
     c.drawCentredString(300, 750, "DECLARAÇÃO")
     c.setFont("Verdana", 12)
     y_position = 700
-    text =f"Eu, {declara['Nome']}, "
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text =f"Eu, {nome_em_negrito}, "
     ####### Se o que consta no formulário também consta no autocompletar do campo este é exibido aqui   ############
     if declara['Cargo de Origem'] in cargo_origem_list: text +=f"{declara['Cargo de Origem']}, "
     if declara['Regime'] in declara['regime_list']: text+=f"{declara['Regime']}, "
@@ -844,9 +898,11 @@ def declaracao_acumulo(c , declara):
     p.drawOn(c, 250, 198)
     draw_checkbox(c, 280, 198 , checked=False)
     c.drawRightString(500, 198, f"_________________________")
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
 
     c.setFont("Verdana", 12)
     c.drawCentredString(300, 150, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
+    c.setFont("Verdana-Bold", 12)
     c.drawCentredString(300, 100, f"{declara['Nome']}")
     rodape(c)
     
@@ -886,7 +942,8 @@ def anexo_i(c , declara):
     p.wrapOn(c, 400, 532)
     p.drawOn(c, 100, 647- p.height)
     
-    text =f"Nome: {declara['Nome']}"
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text =f"Nome: {nome_em_negrito}"
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 618)
@@ -1198,7 +1255,9 @@ def anexo_iii(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 532)
     p.drawOn(c, 100, 647- p.height)
-    text =f"Nome: {declara['Nome']}"
+
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text =f"Nome: {nome_em_negrito}"
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 618)
@@ -1552,7 +1611,7 @@ def on_select_regime_combo(cargo_origem_combo, regime_combo):
                             "Analista Administrativo",
                             "Analista de Tecnologia",
                             "Analista Sociocultural",
-                            "Arquiteto (vide Lc 540/88)",
+                            "Arquiteto (vide Lei Complementar 540/88)",
                             "Arquiteto I",
                             "Arquiteto II",
                             "Arquiteto III",
@@ -1671,7 +1730,7 @@ def on_select_regime_combo(cargo_origem_combo, regime_combo):
                             "Enfermeiro Encarregado",
                             "Enfermeiro Encarregado de Turno",
                             "Enfermeiro Regional de Saúde Pública",
-                            "Engenheiro (vide LC 540/88)",
+                            "Engenheiro (vide Lei Complementar 540/88)",
                             "Engenheiro Agrônomo",
                             "Engenheiro Agrônomo I",
                             "Engenheiro Agrônomo II",

@@ -147,7 +147,7 @@ ato_combo.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_servidor, btn
 
 frame_lei = Frame(window)
 frame_lei.grid(row=5, column=2,pady=4)
-lei = ["Art.5º da lei complementar nº 1080/2008","Art.8º da lei complementar nº 1157/2011"]
+lei = ["Art.5º da Lei Complementar nº 1.080/2008","Art.8º da Lei Complementar nº 1.157/2011"]
 lei_combo = AutocompleteCombobox(
     frame_lei, 
     width=43,
