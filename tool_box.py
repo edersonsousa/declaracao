@@ -305,12 +305,12 @@ def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir
 
 def lei_box_select(event, lei_combo, jornada_combo):
     selected_value = event.widget.get()
-    if selected_value == "Art.5º da Lei Complementar nº 1.080/2008":
+    if selected_value == "Art. 5º da Lei Complementar nº 1.080/2008":
         jornada_combo.config(state=tk.NORMAL)
         jornada_combo.set("")
         jornada_combo["values"] = ["Jornada Completa de Trabalho"]
         jornada_combo.focus()
-    elif selected_value == "Art.8º da Lei Complementar nº 1.157/2011":
+    elif selected_value == "Art. 8º da Lei Complementar nº 1.157/2011":
         jornada_combo.config(state=tk.NORMAL)
         jornada_combo.set("")
         jornada_combo["values"] = "Jornada Básica de Trabalho", "Jornada Parcial de Trabalho", "Jornada de 30(trinta) horas de Trabalho"
@@ -318,7 +318,7 @@ def lei_box_select(event, lei_combo, jornada_combo):
         
 def jornada_box_select(cargo_combo, lei_combo):
     selected_value = lei_combo.get()
-    if selected_value == "Art.5º da Lei Complementar nº 1.080/2008":
+    if selected_value == "Art. 5º da Lei Complementar nº 1.080/2008":
         cargo_combo.set("")
         cargo_combo["completevalues"] = [
                                                 "Assessor de Gabinete I"                , 
@@ -349,7 +349,7 @@ def jornada_box_select(cargo_combo, lei_combo):
                                         ]
         cargo_combo.config(state=tk.NORMAL)
         cargo_combo.set("")
-    elif selected_value == "Art.8º da Lei Complementar nº 1.157/2011":
+    elif selected_value == "Art. 8º da Lei Complementar nº 1.157/2011":
         cargo_combo.set("")
         cargo_combo["completevalues"] = [
                                             "Assessor Técnico de Coordenador de Saúde"  ,
@@ -564,12 +564,15 @@ def declaracao_experiencia_old(c , declara):
             que o(a) indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, \
             no tocante a experiência profissional exigida com relação aos assuntos relacionados as atividades a serem desempenhadas \
             no cargo de {declara['Cargo']} classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
-    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent = 30, leading=(12*1.5))
+    #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent = 30, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent = 35, leading=(12*1.5))
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 600)
+    #p.wrapOn(c, 400, 600)
+    p.wrapOn(c, 300, 600)
     p.drawOn(c, 100, 700 - p.height)
     c.setFont("Verdana", 12)
-    c.drawCentredString(300, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
+    #c.drawCentredString(300, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
+    c.drawCentredString(300, 550, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
     c.setFont("Verdana", 11)
     c.drawCentredString(300, 470, f"_________________________________________")
     c.setFont("Verdana", 10)
@@ -580,6 +583,7 @@ def declaracao_experiencia(c, declara):
     # Define título
     c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 750, "Declaração de Experiência")
+    #c.drawCentredString(300, 800, "Declaração de Experiência")
 
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
     y_position = 700
@@ -588,7 +592,7 @@ def declaracao_experiencia(c, declara):
     
     # Para o caso de 'A Partir'
     if declara['A partir'] != False:
-        text += f" a partir de {declara['A partir']}"
+        text += f" a partir de {user_date_a_partir_variable}"
     elif declara['Periodo Fechado']:
         text += f" no período {declara['Periodo Fechado']['Inicio']} a {declara['Periodo Fechado']['Fim']}"
 
@@ -599,10 +603,13 @@ def declaracao_experiencia(c, declara):
     
     #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=30, leading=(12*1.5))
     #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=60, leading=(12*1.5))
-    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=90, leading=(12*1.5))
-    
+    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=125, leading=(12*1.5), fontSize=12)
+    #c.setFont("Verdana", 11)
+    #c.setFont("Verdana", 16)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 600)
+    #p.wrapOn(c, 400, 600)
+    #p.wrapOn(c, 400, 500)
+    p.wrapOn(c, 400, 400)
  
 
     p.drawOn(c, 100, y_position - p.height)
@@ -612,18 +619,21 @@ def declaracao_experiencia(c, declara):
     data_atual = format_date(datetime.now(), format='full', locale='pt_BR').split(',')[1].strip()
     #c.drawCentredString(300, 500, f"São Paulo, {data_atual}")
     c.setFont("Verdana", 10)
-    #c.drawCentredString(300, 470, f"São Paulo, {data_atual}")
-    c.drawCentredString(300, 300, f"São Paulo, {data_atual}")
+    c.drawCentredString(300, 400, f"São Paulo, {data_atual}")
+    #c.drawCentredString(300, 350, f"São Paulo, {data_atual}")
+    #c.drawCentredString(300, 300, f"São Paulo, {data_atual}")
 
     # Assinatura
     c.setFont("Verdana", 11)
     #c.drawCentredString(300, 470, "_________________________________________")
     #c.drawCentredString(300, 400, "_________________________________________")
-    c.drawCentredString(300, 175, "_________________________________________")
+    #c.drawCentredString(300, 175, "_________________________________________")
+    c.drawCentredString(300, 315, "_________________________________________")
     c.setFont("Verdana", 10)
     #c.drawCentredString(300, 450, "(Assinatura e Carimbo)")
     #c.drawCentredString(300, 380, "(Assinatura e Carimbo)")
-    c.drawCentredString(300, 160, "(Assinatura e Carimbo)")
+    #c.drawCentredString(300, 160, "(Assinatura e Carimbo)")
+    c.drawCentredString(300, 300, "(Assinatura e Carimbo)")
     rodape(c)
     
 def termo_de_anuencia(c , declara):
