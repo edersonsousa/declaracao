@@ -596,7 +596,12 @@ def declaracao_experiencia(c, declara):
     elif declara['Periodo Fechado']:
         text += f" no período {declara['Periodo Fechado']['Inicio']} a {declara['Periodo Fechado']['Fim']}"
 
-    text += f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
+    # text += f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
+    #         que o(a) indicado(a) atende ao estabelecido no anexo IV da referida Lei Complementar, \
+    #         no tocante a experiência profissional exigida nos assuntos relacionados com as atividades a serem desempenhadas \
+    #         no cargo de {declara['Cargo']}, classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
+    
+    text += f" com vistas ao disposto no {declara['Lei']}, e após devida análise curricular, DECLARO \
             que o(a) indicado(a) atende ao estabelecido no anexo IV da referida Lei Complementar, \
             no tocante a experiência profissional exigida nos assuntos relacionados com as atividades a serem desempenhadas \
             no cargo de {declara['Cargo']}, classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."

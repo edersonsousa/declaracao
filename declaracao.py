@@ -113,8 +113,8 @@ estado_civil_combo = AutocompleteCombobox(
     )
 estado_civil_combo.grid(row=3, column=2, pady=4)
 estado_civil_combo.bind("<<ComboboxSelected>>", lambda event: on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text))
-estado_civil_combo.bind("<FocusOut>", lambda event: on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text))
-estado_civil_combo.bind("<Tab>", lambda event: on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text))
+#estado_civil_combo.bind("<FocusOut>", lambda event: on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text))
+#estado_civil_combo.bind("<Tab>", lambda event: on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text))
 
 ato =["Nomeação", "Designação", "Designação com posterior Nomeação"]
 frame_ato = Frame(window)
