@@ -586,7 +586,7 @@ def declaracao_experiencia(c, declara):
     #c.drawCentredString(300, 800, "Declaração de Experiência")
 
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
-    y_position = 700
+    y_position = 650
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text = f"Tendo em vista, a indicação por esta Unidade de {nome_em_negrito}, RG. {declara['RG']}, para {declara['Ato']}"
     
@@ -609,7 +609,8 @@ def declaracao_experiencia(c, declara):
     p = Paragraph(text, style)
     #p.wrapOn(c, 400, 600)
     #p.wrapOn(c, 400, 500)
-    p.wrapOn(c, 400, 400)
+    #p.wrapOn(c, 400, 400)
+    p.wrapOn(c, 400, 300)
  
 
     p.drawOn(c, 100, y_position - p.height)
@@ -628,12 +629,14 @@ def declaracao_experiencia(c, declara):
     #c.drawCentredString(300, 470, "_________________________________________")
     #c.drawCentredString(300, 400, "_________________________________________")
     #c.drawCentredString(300, 175, "_________________________________________")
-    c.drawCentredString(300, 315, "_________________________________________")
+    #c.drawCentredString(300, 315, "_________________________________________")
+    c.drawCentredString(300, 215, "_________________________________________")
     c.setFont("Verdana", 11)
     #c.drawCentredString(300, 450, "(Assinatura e Carimbo)")
     #c.drawCentredString(300, 380, "(Assinatura e Carimbo)")
     #c.drawCentredString(300, 160, "(Assinatura e Carimbo)")
-    c.drawCentredString(300, 300, "(Assinatura e Carimbo)")
+    #c.drawCentredString(300, 300, "(Assinatura e Carimbo)")
+    c.drawCentredString(300, 200, "(Assinatura e Carimbo)")
     rodape(c)
     
 def termo_de_anuencia(c , declara):
