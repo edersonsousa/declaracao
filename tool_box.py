@@ -534,7 +534,7 @@ def path_check(declara, statusbar_text):
         
 def rodape(c):    
     # Definir o texto e suas coordenadas
-    texto = "CRH-GADI-V1.4.1"
+    texto = "CRH-GADI-V1.4.3"
     x, y = 500, 25  # Posição do texto
 
     # Adicionar o texto como marca d'água
@@ -548,7 +548,7 @@ def declaracao_experiencia_old(c , declara):
     c.drawCentredString(300, 750, "Declaração de Experiência")
     
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     y_position = 700
     text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, para {declara['Ato']}"
     ######################## Para o caso de 'A Partir' ###############################################
@@ -575,7 +575,7 @@ def declaracao_experiencia_old(c , declara):
     c.drawCentredString(300, 550, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
     c.setFont("Verdana", 11)
     c.drawCentredString(300, 470, f"_________________________________________")
-    c.setFont("Verdana", 10)
+    c.setFont("Verdana", 11)
     c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
     rodape(c)
     
@@ -603,7 +603,7 @@ def declaracao_experiencia(c, declara):
     
     #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=30, leading=(12*1.5))
     #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=60, leading=(12*1.5))
-    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=125, leading=(12*1.5), fontSize=12)
+    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=125, leading=(12*1.5), fontSize=11)
     #c.setFont("Verdana", 11)
     #c.setFont("Verdana", 16)
     p = Paragraph(text, style)
@@ -618,7 +618,7 @@ def declaracao_experiencia(c, declara):
     c.setFont("Verdana", 11)
     data_atual = format_date(datetime.now(), format='full', locale='pt_BR').split(',')[1].strip()
     #c.drawCentredString(300, 500, f"São Paulo, {data_atual}")
-    c.setFont("Verdana", 10)
+    c.setFont("Verdana", 11)
     c.drawCentredString(300, 400, f"São Paulo, {data_atual}")
     #c.drawCentredString(300, 350, f"São Paulo, {data_atual}")
     #c.drawCentredString(300, 300, f"São Paulo, {data_atual}")
@@ -629,7 +629,7 @@ def declaracao_experiencia(c, declara):
     #c.drawCentredString(300, 400, "_________________________________________")
     #c.drawCentredString(300, 175, "_________________________________________")
     c.drawCentredString(300, 315, "_________________________________________")
-    c.setFont("Verdana", 10)
+    c.setFont("Verdana", 11)
     #c.drawCentredString(300, 450, "(Assinatura e Carimbo)")
     #c.drawCentredString(300, 380, "(Assinatura e Carimbo)")
     #c.drawCentredString(300, 160, "(Assinatura e Carimbo)")
@@ -641,7 +641,7 @@ def termo_de_anuencia(c , declara):
     c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 750, "TERMO DE ANUÊNCIA")
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text = f"Eu, {nome_em_negrito}, "
@@ -665,7 +665,7 @@ def termo_de_anuencia(c , declara):
     c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
     c.drawRightString(500, 470, f"______________________________________")
-    c.setFont("Verdana", 10)
+    c.setFont("Verdana", 11)
     c.drawRightString(500, 450, f"{declara['Nome']}")
     rodape(c)
     
@@ -676,7 +676,7 @@ def termo_de_compromisso_clt(c , declara):
     c.setFont("Verdana", 10)
     c.drawCentredString(300, 735, "(para servidores celetistas)")
     # Adiciona informações do dicionário do PDF em um parágrafo justificado
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text = f"Eu, {nome_em_negrito}, RG. {declara['RG']}, {declara['Cargo de Origem']}, CLT, concordo com a \
@@ -687,11 +687,11 @@ def termo_de_compromisso_clt(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
     c.drawRightString(500, 470, f"__________________________________________________")
-    c.setFont("Verdana", 10)
+    c.setFont("Verdana", 11)
     c.drawRightString(500, 450, f"{declara['Nome']}")
     rodape(c)
     
@@ -700,9 +700,9 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     #Define título
     c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 750, "DECLARAÇÃO")
-    c.setFont("Verdana", 10)
+    c.setFont("Verdana", 11)
     c.drawCentredString(300, 735, "(hipóteses de inelegibilidade)")
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text =f"Eu, {nome_em_negrito}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
@@ -734,14 +734,14 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     p.wrapOn(c, 400, 440)
     p.drawOn(c, 100, 470)
     c.drawRightString(500, 350, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
-    c.setFont("Verdana", 10)
+    c.setFont("Verdana", 11)
     c.drawRightString(500, 300, f"{declara['Nome']}")
     rodape(c)
     
 def declaracao_cargo_funcao(c , declara):
     c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 750, "DECLARAÇÃO")
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text =f"Eu, {nome_em_negrito}, "
@@ -757,7 +757,7 @@ def declaracao_cargo_funcao(c , declara):
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     c.drawRightString(500, 450, f"{declara['Nome']}")
     rodape(c)
     
@@ -770,7 +770,7 @@ def declaracao_acumulo(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     y_position = 700
     text_bold =f"sob pena de responsabilidade, para fins de acumulação que no âmbito do Serviço Público Federal, Estadual ou Municipal\
             , ou ainda em Autarquias, Fundações, Empresas Públicas, Sociedade de Economia Mista, suas subsidiárias e Sociedades Controladas\
@@ -779,7 +779,7 @@ def declaracao_acumulo(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     text=f"EU, {declara['Nome']}, RG Nº {declara['RG']},"
     style = ParagraphStyle(name='Justify', alignment=0, leading=(12*1.5), fontName="Verdana-Bold")
     p = Paragraph(text, style)
@@ -910,9 +910,9 @@ def declaracao_acumulo(c , declara):
     c.drawRightString(500, 198, f"_________________________")
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
 
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     c.drawCentredString(300, 150, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
-    c.setFont("Verdana-Bold", 12)
+    c.setFont("Verdana-Bold", 11)
     c.drawCentredString(300, 100, f"{declara['Nome']}")
     rodape(c)
     
@@ -1056,7 +1056,7 @@ def anexo_i(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 190)
     p.drawOn(c, 100, 240)
-    c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
     c.setFont("Verdana", 11)
     text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
@@ -1367,7 +1367,7 @@ def anexo_iii(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 190)
     p.drawOn(c, 100, 240)
-    c.setFont("Verdana", 12)
+    #c.setFont("Verdana", 12)
     c.setFont("Verdana", 11)
     text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
