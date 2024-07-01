@@ -103,7 +103,7 @@ cpf_entry.bind("<Return>", lambda event: validar_cpf(event, cpf_entry, statusbar
 cpf_entry.bind("<Tab>", lambda event: validar_cpf(event, cpf_entry, statusbar_text))
 cpf_entry.bind("<FocusOut>", lambda event: validar_cpf(event, cpf_entry, statusbar_text))
 
-estado_civil = ["Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)"]
+estado_civil = ["Solteiro(a)", "Casado(a)", "Divorciado(a)", "Viúvo(a)", "União Estável"]
 frame_estado_civil = Frame(window)
 frame_estado_civil.grid(row=3, column=2, padx=4, pady=4)
 estado_civil_combo = AutocompleteCombobox(
