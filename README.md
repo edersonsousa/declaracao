@@ -122,6 +122,6 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
 
 * 01/07/2024 - Inclusão da opção "União Estável"
              - Mais ajustes na disposição do texto
-             - Alinhamento do tamanho do texto.
+             - Alinhamento do tamanho do texto. [ Título14, Resto11]
              - Mudanças no teto da declaração de experiência
              - Inclusão de um manual para os usuários
