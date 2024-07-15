@@ -653,10 +653,13 @@ def termo_de_anuencia(c , declara):
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text = f"Eu, {nome_em_negrito}, "
-    # Para o caso de Servidor ou Não Servidor RAI(da rua)
-    if (declara['Cargo de Origem'] != ''):
+    # Para o caso de Servidor ou Não Servidor [RAI](da rua)
+    if (len(declara['Cargo de Origem']) > 4):
         text += f"{declara['Cargo de Origem']}, "
-    text += f"{declara['Regime']}, RG. {declara['RG']}, concordo com\
+    if (len(declara['Regime']) > 4):
+        text += f"{declara['Regime']}, "
+    
+    text += f"RG. {declara['RG']}, concordo com\
                 a {declara['Ato']}, em {declara['Jornada']}, para o cargo de {declara['Cargo']}"
     # Para o caso do "A partir" CAIeIII AP
     if  user_date_a_partir_variable is not None:
@@ -762,8 +765,10 @@ def declaracao_cargo_funcao(c , declara):
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text =f"Eu, {nome_em_negrito}, "
     ####### Se o que consta no formulário também consta no autocompletar do campo este é exibido aqui   ############
-    if declara['Cargo de Origem'] in cargo_origem_list: text +=f"{declara['Cargo de Origem']}, "
-    if declara['Regime'] in declara['regime_list']: text+=f"{declara['Regime']}, "
+    #if declara['Cargo de Origem'] in cargo_origem_list: text +=f"{declara['Cargo de Origem']}, "
+    if (len(declara['Cargo de Origem']) > 4) : text +=f"{declara['Cargo de Origem']}, "
+    #if declara['Regime'] in declara['regime_list']: text+=f"{declara['Regime']}, "
+    if (len(declara['Regime']) > 4) : text+=f"{declara['Regime']}, "
     text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, no(a) {declara['Destinação']}, do(a) \
             {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
             gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \
