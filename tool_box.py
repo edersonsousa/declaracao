@@ -534,7 +534,7 @@ def path_check(declara, statusbar_text):
         
 def rodape(c):    
     # Definir o texto e suas coordenadas
-    texto = "CRH-GADI-V1.4.3"
+    texto = "CRH-GADI-V1.4.4"
     x, y = 500, 25  # Posição do texto
 
     # Adicionar o texto como marca d'água
