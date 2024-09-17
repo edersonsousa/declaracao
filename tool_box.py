@@ -1412,6 +1412,172 @@ def anexo_iii(c , declara):
     rodape(c)
     c.showPage()
     informacoes_adicionais(c, declara)
+    
+    
+def declaracao_de_parentesco(c , declara):
+    y_position = 780
+    text =f"DECLARAÇÃO DE PARENTESCO"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 730)
+    p.drawOn(c, 100, 780 - p.height)
+    y_position = 600
+    text_bold =f"(ANEXO a que se refere o inciso V do artigo 9º do Decreto nº 68.829/2024)"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 700)
+
+    # c.setFont("Verdana", 11)
+    # y_position = 700
+    # text_bold =f"DECLARAÇÃO DE PARENTESCO"
+    # style = ParagraphStyle(name='Justify', alignment=4)
+    # p = Paragraph(text_bold, style)
+    # p.wrapOn(c, 400, 550)
+    # p.drawOn(c, 100, 665 - p.height)
+
+    # c.setFont("Verdana", 11)
+    # y_position = 650
+    # text_bold =f"( SÚMULA VINCULANTE Nº 13 DO STF )"
+    
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 532)
+    p.drawOn(c, 100, 647- p.height)
+
+    nome_em_negrito = f"<b>{declara['Nome']}</b>"
+    text =f"Nome: {nome_em_negrito}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 618)
+    p.drawOn(c, 100, 600 - p.height)
+    c.rect(90, 550, 450, 50)
+    
+    text =f"RG : {declara['RG']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 600)
+    p.drawOn(c, 100, 582 - p.height)
+
+    text =f"CPF : {declara['CPF']}"
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 582)
+    p.drawOn(c, 100, 564 - p.height)
+    c.rect(90, 300, 450, 236)
+    y_position = 350
+    text_bold =f"É cônjuge, companheiro ou familiar em linha reta(1) ou colateral(2), por consanguinidade ou afinidade(3), \
+                até o terceiro grau inclusive, da autoridade nomeante ou de agente público do Poder Executivo do Estado de São Paulo\
+                que ocupe cargo ou função de confiança? (Exemplo: Diretoria, Chefia, Assessoramento ou similares)"
+    
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 425)
+    p.drawOn(c, 100, 475)
+    
+    text=f"SIM."
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
+    draw_checkbox(c, 100, 430 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 200, 430)
+    p.drawOn(c, 120, 430)
+    
+    text=f"NÃO"
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
+    draw_checkbox(c, 100, 450 , checked=False)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 200, 450)
+    p.drawOn(c, 120, 450)
+    
+    y_position = 400
+    text_bold =f"Em caso positivo, apontar:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 400)
+    p.drawOn(c, 100, 380)
+    c.setFont("Verdana", 11)
+    
+    y_position = 420
+    text_bold =f"NOME DA AUTORIDADE(4)/OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 380)
+    p.drawOn(c, 100, 360)
+    c.drawRightString(500, 360, f"_____________________________________________________")
+    
+    y_position = 240
+    text_bold =f"RELAÇÃO DE PARENTESCO:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 358)
+    p.drawOn(c, 100, 340)
+    c.drawRightString(500, 340, f"_______________________________________")
+
+    y_position = 240
+    text_bold =f"CARGO/FUNÇÃO OCUPADA:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 348)
+    p.drawOn(c, 100, 320)
+    c.drawRightString(500, 320, f"_____________________________________________")
+
+    c.rect(90, 222, 450, 70)
+    
+    text_bold =f"ÓRGÃO DA AUTORIDADE OU OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 348)
+    p.drawOn(c, 100, 320)
+    c.drawRightString(500, 320, f"_____________________________________________")
+    
+    text =f"Informe também a existência de cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade,\
+            até o terceiro grau, inclusive, no exercício de cargo de direção, chefia ou assessoramento no âmbito dos \
+            Poderes Judiciário ou Legislativo, do Ministério Público, da Defensoria Pública, das Autarquias \
+            (inclusive das universidades públicas), das empresas controladas pelo Estado e das fundações \
+            instituídas e mantidas pelo Poder Público:"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text, style)
+    p.wrapOn(c, 425, 220)
+    p.drawOn(c, 100, 145)
+    c.rect(90, 140, 450, 75)
+    text_bold =f"DECLARAÇÃO:"
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 260)
+    p.drawOn(c, 100, 278)
+    
+    text_bold =f"   Declaro para os devidos fins que desconheço a atuação com valimento do cargo(5) de autoridade que seja meu/minha cônjuge,\
+                    companheiro(a) ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, com fins de viabilizar minha nomeação\
+                    em cargo em comissão/função de confiança/demais situações previstas no Art. 7º do Decreto 68.829/2024(6), ou mesmo para a realização\
+                    de ajustes de nomeações ou designações recíprocas, envolvendo outros órgãos e entidades do poder judiciário, legislativo ou Ministério Público.
+                "
+    style = ParagraphStyle(name='Justify', alignment=4)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 400, 190)
+    p.drawOn(c, 100, 240)
+    #c.setFont("Verdana", 12)
+    c.setFont("Verdana", 11)
+    text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 100)
+    p.drawOn(c, 100, 110)
+    
+    text=f"__________________________________________________"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 75)
+    p.drawOn(c, 100, 85)
+    
+    text=f"{declara['Nome']}"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    p = Paragraph(text, style)
+    p.wrapOn(c, 400, 60)
+    p.drawOn(c, 100, 70)
+    rodape(c)
+    c.showPage()
+    informacoes_adicionais(c, declara)
 
 def declaracao(declara, statusbar_text):
     search_font_verdana()
@@ -1445,6 +1611,7 @@ def gerar_declaracoes(c, declara):
 
 ############ Designação => Anexo III #####################################
     if is_designacao(declara):
+        
         anexo_iii(c, declara)
         c.showPage()
 ################## Designação com posterior Nomeação => Anexo III e I ####
