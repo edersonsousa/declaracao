@@ -981,7 +981,7 @@ def anexo_i(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 618)
     p.drawOn(c, 100, 600 - p.height)
-    c.rect(90, 550, 450, 50)
+    #c.rect(80, 300, 50, 50)
     
     text =f"RG : {declara['RG']}"
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
@@ -1416,56 +1416,44 @@ def anexo_iii(c , declara):
     
 def declaracao_de_parentesco(c , declara):
     y_position = 780
-    text =f"DECLARAÇÃO DE PARENTESCO"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
-    p = Paragraph(text, style)
-    p.wrapOn(c, 400, 730)
-    p.drawOn(c, 100, 780 - p.height)
-    y_position = 600
-    text_bold =f"(ANEXO a que se refere o inciso V do artigo 9º do Decreto nº 68.829/2024)"
-    
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
-    p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 600)
-    p.drawOn(c, 100, 700)
+    c.setFont("Verdana-Bold", 16)
+    c.drawCentredString(300, 750, "DECLARAÇÃO DE PARENTESCO")
 
-    # c.setFont("Verdana", 11)
-    # y_position = 700
-    # text_bold =f"DECLARAÇÃO DE PARENTESCO"
-    # style = ParagraphStyle(name='Justify', alignment=4)
-    # p = Paragraph(text_bold, style)
-    # p.wrapOn(c, 400, 550)
-    # p.drawOn(c, 100, 665 - p.height)
+    # Definir a largura do texto para sublinhar corretamente
+    text_width = c.stringWidth("DECLARAÇÃO DE PARENTESCO", "Verdana-Bold", 16)
 
-    # c.setFont("Verdana", 11)
-    # y_position = 650
-    # text_bold =f"( SÚMULA VINCULANTE Nº 13 DO STF )"
+    # Desenhar a linha abaixo do texto
+    underline_y = 745  # Ajustar conforme necessário
+    #c.setFont("Verdana", 16)
+    c.line(300 - text_width / 2, underline_y, 300 + text_width / 2, underline_y)
     
-    style = ParagraphStyle(name='Justify', alignment=4)
-    p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 532)
-    p.drawOn(c, 100, 647- p.height)
+    c.setFont("Verdana", 10)
+    c.drawCentredString(300, 730, "(ANEXO a que se refere o inciso V do artigo 9º do Decreto nº 68.829/2024)")
 
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
-    text =f"Nome: {nome_em_negrito}"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
-    p = Paragraph(text, style)
-    p.wrapOn(c, 400, 618)
-    p.drawOn(c, 100, 600 - p.height)
-    c.rect(90, 550, 450, 50)
+    nome =f"<b>NOME: {nome_em_negrito}</b>"
+    style = ParagraphStyle(name='Justify', alignment=4)#, leading=(12*1.5))
+    p = Paragraph(nome, style)
+    p.wrapOn(c, 400, 718)
+    p.drawOn(c, 85, 700 - p.height)
     
-    text =f"RG : {declara['RG']}"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    c.rect(80, 680, 450, 30)
+    c.rect(80, 650, 225, 30)
+    c.rect(305, 650, 225, 30)
+    
+    text =f"<b>RG : {declara['RG']}</b>"
+    style = ParagraphStyle(name='Justify', alignment=4)#, leading=(12*1.5))
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 600)
-    p.drawOn(c, 100, 582 - p.height)
+    p.wrapOn(c, 400, 690)
+    #p.wrapOn(c, 400, 700)
+    p.drawOn(c, 85, 672 - p.height)
 
-    text =f"CPF : {declara['CPF']}"
+    text =f"<b>CPF : {declara['CPF']}</b>"
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 582)
-    p.drawOn(c, 100, 564 - p.height)
-    c.rect(90, 300, 450, 236)
+    p.wrapOn(c, 400, 690)
+    p.drawOn(c, 310, 672 - p.height)
+    #c.rect(90, 300, 450, 236)
     y_position = 350
     text_bold =f"É cônjuge, companheiro ou familiar em linha reta(1) ou colateral(2), por consanguinidade ou afinidade(3), \
                 até o terceiro grau inclusive, da autoridade nomeante ou de agente público do Poder Executivo do Estado de São Paulo\
@@ -1473,8 +1461,8 @@ def declaracao_de_parentesco(c , declara):
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 425)
-    p.drawOn(c, 100, 475)
+    p.wrapOn(c, 400, 650)
+    p.drawOn(c, 85, 600)
     
     text=f"SIM."
     style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
@@ -1522,7 +1510,7 @@ def declaracao_de_parentesco(c , declara):
     p.drawOn(c, 100, 320)
     c.drawRightString(500, 320, f"_____________________________________________")
 
-    c.rect(90, 222, 450, 70)
+    #c.rect(90, 222, 450, 70)
     
     text_bold =f"ÓRGÃO DA AUTORIDADE OU OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
@@ -1540,18 +1528,17 @@ def declaracao_de_parentesco(c , declara):
     p = Paragraph(text, style)
     p.wrapOn(c, 425, 220)
     p.drawOn(c, 100, 145)
-    c.rect(90, 140, 450, 75)
+    #c.rect(90, 140, 450, 75)
     text_bold =f"DECLARAÇÃO:"
     style = ParagraphStyle(name='Justify', alignment=4)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 260)
     p.drawOn(c, 100, 278)
     
-    text_bold =f"   Declaro para os devidos fins que desconheço a atuação com valimento do cargo(5) de autoridade que seja meu/minha cônjuge,\
+    text_bold =f"Declaro para os devidos fins que desconheço a atuação com valimento do cargo(5) de autoridade que seja meu/minha cônjuge,\
                     companheiro(a) ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, com fins de viabilizar minha nomeação\
                     em cargo em comissão/função de confiança/demais situações previstas no Art. 7º do Decreto 68.829/2024(6), ou mesmo para a realização\
-                    de ajustes de nomeações ou designações recíprocas, envolvendo outros órgãos e entidades do poder judiciário, legislativo ou Ministério Público.
-                "
+                    de ajustes de nomeações ou designações recíprocas, envolvendo outros órgãos e entidades do poder judiciário, legislativo ou Ministério Público."
     style = ParagraphStyle(name='Justify', alignment=4)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 190)
@@ -1576,8 +1563,8 @@ def declaracao_de_parentesco(c , declara):
     p.wrapOn(c, 400, 60)
     p.drawOn(c, 100, 70)
     rodape(c)
-    c.showPage()
-    informacoes_adicionais(c, declara)
+    #c.showPage()
+    #informacoes_adicionais(c, declara)
 
 def declaracao(declara, statusbar_text):
     search_font_verdana()
@@ -1593,36 +1580,39 @@ def declaracao(declara, statusbar_text):
     subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}"], shell=True)
 
 def gerar_declaracoes(c, declara):
-    declaracao_experiencia(c, declara)
-    c.showPage()
-    termo_de_anuencia(c, declara)
-    c.showPage()
+    # declaracao_experiencia(c, declara)
+    #c.showPage()
+    # termo_de_anuencia(c, declara)
+    #c.showPage()
 ####### Se for CLT entra aqui o Termo de Compromisso CLT################
-    if is_clt(declara):
-        termo_de_compromisso_clt(c, declara)
-        c.showPage()
+    #if is_clt(declara):
+        # termo_de_compromisso_clt(c, declara)
+        #c.showPage()
 #########################################################################
-    declaracao_hipotese_inelegibilidade(c, declara)
-    c.showPage()
-    declaracao_cargo_funcao(c, declara)
-    c.showPage()
-    declaracao_acumulo(c, declara)
-    c.showPage()
+    # declaracao_hipotese_inelegibilidade(c, declara)
+    # c.showPage()
+    # declaracao_cargo_funcao(c, declara)
+    # c.showPage()
+    # declaracao_acumulo(c, declara)
+    # c.showPage()
 
 ############ Designação => Anexo III #####################################
     if is_designacao(declara):
         
-        anexo_iii(c, declara)
+        #anexo_iii(c, declara)
+        declaracao_de_parentesco(c, declara)
         c.showPage()
 ################## Designação com posterior Nomeação => Anexo III e I ####
     elif is_designacao_nomeacao(declara):
-        anexo_i(c, declara)
+        #anexo_i(c, declara)
+        declaracao_de_parentesco(c, declara)
         c.showPage()
-        anexo_iii(c, declara)  # Adiciona também o anexo III
-        c.showPage()
+        #anexo_iii(c, declara)  # Adiciona também o anexo III
+        #c.showPage()
     # Nomeação => Anexo I
     elif is_nomeacao(declara):
-        anexo_i(c, declara)
+        declaracao_de_parentesco(c, declara)
+        #anexo_i(c, declara)
         c.showPage()
 
 def is_designacao(declara):
