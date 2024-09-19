@@ -1417,139 +1417,177 @@ def anexo_iii(c , declara):
 def declaracao_de_parentesco(c , declara):
     y_position = 780
     c.setFont("Verdana-Bold", 16)
-    c.drawCentredString(300, 750, "DECLARAÇÃO DE PARENTESCO")
+    c.drawCentredString(300, 780, "DECLARAÇÃO DE PARENTESCO")
 
     # Definir a largura do texto para sublinhar corretamente
     text_width = c.stringWidth("DECLARAÇÃO DE PARENTESCO", "Verdana-Bold", 16)
 
     # Desenhar a linha abaixo do texto
-    underline_y = 745  # Ajustar conforme necessário
+    underline_y = 778  # Ajustar conforme necessário
     #c.setFont("Verdana", 16)
     c.line(300 - text_width / 2, underline_y, 300 + text_width / 2, underline_y)
     
     c.setFont("Verdana", 10)
-    c.drawCentredString(300, 730, "(ANEXO a que se refere o inciso V do artigo 9º do Decreto nº 68.829/2024)")
+    c.drawCentredString(300, 766, "(ANEXO a que se refere o inciso V do artigo 9º do Decreto nº 68.829/2024)")
 
-    nome_em_negrito = f"<b>{declara['Nome']}</b>"
-    nome =f"<b>NOME: {nome_em_negrito}</b>"
-    style = ParagraphStyle(name='Justify', alignment=4)#, leading=(12*1.5))
+    nome_em_negrito = f"{declara['Nome']}"
+    nome =f"<b>NOME:</b> {nome_em_negrito}"
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)#, leading=(12*1.5))
     p = Paragraph(nome, style)
-    p.wrapOn(c, 400, 718)
-    p.drawOn(c, 85, 700 - p.height)
+    p.wrapOn(c, 400, 745)#718
+    p.drawOn(c, 58, 745 - p.height)#700
     
-    c.rect(80, 680, 450, 30)
-    c.rect(80, 650, 225, 30)
-    c.rect(305, 650, 225, 30)
+    c.rect(50, 720, 490, 30)
+    c.rect(50, 690, 245, 30)
+    c.rect(295, 690, 245, 30)
     
-    text =f"<b>RG : {declara['RG']}</b>"
-    style = ParagraphStyle(name='Justify', alignment=4)#, leading=(12*1.5))
+    text =f"<b>RG</b> : {declara['RG']}"
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)#, leading=(12*1.5))
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 690)
-    #p.wrapOn(c, 400, 700)
-    p.drawOn(c, 85, 672 - p.height)
+    p.wrapOn(c, 400, 710)
+    p.drawOn(c, 58, 710 - p.height)
 
-    text =f"<b>CPF : {declara['CPF']}</b>"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
-    p = Paragraph(text, style)
-    p.wrapOn(c, 400, 690)
-    p.drawOn(c, 310, 672 - p.height)
+    text_cpf =f"<b>CPF :</b> {declara['CPF']}"
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)#, leading=(12*1.5))
+    p = Paragraph(text_cpf, style)
+    p.wrapOn(c, 400, 710)
+    p.drawOn(c, 300, 710 - p.height)
     #c.rect(90, 300, 450, 236)
     y_position = 350
-    text_bold =f"É cônjuge, companheiro ou familiar em linha reta(1) ou colateral(2), por consanguinidade ou afinidade(3), \
-                até o terceiro grau inclusive, da autoridade nomeante ou de agente público do Poder Executivo do Estado de São Paulo\
-                que ocupe cargo ou função de confiança? (Exemplo: Diretoria, Chefia, Assessoramento ou similares)"
+    text_descricao =f"É cônjuge, companheiro ou familiar em linha reta<sup>(1)</sup> ou colateral<sup>(2)</sup>, por consanguinidade ou afinidade<sup>(3)</sup>, \
+                    até o terceiro grau inclusive, da autoridade nomeante ou de agente público do Poder Executivo do Estado de São Paulo\
+                    que ocupe cargo ou função de confiança? <i><em>(Exemplo: Diretoria, Chefia, Assessoramento ou similares)</em></i>"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
-    p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 650)
-    p.drawOn(c, 85, 600)
+    p = Paragraph(text_descricao, style)
+    p.wrapOn(c, 440, 550)
+    p.drawOn(c, 85, 630 - p.height)
+    c.rect(80, 540, 450, 95)
     
-    text=f"SIM."
+    
+    text_nao=f"<b>NÃO</b>."
     style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
-    draw_checkbox(c, 100, 430 , checked=False)
-    p = Paragraph(text, style)
-    p.wrapOn(c, 200, 430)
-    p.drawOn(c, 120, 430)
+    draw_checkbox(c, 100, 565 , checked=False)
+    p = Paragraph(text_nao, style)
+    p.wrapOn(c, 200, 565)
+    p.drawOn(c, 120, 565)
     
-    text=f"NÃO"
+    text_sim=f"<b>SIM</b>. Em caso positivo apontar: "
     style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
-    draw_checkbox(c, 100, 450 , checked=False)
-    p = Paragraph(text, style)
-    p.wrapOn(c, 200, 450)
-    p.drawOn(c, 120, 450)
+    draw_checkbox(c, 100, 545 , checked=False)
+    p = Paragraph(text_sim, style)
+    p.wrapOn(c, 200, 545)
+    p.drawOn(c, 120, 545)
     
-    y_position = 400
-    text_bold =f"Em caso positivo, apontar:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
-    p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 400)
-    p.drawOn(c, 100, 380)
-    c.setFont("Verdana", 11)
+   
+    
+    # y_position = 400
+    # text_positivo =f"Em caso positivo, apontar:"
+    # style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    # p = Paragraph(text_positivo, style)
+    # p.wrapOn(c, 400, 400)
+    # p.drawOn(c, 100, 380)
+    # c.setFont("Verdana", 11)
     
     y_position = 420
-    text_bold =f"NOME DA AUTORIDADE(4)/OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
-    p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 380)
-    p.drawOn(c, 100, 360)
-    c.drawRightString(500, 360, f"_____________________________________________________")
+    text_autoridade =f"NOME DA AUTORIDADE<sup>(4)</sup>/OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=11)
+    p = Paragraph(text_autoridade, style)
+    #p.wrapOn(c, 400, 380)
+    #p.drawOn(c, 100, 360)
+    p.wrapOn(c, 430, 520)
+    p.drawOn(c, 85, 520)# - p.height)
+    #c.drawRightString(500, 360, f"_____________________________________________________")
+    c.rect(80, 505, 450, 35)
+    
     
     y_position = 240
-    text_bold =f"RELAÇÃO DE PARENTESCO:"
+    text_relacao =f"RELAÇÃO DE PARENTESCO:"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
-    p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 358)
-    p.drawOn(c, 100, 340)
-    c.drawRightString(500, 340, f"_______________________________________")
-
-    y_position = 240
+    p = Paragraph(text_relacao, style)
+    p.wrapOn(c, 400, 490)
+    p.drawOn(c, 85, 490)
+    #c.drawRightString(500, 340, f"_______________________________________")
+    
+    c.rect(80, 470, 450, 35)
+    #y_position = 240
     text_bold =f"CARGO/FUNÇÃO OCUPADA:"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 348)
-    p.drawOn(c, 100, 320)
-    c.drawRightString(500, 320, f"_____________________________________________")
-
-    #c.rect(90, 222, 450, 70)
+    p.wrapOn(c, 400, 455)
+    p.drawOn(c, 85, 455)
+    #c.drawRightString(500, 320, f"_____________________________________________")
+    
+    c.rect(80, 435, 450, 35)
     
     text_bold =f"ÓRGÃO DA AUTORIDADE OU OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 348)
-    p.drawOn(c, 100, 320)
-    c.drawRightString(500, 320, f"_____________________________________________")
+    p.wrapOn(c, 400, 410)
+    p.drawOn(c, 85, 410)
+   #c.drawRightString(500, 320, f"_____________________________________________")
     
-    text =f"Informe também a existência de cônjuge, companheiro ou parente em linha reta, colateral ou por afinidade,\
-            até o terceiro grau, inclusive, no exercício de cargo de direção, chefia ou assessoramento no âmbito dos \
-            Poderes Judiciário ou Legislativo, do Ministério Público, da Defensoria Pública, das Autarquias \
-            (inclusive das universidades públicas), das empresas controladas pelo Estado e das fundações \
-            instituídas e mantidas pelo Poder Público:"
-    style = ParagraphStyle(name='Justify', alignment=4)
-    p = Paragraph(text, style)
-    p.wrapOn(c, 425, 220)
-    p.drawOn(c, 100, 145)
-    #c.rect(90, 140, 450, 75)
-    text_bold =f"DECLARAÇÃO:"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    c.rect(80, 400, 450, 35)
+    c.rect(80, 290, 450, 100)
+    text_bold =f"<b>DECLARAÇÃO:</b>"
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 260)
-    p.drawOn(c, 100, 278)
+    p.wrapOn(c, 400, 370)
+    p.drawOn(c, 85, 370)
     
     text_bold =f"Declaro para os devidos fins que desconheço a atuação com valimento do cargo(5) de autoridade que seja meu/minha cônjuge,\
                     companheiro(a) ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, com fins de viabilizar minha nomeação\
                     em cargo em comissão/função de confiança/demais situações previstas no Art. 7º do Decreto 68.829/2024(6), ou mesmo para a realização\
                     de ajustes de nomeações ou designações recíprocas, envolvendo outros órgãos e entidades do poder judiciário, legislativo ou Ministério Público."
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
+    p = Paragraph(text_bold, style)
+    p.wrapOn(c, 440, 295)
+    p.drawOn(c, 85, 295)
+    #c.setFont("Verdana", 12)
+    
+
+    #c.rect(90, 222, 450, 70)
+    
+    c.rect(80, 190, 450, 50)
+    
+    text_bold =f"<b>OBSERVAÇÕES:</b>"
     style = ParagraphStyle(name='Justify', alignment=4)
     p = Paragraph(text_bold, style)
-    p.wrapOn(c, 400, 190)
-    p.drawOn(c, 100, 240)
-    #c.setFont("Verdana", 12)
+    p.wrapOn(c, 400, 270)
+    p.drawOn(c, 85, 270)
+    
+    
+    text_obs =f"<sup>(1)</sup>Parentes em linha reta: pais, avós, bisavós, filho(a), neto(a) e bisneto(a);<br/>\
+                <sup>(2)</sup>Parentes em linha colateral: irmão(ã), tio(a), sobrinho(a);<br/>\
+                <sup>(3)</sup>Parentes por afinidade: genro, nora, sogro(a), enteado(a), madrasta, padrasto e cunhado(a);<br/>\
+                <sup>(4)</sup>Autoridade: Governador e o Vice-Governador, Secretário-Chefe, Chefe da Casa Militar, Secretário(s), o Procurador Geral, Controlador Geral, Coordenadores<br/>\
+                , Diretores, Chefes, Encarregados,Supervisores, Assessores, Autoridades máximas de entidades (Estatais, Autarquias, Paraestatais, Empresas Públicas, Fundações, Institutos, por exemplo);<br/>\
+                (5)Valimento do cargo: utilização/servir-se do cargo para proveito/benefício pessoal ou de outra pessoa.<br/>\
+                (6)Decreto nº 68.829/2024:<br/>\
+                &nbsp “Artigo 7º - As vedações para contratação, designação e nomeação de parente das autoridades de que trata o artigo 3º, nas respectivas áreas de influência, abrangem:<br/>\
+                &nbsp I - cargo em comissão, emprego público ou função de confiança;<br/>\
+                &nbsp II - gratificações cuja concessão ou a cessação possa ser realizada mediante ato discricionário da autoridade competente;<br/>\
+                &nbsp III - prestação de serviço terceirizado mediante contratos com órgãos ou entidades;<br/>\
+                &nbsp IV - membros de colegiados da Administração Pública estadual;<br/>\
+                &nbsp V - contratado para atendimento à necessidade temporária de excepcional interesse público;<br/>\
+                &nbsp VI - estagiários.<br/>\
+                &nbsp §1º - As vedações dos incisos V e VI deste artigo não se aplicam caso o ingresso seja precedido de processo seletivo.<br/>\
+                &nbsp §2º - As vedações dos incisos III, V e VI deste artigo não se aplicam àqueles que previamente atuam em órgão ou entidade e que tenha seu parente<br/>\
+                &nbsp nomeado ou designado para cargo em comissão ou função de confiança nesse mesmo órgão ou entidade."
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=9, leading=9)
+    p = Paragraph(text_obs, style)
+    p.wrapOn(c, 425, 70)
+    p.drawOn(c, 95, 70)
+    #c.rect(90, 140, 450, 75)
+    
+    
+    
     c.setFont("Verdana", 11)
     text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 100)
-    p.drawOn(c, 100, 110)
+    p.drawOn(c, 85, 110)
     
     text=f"__________________________________________________"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
