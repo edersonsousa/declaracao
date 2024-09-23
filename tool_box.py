@@ -533,10 +533,25 @@ def path_check(declara, statusbar_text):
         novo_status = f"[GADI] - A pasta '{declara['Nome']}' dentro de '{declara['Ato']} já existe."
         statusbar_text.set(novo_status)
         
-def rodape(c):    
+def rodape(c):
+    meses_portugues = {
+    1: "JAN", 2: "FEV", 3: "MAR", 4: "ABR", 5: "MAI", 6: "JUN",
+    7: "JUL", 8: "AGO", 9: "SET", 10: "OUT", 11: "NOV", 12: "DEZ"
+    }
+    # Obtém a data atual
+    hoje = datetime.now()
+    # Extrai o mês e o ano
+    mes_abreviado = meses_portugues[hoje.month]
+    ano = hoje.year
+    # Formata como "SET/2024"
+    data_formatada = f"{mes_abreviado}/{ano}"
+    #p = Paragraph(f"São Paulo, {data_formatada}.", style)
+
+    versao="1.0"
+        
     # Definir o texto e suas coordenadas
     #texto = "CRH-GADI-V1.4.4"
-    texto = "NMP/CCRH/GADI/CRH/SES - versão 1.0 | SET/24"
+    texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"
     x, y = 420, 15  # Posição do texto
 
     # Adicionar o texto como marca d'água
@@ -1485,11 +1500,11 @@ def declaracao_de_parentesco(c , declara):
     aspect_ratio = img.width / img.height
 
     # Mantém a proporção da imagem enquanto define uma largura
-    desired_width = 10
+    desired_width = 8
     desired_height = desired_width / aspect_ratio
 
     # Insere a imagem com o tamanho proporcional
-    c.drawImage(image_path, x=225, y=580, width=desired_width, height=desired_height)
+    c.drawImage(image_path, x=220, y=585, width=desired_width, height=desired_height)
 
 
 
@@ -1630,8 +1645,8 @@ def declaracao(declara, statusbar_text):
     finally:
         c.save()  # Salva o conteúdo do canvas em um arquivo PDF
         del c     # Libera os recursos do canvas
-    subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}"], shell=True)
-
+        subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}"], shell=True)
+    
 def gerar_declaracoes(c, declara):
     declaracao_experiencia(c, declara)
     c.showPage()
