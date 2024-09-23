@@ -1022,7 +1022,7 @@ def anexo_i(c , declara):
     p.drawOn(c, 120, 450)
     
     y_position = 400
-    text_bold =f"Em caso positivo, apontar:"
+    text_bold =f"Em caso positivo, apontar:  ⤵ ⤵ ⤵ ⤵ ⤵"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 400)
@@ -1473,9 +1473,23 @@ def declaracao_de_parentesco(c , declara):
     p.wrapOn(c, 200, 604)
     p.drawOn(c, 78, 604)
     
-    text_sim=f"<b>SIM</b>. Em caso positivo apontar: "
-    draw_arrow(c, 225, 590, size=9, line_width=2.5)
+    text_sim=f"<b>SIM</b>. Em caso positivo apontar:"
+    #draw_arrow(c, 225, 590, size=9, line_width=2.5)
     
+    #image_path = "pbaixo.png"
+    image_path = "pbaixo.jpg"
+
+    # Obtém as dimensões originais da imagem
+    img = Image.open(image_path)
+    
+    aspect_ratio = img.width / img.height
+
+    # Mantém a proporção da imagem enquanto define uma largura
+    desired_width = 10
+    desired_height = desired_width / aspect_ratio
+
+    # Insere a imagem com o tamanho proporcional
+    c.drawImage(image_path, x=225, y=580, width=desired_width, height=desired_height)
 
 
 
@@ -1619,40 +1633,41 @@ def declaracao(declara, statusbar_text):
     subprocess.Popen([f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}"], shell=True)
 
 def gerar_declaracoes(c, declara):
-    # declaracao_experiencia(c, declara)
-    #c.showPage()
-    # termo_de_anuencia(c, declara)
-    #c.showPage()
+    declaracao_experiencia(c, declara)
+    c.showPage()
+    termo_de_anuencia(c, declara)
+    c.showPage() 
 ####### Se for CLT entra aqui o Termo de Compromisso CLT################
-    #if is_clt(declara):
-        # termo_de_compromisso_clt(c, declara)
-        #c.showPage()
+    if is_clt(declara):
+        termo_de_compromisso_clt(c, declara)
+        c.showPage()
 #########################################################################
-    # declaracao_hipotese_inelegibilidade(c, declara)
-    # c.showPage()
-    # declaracao_cargo_funcao(c, declara)
-    # c.showPage()
-    # declaracao_acumulo(c, declara)
-    # c.showPage()
-
+    declaracao_hipotese_inelegibilidade(c, declara)
+    c.showPage()
+    declaracao_cargo_funcao(c, declara)
+    c.showPage()
+    declaracao_acumulo(c, declara)
+    c.showPage()
+    declaracao_de_parentesco(c, declara)
+    c.showPage()
 ############ Designação => Anexo III #####################################
-    if is_designacao(declara):
+#     if is_designacao(declara):
         
-        #anexo_iii(c, declara)
-        declaracao_de_parentesco(c, declara)
-        c.showPage()
-################## Designação com posterior Nomeação => Anexo III e I ####
-    elif is_designacao_nomeacao(declara):
-        #anexo_i(c, declara)
-        declaracao_de_parentesco(c, declara)
-        c.showPage()
-        #anexo_iii(c, declara)  # Adiciona também o anexo III
-        #c.showPage()
-    # Nomeação => Anexo I
-    elif is_nomeacao(declara):
-        declaracao_de_parentesco(c, declara)
-        #anexo_i(c, declara)
-        c.showPage()
+#         #anexo_iii(c, declara)
+#         declaracao_de_parentesco(c, declara)
+#         c.showPage()
+# ################## Designação com posterior Nomeação => Anexo III e I ####
+#     elif is_designacao_nomeacao(declara):
+#         #anexo_i(c, declara)
+#         declaracao_de_parentesco(c, declara)
+#         c.showPage()
+#         #anexo_iii(c, declara)  # Adiciona também o anexo III
+#         #c.showPage()
+#     # Nomeação => Anexo I
+#     elif is_nomeacao(declara):
+#         declaracao_de_parentesco(c, declara)
+#         #anexo_i(c, declara)
+#         c.showPage()
 
 def is_designacao(declara):
     return declara['Ato'] == 'Designação'
