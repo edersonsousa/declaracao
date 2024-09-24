@@ -501,6 +501,7 @@ def btn_on(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_ent
     if validar_dados_servidor(ato_combo, cargo_origem_combo, btn_n_servidor, btn_servidor, nome_entry, rg_entry, 
                              cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, 
                              ua_combo, coordenadoria_combo, regime_combo):
+        regime_combo.config(state="enable")
         if (ato_combo.get() == "Nomeação" and len(regime_combo.get()) == 0 and len(cargo_origem_combo.get()) == 0):
             btn_n_servidor.config(state="normal")
             btn_servidor.config(state="disable")
@@ -1471,9 +1472,9 @@ def declaracao_de_parentesco(c , declara):
     p.drawOn(c, 300, 712.5 - p.height)
     #c.rect(90, 300, 450, 236)
     y_position = 350
-    text_descricao =f"É cônjuge, companheiro ou familiar em linha reta<sup><i>(1)</i></sup> ou colateral<i><sup>(2)</sup></i>, por consanguinidade ou afinidade<sup><i>(3)</i></sup>, \
+    text_descricao =f"É cônjuge, companheiro ou familiar em linha reta<sup><i>(1)</i></sup> ou colateral<sup><i> (2) </i></sup>, por consanguinidade ou afinidade<sup><i>(3)</i></sup>, \
                     até o terceiro grau inclusive, da autoridade nomeante ou de agente público do Poder Executivo do Estado de São Paulo\
-                    que ocupe cargo ou função de confiança? <i>(Exemplo: Diretoria, Chefia, Assessoramento ou similares)</i>"
+                    que ocupe cargo ou função de confiança? <i> (Exemplo: Diretoria, Chefia, Assessoramento ou similares) </i>"
     
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
     p = Paragraph(text_descricao, style)
@@ -1569,7 +1570,7 @@ def declaracao_de_parentesco(c , declara):
     
     text_bold =f"Declaro para os devidos fins que desconheço a atuação com valimento do cargo<sup><i>(5)</i></sup> de autoridade que seja meu/minha cônjuge,\
                     companheiro(a) ou parente em linha reta, colateral ou por afinidade, até o terceiro grau, com fins de viabilizar minha nomeação\
-                    em cargo em comissão/função de confiança/demais situações previstas no Art. 7º do Decreto 68.829/2024<sup>(6)</sup>, ou mesmo para a realização\
+                    em cargo em comissão/função de confiança/demais situações previstas no Art. 7º do Decreto 68.829/2024<sup><i>(6)</i></sup>, ou mesmo para a realização\
                     de ajustes de nomeações ou designações recíprocas, envolvendo outros órgãos e entidades do poder judiciário, legislativo ou Ministério Público."
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text_bold, style)
@@ -1590,22 +1591,22 @@ def declaracao_de_parentesco(c , declara):
     
     
     text_obs =f"<sup><i>(1)</i></sup><u>Parentes em linha reta</u>: pais, avós, bisavós, filho(a), neto(a) e bisneto(a);<br/>\
-                <sup>(2)</sup><u>Parentes em linha colateral</u>: irmão(ã), tio(a), sobrinho(a);<br/>\
-                <sup>(3)</sup><u>Parentes por afinidade</u>: genro, nora, sogro(a), enteado(a), madrasta, padrasto e cunhado(a);<br/>\
-                <sup>(4)</sup><u>Autoridade</u>: Governador e o Vice-Governador, Secretário-Chefe, Chefe da Casa Militar, Secretário(s), o Procurador Geral, Controlador Geral, Coordenadores<br/>\
+                <sup><i>(2)</i></sup><u>Parentes em linha colateral</u>: irmão(ã), tio(a), sobrinho(a);<br/>\
+                <sup><i>(3)</i></sup><u>Parentes por afinidade</u>: genro, nora, sogro(a), enteado(a), madrasta, padrasto e cunhado(a);<br/>\
+                <sup><i>(4)</i></sup><u>Autoridade</u>: Governador e o Vice-Governador, Secretário-Chefe, Chefe da Casa Militar, Secretário(s), o Procurador Geral, Controlador Geral, Coordenadores\
                 , Diretores, Chefes, Encarregados,Supervisores, Assessores, Autoridades máximas de entidades (Estatais, Autarquias, Paraestatais, Empresas Públicas, Fundações, Institutos, por exemplo);<br/>\
-                <sup>(5)</sup><u>Valimento do cargo</u>: utilização/servir-se do cargo para proveito/benefício pessoal ou de outra pessoa.<br/>\
-                <sup>(6)</sup>Decreto nº 68.829/2024:<br/>\
-                &nbsp “Artigo 7º - As vedações para contratação, designação e nomeação de parente das autoridades de que trata o artigo 3º, nas respectivas áreas de influência, abrangem:<br/>\
-                &nbsp I - cargo em comissão, emprego público ou função de confiança;<br/>\
-                &nbsp II - gratificações cuja concessão ou a cessação possa ser realizada mediante ato discricionário da autoridade competente;<br/>\
-                &nbsp III - prestação de serviço terceirizado mediante contratos com órgãos ou entidades;<br/>\
-                &nbsp IV - membros de colegiados da Administração Pública estadual;<br/>\
-                &nbsp V - contratado para atendimento à necessidade temporária de excepcional interesse público;<br/>\
-                &nbsp VI - estagiários.<br/>\
+                <sup><i>(5)</i></sup><u>Valimento do cargo</u>: utilização/servir-se do cargo para proveito/benefício pessoal ou de outra pessoa.<br/>\
+                <sup><i>(6)</i></sup>Decreto nº 68.829/2024:<br/>\
+                &nbsp  “Artigo 7º - As vedações para contratação, designação e nomeação de parente das autoridades de que trata o artigo &nbsp 3º, nas respectivas áreas de influência, abrangem:<br/>\
+                &nbsp &nbsp I - cargo em comissão, emprego público ou função de confiança;<br/>\
+                &nbsp  II - gratificações cuja concessão ou a cessação possa ser realizada mediante ato discricionário da autoridade &nbsp competente;<br/>\
+                &nbsp &nbsp III - prestação de serviço terceirizado mediante contratos com órgãos ou entidades;<br/>\
+                &nbsp &nbsp IV - membros de colegiados da Administração Pública estadual;<br/>\
+                &nbsp &nbsp V - contratado para atendimento à necessidade temporária de excepcional interesse público;<br/>\
+                &nbsp &nbsp VI - estagiários.<br/>\
                 &nbsp §1º - As vedações dos incisos V e VI deste artigo não se aplicam caso o ingresso seja precedido de processo seletivo.<br/>\
-                &nbsp §2º - As vedações dos incisos III, V e VI deste artigo não se aplicam àqueles que previamente atuam em órgão ou entidade e que tenha seu parente<br/>\
-                &nbsp nomeado ou designado para cargo em comissão ou função de confiança nesse mesmo órgão ou entidade.”"
+                &nbsp §2º - As vedações dos incisos III, V e VI deste artigo não se aplicam àqueles que previamente atuam em órgão ou entidade e que tenha seu parente\
+                nomeado ou designado para cargo em comissão ou função de confiança nesse mesmo órgão ou entidade.”"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=9, leading=10)
     p = Paragraph(text_obs, style)
     p.wrapOn(c, 480, 82.5)
@@ -1754,7 +1755,7 @@ def cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo,
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
                         coordenadoria_combo, regime_combo):
     global cargo_origem_list
-    regime_combo.config(state="enable")
+    #regime_combo.config(state="enable")
     ua = ua_combo.get() 
     cargo_origem_list = cargo_origem_combo["completevalues"]
     btn_on(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
@@ -1775,19 +1776,26 @@ def on_select(event, valores, combo):
         messagebox.showinfo("Atenção", "O valor preenchido não consta na lista atual.")
         combo.focus()
 
-def on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text):
+def on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text, estado_civil_combo):
+    # print(estado_civil_combo.get())  # Corrigido
+    # print(estado_civil_combo['values'])  # Corrigido
+    # print(nome_entry.get())  # Corrigido
+    
     if len(nome_entry.get()) < 3 :
         statusbar_text.set("Favor preencher o nome do servidor")
         nome_entry.focus()
+        ato_combo.config(state="disable")
     elif len(rg_entry.get()) < 4 :
         statusbar_text.set("Favor preencher o RG do servidor")
         rg_entry.focus()
+        ato_combo.config(state="disable")
     elif len(cpf_entry.get()) < 1 :
         statusbar_text.set("Favor preencher o cpf do servidor")
         cpf_entry.focus()
-    elif len(cpf_entry.get()) > 1 and len(nome_entry.get()) > 3 and len(rg_entry.get()) > 4:
+        ato_combo.config(state="disable")
+    elif len(cpf_entry.get()) > 1 and len(nome_entry.get()) > 3 and len(rg_entry.get()) > 4 and (estado_civil_combo.get() in estado_civil_combo['values']):
         ato_combo.config(state="enable")
-        ato_combo.focus()
+        #ato_combo.focus()
     
 def search_font_verdana():
     # Diretório padrão de fontes do Windows
