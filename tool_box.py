@@ -1489,24 +1489,29 @@ def declaracao_de_parentesco(c , declara):
     p.wrapOn(c, 200, 604)
     p.drawOn(c, 78, 604)
     
-    text_sim=f"<b>SIM</b>. Em caso positivo apontar: "
+    text_sim=f"<b>SIM</b>. Em caso positivo apontar:"
     #draw_arrow(c, 225, 590, size=9, line_width=2.5)
     
-    #image_path = "pbaixo.png"
-    image_path = "pbaixo.jpg"
+       
+    try:
+        #image_path = "pbaixo.png"
+        image_path = "pbaixo.jpg"
+        # Obtém as dimensões originais da imagem
+        img = Image.open(image_path)
+        aspect_ratio = img.width / img.height
+        # Mantém a proporção da imagem enquanto define uma largura
+        desired_width = 8
+        desired_height = desired_width / aspect_ratio
+        # Insere a imagem com o tamanho proporcional
+        c.drawImage(image_path, x=220, y=585, width=desired_width, height=desired_height)
+    except:
+        # Se a imagem falhar, desenha a seta
+        draw_arrow(c, 225, 590, size=9, line_width=2.5)
 
-    # Obtém as dimensões originais da imagem
-    img = Image.open(image_path)
     
-    aspect_ratio = img.width / img.height
-
-    # Mantém a proporção da imagem enquanto define uma largura
-    desired_width = 8
-    desired_height = desired_width / aspect_ratio
-
-    # Insere a imagem com o tamanho proporcional
-    c.drawImage(image_path, x=220, y=585, width=desired_width, height=desired_height)
-
+    
+    #try:
+    #    c.drawImage(image_path, x=220, y=585, width=desired_width, height=desired_height)
 
 
     style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
