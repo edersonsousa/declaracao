@@ -326,9 +326,9 @@ def jornada_box_select(cargo_combo, lei_combo):
                                                 "Assessor de Gabinete II"               , 
                                                 "Assessor I"                            ,
                                                 "Assessor Técnico de Coordenador"       ,
-                                                "Assessor Técnico de Gabinete I"        ,
-                                                "Assessor Técnico de Gabinete II"       ,
-                                                "Assessor Técnico de Gabinete III"      ,
+                                                #"Assessor Técnico de Gabinete I"        ,
+                                                #"Assessor Técnico de Gabinete II"       ,
+                                                #"Assessor Técnico de Gabinete III"      ,
                                                 "Assessor Técnico de Gabinete IV"       ,
                                                 "Assessor Técnico I"                ,
                                                 "Assessor Técnico II"   	            ,
@@ -359,16 +359,16 @@ def jornada_box_select(cargo_combo, lei_combo):
                                             "Assessor Técnico em Saúde Pública III"     ,
                                             "Chefe de Saúde I"                          ,
                                             "Chefe de Saúde II"                         ,
-                                            "Cirurgião Dentista Sanitarista Inspetor"   ,
+                                            #"Cirurgião Dentista Sanitarista Inspetor"   ,
                                             "Coordenador de Saúde"                      ,
                                             "Diretor Técnico de Saúde I"                ,
                                             "Diretor Técnico de Saúde II"               ,
                                             "Diretor Técnico de Saúde III"              ,
                                             "Encarregado de Saúde I"                    ,
                                             "Encarregado de Saúde II"                   ,
-                                            "Enfermeiro Inspetor de Saúde Pública"      ,
-                                            "Engenheiro Sanitarista Assessor"           ,
-                                            "Médico Inspetor"                           ,
+                                            #"Enfermeiro Inspetor de Saúde Pública"      ,
+                                            #"Engenheiro Sanitarista Assessor"           ,
+                                            #"Médico Inspetor"                           ,
                                             "Supervisor de Equipe Técnica de Saúde"     ,
                                             "Supervisor de Saúde"         
                                         ]
@@ -1489,7 +1489,7 @@ def declaracao_de_parentesco(c , declara):
     p.wrapOn(c, 200, 604)
     p.drawOn(c, 78, 604)
     
-    text_sim=f"<b>SIM</b>. Em caso positivo apontar:"
+    text_sim=f"<b>SIM</b>. Em caso positivo apontar: "
     #draw_arrow(c, 225, 590, size=9, line_width=2.5)
     
     #image_path = "pbaixo.png"
@@ -1597,16 +1597,16 @@ def declaracao_de_parentesco(c , declara):
                 , Diretores, Chefes, Encarregados,Supervisores, Assessores, Autoridades máximas de entidades (Estatais, Autarquias, Paraestatais, Empresas Públicas, Fundações, Institutos, por exemplo);<br/>\
                 <sup><i>(5)</i></sup><u>Valimento do cargo</u>: utilização/servir-se do cargo para proveito/benefício pessoal ou de outra pessoa.<br/>\
                 <sup><i>(6)</i></sup>Decreto nº 68.829/2024:<br/>\
-                &nbsp  “Artigo 7º - As vedações para contratação, designação e nomeação de parente das autoridades de que trata o artigo &nbsp 3º, nas respectivas áreas de influência, abrangem:<br/>\
+                &nbsp &quot Artigo 7º - As vedações para contratação, designação e nomeação de parente das autoridades de que trata o artigo &nbsp 3º, nas respectivas áreas de influência, abrangem:<br/>\
                 &nbsp &nbsp I - cargo em comissão, emprego público ou função de confiança;<br/>\
-                &nbsp  II - gratificações cuja concessão ou a cessação possa ser realizada mediante ato discricionário da autoridade &nbsp competente;<br/>\
+                &nbsp   II - gratificações cuja concessão ou a cessação possa ser realizada mediante ato discricionário da autoridade &nbsp competente;<br/>\
                 &nbsp &nbsp III - prestação de serviço terceirizado mediante contratos com órgãos ou entidades;<br/>\
                 &nbsp &nbsp IV - membros de colegiados da Administração Pública estadual;<br/>\
                 &nbsp &nbsp V - contratado para atendimento à necessidade temporária de excepcional interesse público;<br/>\
                 &nbsp &nbsp VI - estagiários.<br/>\
                 &nbsp §1º - As vedações dos incisos V e VI deste artigo não se aplicam caso o ingresso seja precedido de processo seletivo.<br/>\
                 &nbsp §2º - As vedações dos incisos III, V e VI deste artigo não se aplicam àqueles que previamente atuam em órgão ou entidade e que tenha seu parente\
-                nomeado ou designado para cargo em comissão ou função de confiança nesse mesmo órgão ou entidade.”"
+                nomeado ou designado para cargo em comissão ou função de confiança nesse mesmo órgão ou entidade.&quot"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=9, leading=10)
     p = Paragraph(text_obs, style)
     p.wrapOn(c, 480, 82.5)
