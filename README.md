@@ -125,3 +125,6 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
              - Alinhamento do tamanho do texto. [ Título14, Resto11]
              - Mudanças no teto da declaração de experiência
              - Inclusão de um manual para os usuários
+
+* 08/11/2024 - Ajustes nas Coordenadorias e Unidades Administrativas
+             - 

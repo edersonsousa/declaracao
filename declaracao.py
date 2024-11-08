@@ -109,7 +109,8 @@ frame_estado_civil.grid(row=3, column=2, padx=4, pady=4)
 estado_civil_combo = AutocompleteCombobox(
     frame_estado_civil, 
     width=43, 
-    completevalues=estado_civil
+    completevalues=estado_civil,
+    state="readonly"
     )
 estado_civil_combo.grid(row=3, column=2, pady=4)
 estado_civil_combo.bind("<<ComboboxSelected>>", lambda event: on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text, estado_civil_combo))
@@ -123,8 +124,9 @@ frame_ato.grid(row=4, column=2, padx=0, pady=4)
 ato_combo = AutocompleteCombobox(
     frame_ato, 
     width=43,
-    state="disable",
-    completevalues=ato
+    #state="disable",
+    completevalues=ato,
+    state="readonly"
     )
 ato_combo.grid(row=4, column=2, pady=0)
 ato_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, ato, ato_combo))
@@ -154,8 +156,9 @@ lei = ["Art. 5º da Lei Complementar nº 1.080/2008","Art. 8º da Lei Complement
 lei_combo = AutocompleteCombobox(
     frame_lei, 
     width=43,
-    state="disable",
-    completevalues=lei
+    #state="disable",
+    completevalues=lei,
+    state="readonly"
     )
 lei_combo.grid(row=5, column=2, pady=4)
 lei_combo.bind("<<ComboboxSelected>>", lambda event: lei_box_select(event, lei_combo, jornada_combo))
@@ -179,7 +182,8 @@ jornada_combo = AutocompleteCombobox(
     frame_jornada, 
     width=43,
     completevalues=jornada,
-    state="disable"
+    #state="disable",
+    state="readonly"
     )
 jornada_combo.grid(row=6, column=2, pady=4)
 jornada_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, jornada, jornada_combo))
@@ -215,8 +219,10 @@ cargo_combo.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_servidor, b
 
 coordenadoria = [
         'Administração Superior da Secretaria e da Sede',
+        'Coordenadoria de Assistência Farmacêutica',
         "Coordenadoria de Ciência, Tecnologia e Insumos Estratégicos de Saúde",
         "Coordenadoria de Controle de Doenças",
+        "Coordenadoria de Gestão de Contratos de Serviços de Saúde",
         "Coordenadoria de Regiões de Saúde",
         "Coordenadoria de Serviços de Saúde",
                     ]
@@ -453,7 +459,7 @@ btn_n_servidor = ttk.Button(
             "Coordenadoria": coordenadoria_combo.get(),
             "Cargo de Origem": cargo_origem_combo.get(),
             "cargo_origem_list": cargo_origem_list,
-            "Regime": regime_combo.get(),
+            "Regime de Origem": regime_combo.get(),
             "regime_list": regime_list
         },
         statusbar_text=statusbar_text

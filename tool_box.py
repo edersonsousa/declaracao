@@ -131,21 +131,21 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     estado_civil_combo.set('')
     ato_combo.set('')
     jornada_combo.set('')
-    jornada_combo.config(state="disable")
+    jornada_combo.config(state="readonly")
     ato_combo["values"] = "Nomeação","Designação","Designação com posterior Nomeação"
-    ato_combo.config(state="disable")
+    ato_combo.config(state="readonly")
     lei_combo.set('')
-    lei_combo.config(state="disable")
+    lei_combo.config(state="readonly")
     cargo_combo.set('')
-    cargo_combo.config(state="disable")
+    cargo_combo.config(state="readonly")
     destinacao_entry.delete(0, END)
-    destinacao_entry.config(state="disable")
+    destinacao_entry.config(state="readonly")
     ua_combo.set('')
-    ua_combo.config(state="disable")
+    ua_combo.config(state="readonly")
     coordenadoria_combo.set('')
-    coordenadoria_combo.config(state="disable")
+    coordenadoria_combo.config(state="readonly")
     cargo_origem_combo.set('')
-    cargo_origem_combo.config(state="disable")
+    cargo_origem_combo.config(state="readonly")
     periodo_fechado_var.set(False)
     a_partir_var.set(False)
     a_partir_var = None
@@ -154,7 +154,7 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     user_date_a_partir_variable = None
     periodo_fechado_checkbutton.config(state="normal")
     regime_combo.set('')
-    regime_combo.config(state="disable")
+    regime_combo.config(state="readonly")
     btn_n_servidor.config(state="disable")
     btn_servidor.config(state="disable")
     statusbar_text.set("GADI")
@@ -291,28 +291,29 @@ def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir
         periodo_fechado_var.set(False)
         a_partir_checkbutton.config(state=tk.DISABLED)
         periodo_fechado_checkbutton.config(state=tk.DISABLED)
-        lei_combo.config(state="normal")
+        lei_combo.config(state="readonly")
         
     elif selected_value == "Designação com posterior Nomeação":
         periodo_fechado_var.set(False)
         a_partir_checkbutton.config(state=tk.NORMAL)
         periodo_fechado_checkbutton.config(state=tk.DISABLED)
-        lei_combo.config(state="normal")
+        lei_combo.config(state="readonly")
 
     else:
         a_partir_checkbutton.config(state=tk.NORMAL)
         periodo_fechado_checkbutton.config(state=tk.NORMAL)
-        lei_combo.config(state="normal")
+        lei_combo.config(state="readonly")
 
 def lei_box_select(event, lei_combo, jornada_combo):
     selected_value = event.widget.get()
     if selected_value == "Art. 5º da Lei Complementar nº 1.080/2008":
-        jornada_combo.config(state=tk.NORMAL)
+        #jornada_combo.config(state=tk.NORMAL)
         jornada_combo.set("")
         jornada_combo["values"] = ["Jornada Completa de Trabalho"]
         jornada_combo.focus()
+        
     elif selected_value == "Art. 8º da Lei Complementar nº 1.157/2011":
-        jornada_combo.config(state=tk.NORMAL)
+        #jornada_combo.config(state=tk.NORMAL)
         jornada_combo.set("")
         jornada_combo["values"] = "Jornada Básica de Trabalho", "Jornada Parcial de Trabalho", "Jornada de 30(trinta) horas de Trabalho"
         jornada_combo.focus()
@@ -384,17 +385,17 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
     ua_combo.set('')
     if selected_value == 'Administração Superior da Secretaria e da Sede':
         ua_combo["completevalues"] = [
-                                        "Gabinete do Coordenador",
+                                        #"Gabinete do Coordenador",
                                         "Gabinete do Secretário e Assessorias",
-                                        "Grupo de Assistência Farmacêutica",
                                         "Coordenadoria de Planejamento de Saúde",
                                         "Coordenadoria de Recursos Humanos",
                                         "Coordenadoria Geral de Administração",
-                                        "Coordenadoria de Gestão de Contratos de Serviços de Saúde",
+                                        #"Coordenadoria de Gestão de Contratos de Serviços de Saúde",
                                         "Coordenadoria de Gestão Orçamentaria e Financeira"
                                     ]
     elif selected_value =="Coordenadoria de Serviços de Saúde":
         ua_combo["completevalues"] = [
+                                            'Ambulatório Médico de Especialidades Digital do Estado de São Paulo - AME Digital SP',
                                             'Centro de Atenção Integrada em Saúde Mental "Philippe Pinel" - CAISM Philippe Pinel',
                                             'Centro de Atenção Integral à Saúde "Clemente Ferreira" de Lins',
                                             'Centro de Atenção Integral à Saúde "Professor Cantídio de Moura Campos"',
@@ -1799,7 +1800,7 @@ def on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, st
         cpf_entry.focus()
         ato_combo.config(state="disable")
     elif len(cpf_entry.get()) > 1 and len(nome_entry.get()) > 3 and len(rg_entry.get()) > 4 and (estado_civil_combo.get() in estado_civil_combo['values']):
-        ato_combo.config(state="enable")
+        ato_combo.config(state="readonly")
         #ato_combo.focus()
     
 def search_font_verdana():
