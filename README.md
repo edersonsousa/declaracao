@@ -126,5 +126,8 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
              - Mudanças no teto da declaração de experiência
              - Inclusão de um manual para os usuários
 
-* 08/11/2024 - Ajustes nas Coordenadorias e Unidades Administrativas
-             - 
+* 08 => 18/11/2024 - Ajustes nas Coordenadorias e Unidades Administrativas
+             - Inclusão AME DIGITAL
+             - Regime de Origem subiu por questões de usabilidade.
+             - Os combos ficam somente leitura para evitar alterações indevidas.
+             - Padronização do tamanho do texto.
