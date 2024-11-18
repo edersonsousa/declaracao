@@ -10,14 +10,12 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont, pdfmetrics
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph
-
 import babel.numbers
 import subprocess, os, locale
 from babel.dates import format_date, Locale
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 import os
-
 global date_periodofechado_inicio 
 global date_periodofechado_fim
 locale = Locale('pt', 'BR')
@@ -61,7 +59,6 @@ def mascara_cpf(event, cpf_entry):
     cpf = cpf_entry.get()
     cpf = ''.join(filter(str.isdigit, cpf))  # Mantém apenas os dígitos do CPF
     #cpf = cpf.replace(".", "").replace("-", "")  # Remove pontos e hífen anteriores (se houver)
-    
     # Verifica se o tamanho do CPF é menor que 11 para continuar formatando
     if len(cpf) < 11:
         cpf_formatado = ""
@@ -119,11 +116,6 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
                   destinacao_entry, ua_combo, coordenadoria_combo, cargo_origem_combo, a_partir_checkbutton, periodo_fechado_var, 
                   periodo_fechado_checkbutton, regime_combo, btn_n_servidor, btn_servidor, statusbar_text, user_date_a_partir_variable, a_partir_var):
     # Limpa o valor de todos os campos de entrada
-    # global date_periodofechado_inicio_variable, date_periodofechado_fim_variable
-    # user_date_a_partir_variable = None
-    # date_periodofechado_inicio_variable = None
-    # date_periodofechado_fim_variable = None
-    
     nome_entry.delete(0, END)
     nome_entry.focus()
     rg_entry.delete(0, END)
@@ -139,7 +131,6 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     cargo_combo.set('')
     cargo_combo.config(state="readonly")
     cargo_combo["values"] = ""
-    
     destinacao_entry.delete(0, END)
     destinacao_entry.config(state="readonly")
     ua_combo.set('')
@@ -151,7 +142,6 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     periodo_fechado_var.set(False)
     a_partir_var.set(False)
     a_partir_var = None
-    # a_partir_var.set(False)
     a_partir_checkbutton.config(state="normal")
     user_date_a_partir_variable = None
     periodo_fechado_checkbutton.config(state="normal")
@@ -160,8 +150,6 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     btn_n_servidor.config(state="disable")
     btn_servidor.config(state="disable")
     statusbar_text.set("GADI")
-    #print(user_date_a_partir_variable != None)
-    #print(user_date_a_partir_variable)
 global user_date_a_partir_variable
 # user_date_a_partir_variable = None
 
@@ -492,7 +480,6 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                         "DRS XVII - Taubaté",
                                         "DRS XVIII - Botucatu"
                                     ]
-    #ua_combo.config(state=tk.NORMAL)
     ua_combo.focus()
 
 def ua_box_select(destinacao_entry):
@@ -504,7 +491,6 @@ def btn_on(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_ent
     if validar_dados_servidor(ato_combo, cargo_origem_combo, btn_n_servidor, btn_servidor, nome_entry, rg_entry, 
                              cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, 
                              ua_combo, coordenadoria_combo, regime_combo):
-        #regime_combo.config(state="enable")
         if (ato_combo.get() == "Nomeação" and len(regime_combo.get()) == 0 and len(cargo_origem_combo.get()) == 0):
             btn_n_servidor.config(state="normal")
             btn_servidor.config(state="disable")
@@ -547,14 +533,12 @@ def rodape(c):
     # Extrai o mês e o ano
     mes_abreviado = meses_portugues[hoje.month]
     ano = hoje.year
-    # Formata como "SET/2024"
+    # Formata como "NOV/2024"
     data_formatada = f"{mes_abreviado}/{ano}"
-    #p = Paragraph(f"São Paulo, {data_formatada}.", style)
 
-    versao="1.0"
+    versao="1.1"
         
     # Definir o texto e suas coordenadas
-    #texto = "CRH-GADI-V1.4.4"
     texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"
     x, y = 420, 15  # Posição do texto
 
@@ -593,10 +577,7 @@ def declaracao_experiencia(c, declara):
     style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=125, leading=(12*1.5), fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 300)
- 
-
     p.drawOn(c, 100, y_position - p.height)
-
     # Adiciona a data atual formatada
     c.setFont("Verdana", 11)
     data_atual = format_date(datetime.now(), format='full', locale='pt_BR').split(',')[1].strip()
@@ -637,16 +618,10 @@ def termo_de_anuencia(c , declara):
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
-    #p.drawOn(c, 100, 700 - p.height)
     p.drawOn(c, 100, 600 - p.height)
     c.setFont("Verdana", 11)
-    #c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.drawRightString(500, 400, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
-    #c.setFont("Verdana", 11)
-    #c.drawRightString(500, 470, f"______________________________________")
     c.drawRightString(500, 215, f"______________________________________")
-    #c.setFont("Verdana", 11)
-    #c.drawRightString(500, 450, f"{declara['Nome']}")
     c.drawRightString(500, 200, f"{declara['Nome']}")
     rodape(c)
     

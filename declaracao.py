@@ -149,7 +149,6 @@ ato_combo.bind("<Return>", lambda event: cargo_de_origem(btn_n_servidor, btn_ser
 ato_combo.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
                         coordenadoria_combo, regime_combo),)
-
 frame_lei = Frame(window)
 frame_lei.grid(row=5, column=2,pady=4)
 lei = ["Art. 5º da Lei Complementar nº 1.080/2008","Art. 8º da Lei Complementar nº 1.157/2011"]
@@ -348,8 +347,6 @@ a_partir_var = tk.BooleanVar()
 a_partir_checkbutton = ttk.Checkbutton(
     window,
     text=" A partir           ",
-    # text="  Período Fechado  ",
-
     variable=a_partir_var,
     style='Custom.TCheckbutton',  # Aplicar o estilo
     command=lambda: toggle_check_a_partir(
@@ -362,11 +359,9 @@ a_partir_checkbutton = ttk.Checkbutton(
         btn_n_servidor
     ),
 )
-
 # Adicionar o Checkbutton à janela usando grid
 a_partir_checkbutton.grid(row=1, column=4, columnspan=2, padx=25, sticky="w")
 # bnt_limpar.grid(row=24, column=4, columnspan=2, pady=25, padx=25)
-
 periodo_fechado_var = tk.BooleanVar()
 periodo_fechado_checkbutton = ttk.Checkbutton(
     window,
