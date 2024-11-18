@@ -79,7 +79,7 @@ ua_label = ttk.Label(text="UA :", bootstyle="primary")
 ua_label.grid(row=9, column=1, pady=4, sticky="W")
 destinacao_label = ttk.Label(text="Destinação :", bootstyle="primary")
 destinacao_label.grid(row=10, column=1, pady=4, sticky="W")
-regime_label = ttk.Label(text="Regime :", bootstyle="primary")
+regime_label = ttk.Label(text="Regime de Origem:", bootstyle="primary")
 regime_label.grid(row=11, column=1, pady=4, sticky="W")
 
 cargo_de_origem_label = ttk.Label(text="Cargo de Origem :", bootstyle="primary")
@@ -199,7 +199,7 @@ cargo_combo = AutocompleteCombobox(
     frame_cargo, 
     width=43, 
     completevalues=cargo,
-    state="disable"
+    state="readonly"
     )
 cargo_combo.grid(row=7, column=2, pady=4)
 cargo_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, cargo, cargo_combo))
@@ -232,7 +232,7 @@ coordenadoria_combo = AutocompleteCombobox(
     frame_coordenadoria, 
     width=43,
     completevalues=coordenadoria,
-    state="disable"
+    state="readonly"
     )
 coordenadoria_combo.grid(row=8, column=2, pady=4)
 
@@ -247,14 +247,14 @@ ua_combo = AutocompleteCombobox(
     frame_ua, 
     width=43, 
     completevalues=ua,
-    state="disable"
+    state="readonly"
     )
 ua_combo.grid(row=9, column=2, pady=4)
 
 ua_combo.bind("<<ComboboxSelected>>", lambda event: on_select(event, ua, ua_combo))
 ua_combo.bind("<<ComboboxSelected>>", lambda event: ua_box_select(destinacao_entry))
 
-destinacao_entry = ttk.Entry(width=45, state="disable")
+destinacao_entry = ttk.Entry(width=45, state="readonly")
 destinacao_entry.grid(row=10, column=2, pady=4)
 
 destinacao_entry.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
@@ -280,7 +280,7 @@ regime_combo = AutocompleteCombobox(
     frame_regime, 
     width=43, 
     completevalues=regime_list,
-    state="disable"
+    state="readonly"
     )
 regime_combo.grid(row=11, column=2, pady=4)
 regime_combo.bind("<<ComboboxSelected>>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
@@ -297,7 +297,7 @@ cargo_origem_combo = AutocompleteCombobox(
                                         frame_cargo_origem, 
                                         width=43, 
                                         completevalues=cargo_origem_list,
-                                        state="disable"
+                                        state="readonly"
                                         )
 cargo_origem_combo.grid(row=12, column=2, pady=4)
 
@@ -326,43 +326,9 @@ cargo_origem_combo.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_serv
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
                         coordenadoria_combo, regime_combo),)
 
-# a_partir_var = ttk.BooleanVar()
-# a_partir_checkbutton = ttk.Checkbutton(
-#     window,
-#     text="A partir",
-#     variable=a_partir_var,
-#     bootstyle="primary",
-#     command=lambda: toggle_check_a_partir(
-#         a_partir_var,
-#         periodo_fechado_var,
-#         periodo_fechado_checkbutton,
-#         ato_combo,
-#         window, 
-#         btn_servidor, 
-#         btn_n_servidor
-#     ),
-# )
-
-# a_partir_checkbutton.grid(row=1, sticky=tk.W, column=6, columnspan=2)
 
 # Criar um estilo
 style = ttk.Style()
-
-# Aplicar o estilo ao Checkbutton
-# style.configure('Primary.TCheckbutton', background='blue', foreground='white', font=('Arial', 12))
-
-# Definir as propriedades do estilo para se assemelharem ao estilo Lumen
-# style.configure(
-#     'Primary.TCheckbutton', 
-#     # background='#F0F0F0',  # Cor de fundo semelhante ao Lumen
-#     foreground='#376cfe',    # Cor do texto semelhante ao Lumen
-#     font=('Verdana', 10),   # Fonte semelhante ao Lumen
-#     fontcolor='#376cfe',
-#     indicatorforeground="white",
-#     # background="black",
-#     disabledforeground='white',  # Cor do texto quando desabilitado
-
-# )
 
 style.configure('Custom.TCheckbutton', indicatorrelief='flat', indicatordiameter=0, indicatormargin=(0, 0, 0, 0),
                 indicatordistance=0, borderwidth=0, padding=10, foreground='#376cfe')
@@ -372,8 +338,6 @@ style.layout('CustomCheckbutton',
                                        [('Checkbutton.indicator', {'side': 'left', 'sticky': ''}),
                                         ('Checkbutton.focus', {'side': 'left', 'sticky': '', 'children':
                                                                [('Checkbutton.label', {'sticky': 'nswe'})]})]})])
-
-
 
 style.map("CustomCheckbutton", foreground=[("disabled", "lightgray")], highlightcolor=[("disabled", "white")], relief=[("disabled", "flat"), ("!disabled", "flat")])
 
@@ -431,12 +395,6 @@ try:
     image_label.grid(row=4, column=5, columnspan=6, rowspan=10)  # Ajuste as opções de grid conforme necessário
 except:
     pass
-
-
-
-
-
-
 btn_n_servidor = ttk.Button(
     text="Gerar Dados \n Não Servidor",
     width=15,

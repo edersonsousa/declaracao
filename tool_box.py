@@ -138,6 +138,8 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     lei_combo.config(state="readonly")
     cargo_combo.set('')
     cargo_combo.config(state="readonly")
+    cargo_combo["values"] = ""
+    
     destinacao_entry.delete(0, END)
     destinacao_entry.config(state="readonly")
     ua_combo.set('')
@@ -373,11 +375,11 @@ def jornada_box_select(cargo_combo, lei_combo):
                                             "Supervisor de Equipe Técnica de Saúde"     ,
                                             "Supervisor de Saúde"         
                                         ]
-        cargo_combo.config(state=tk.NORMAL)
+        #cargo_combo.config(state=tk.NORMAL)
         cargo_combo.set("")
 
 def cargo_box_select(coordenadoria_combo):
-    coordenadoria_combo.config(state=tk.NORMAL)
+    #coordenadoria_combo.config(state=tk.NORMAL)
     coordenadoria_combo.focus()
     
 def coordenadoria_box_select(ua_combo, coordenadoria_combo):
@@ -490,7 +492,7 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                         "DRS XVII - Taubaté",
                                         "DRS XVIII - Botucatu"
                                     ]
-    ua_combo.config(state=tk.NORMAL)
+    #ua_combo.config(state=tk.NORMAL)
     ua_combo.focus()
 
 def ua_box_select(destinacao_entry):
@@ -502,7 +504,7 @@ def btn_on(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_ent
     if validar_dados_servidor(ato_combo, cargo_origem_combo, btn_n_servidor, btn_servidor, nome_entry, rg_entry, 
                              cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, 
                              ua_combo, coordenadoria_combo, regime_combo):
-        regime_combo.config(state="enable")
+        #regime_combo.config(state="enable")
         if (ato_combo.get() == "Nomeação" and len(regime_combo.get()) == 0 and len(cargo_origem_combo.get()) == 0):
             btn_n_servidor.config(state="normal")
             btn_servidor.config(state="disable")
@@ -560,43 +562,6 @@ def rodape(c):
     c.setFillColorRGB(0.4, 0.4, 0.4)  # Define a cor do texto como cinza (RGB)
     c.setFont("Verdana", 5)  # Define a fonte e o tamanho do texto
     c.drawString(x, y, texto)  # Desenha o texto na posição especificada
-        
-def declaracao_experiencia_old(c , declara):
-    #Define título
-    c.setFont("Verdana-Bold", 14)
-    c.drawCentredString(300, 750, "Declaração de Experiência")
-    
-    # Adiciona informações do dicionário do PDF em um parágrafo justificado
-    c.setFont("Verdana", 11)
-    y_position = 700
-    text =f"Tendo em vista, a indicação por esta Unidade de {declara['Nome']}, RG. {declara['RG']}, para {declara['Ato']}"
-    ######################## Para o caso de 'A Partir' ###############################################
-    if {declara['A partir']} != {False}:
-        # print(user_date_a_partir_variable) 
-        # print({declara['A partir']})
-        text +=f" a partir de {user_date_a_partir_variable}"
-        # print(f" a partir de {user_date_a_partir_variable}")
-    elif (declara['Periodo Fechado']):
-        # print(declara['Periodo Fechado'])
-        text +=f" no período {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}"
-    text +=f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
-            que o(a) indicado(a) atende ao disposto no anexo IV a que se refere Lei Complementar acima mencionada, \
-            no tocante a experiência profissional exigida com relação aos assuntos relacionados as atividades a serem desempenhadas \
-            no cargo de {declara['Cargo']} classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
-    #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent = 30, leading=(12*1.5))
-    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent = 35, leading=(12*1.5))
-    p = Paragraph(text, style)
-    #p.wrapOn(c, 400, 600)
-    p.wrapOn(c, 300, 600)
-    p.drawOn(c, 100, 700 - p.height)
-    c.setFont("Verdana", 12)
-    #c.drawCentredString(300, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
-    c.drawCentredString(300, 550, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}")
-    c.setFont("Verdana", 11)
-    c.drawCentredString(300, 470, f"_________________________________________")
-    c.setFont("Verdana", 11)
-    c.drawCentredString(300, 450, f"(Assinatura e Carimbo)")
-    rodape(c)
     
 def declaracao_experiencia(c, declara):
     # Define título
@@ -625,15 +590,8 @@ def declaracao_experiencia(c, declara):
             no tocante a experiência profissional exigida nos assuntos relacionados com as atividades a serem desempenhadas \
             no cargo de {declara['Cargo']}, classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
     
-    #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=30, leading=(12*1.5))
-    #style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=60, leading=(12*1.5))
     style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=125, leading=(12*1.5), fontSize=11)
-    #c.setFont("Verdana", 11)
-    #c.setFont("Verdana", 16)
     p = Paragraph(text, style)
-    #p.wrapOn(c, 400, 600)
-    #p.wrapOn(c, 400, 500)
-    #p.wrapOn(c, 400, 400)
     p.wrapOn(c, 400, 300)
  
 
@@ -645,21 +603,10 @@ def declaracao_experiencia(c, declara):
     #c.drawCentredString(300, 500, f"São Paulo, {data_atual}")
     c.setFont("Verdana", 11)
     c.drawCentredString(300, 400, f"São Paulo, {data_atual}")
-    #c.drawCentredString(300, 350, f"São Paulo, {data_atual}")
-    #c.drawCentredString(300, 300, f"São Paulo, {data_atual}")
-
     # Assinatura
     c.setFont("Verdana", 11)
-    #c.drawCentredString(300, 470, "_________________________________________")
-    #c.drawCentredString(300, 400, "_________________________________________")
-    #c.drawCentredString(300, 175, "_________________________________________")
-    #c.drawCentredString(300, 315, "_________________________________________")
     c.drawCentredString(300, 215, "_________________________________________")
     c.setFont("Verdana", 11)
-    #c.drawCentredString(300, 450, "(Assinatura e Carimbo)")
-    #c.drawCentredString(300, 380, "(Assinatura e Carimbo)")
-    #c.drawCentredString(300, 160, "(Assinatura e Carimbo)")
-    #c.drawCentredString(300, 300, "(Assinatura e Carimbo)")
     c.drawCentredString(300, 200, "(Assinatura e Carimbo)")
     rodape(c)
     
@@ -722,13 +669,10 @@ def termo_de_compromisso_clt(c , declara):
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     c.setFont("Verdana", 11)
-    #c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.drawRightString(500, 400, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
-    #c.drawRightString(500, 470, f"__________________________________________________")
     c.drawRightString(500, 215, f"__________________________________________________")
     c.setFont("Verdana", 11)
-    #c.drawRightString(500, 450, f"{declara['Nome']}")
     c.drawRightString(500, 200, f"{declara['Nome']}")
     rodape(c)
     
@@ -766,13 +710,12 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     p.drawOn(c, 100, 518)
     text =f"b) instauração de processos administrativos ou judiciais cuja decisão possa importar \
             em inelegibilidade, nos termos de lei federal."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 440)
     p.drawOn(c, 100, 470)
     c.drawRightString(500, 350, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
-    #c.drawRightString(500, 300, f"{declara['Nome']}")
     c.drawRightString(500, 200, f"{declara['Nome']}")
     rodape(c)
     
@@ -784,22 +727,18 @@ def declaracao_cargo_funcao(c , declara):
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text =f"Eu, {nome_em_negrito}, "
     ####### Se o que consta no formulário também consta no autocompletar do campo este é exibido aqui   ############
-    #if declara['Cargo de Origem'] in cargo_origem_list: text +=f"{declara['Cargo de Origem']}, "
     if (len(declara['Cargo de Origem']) > 4) : text +=f"{declara['Cargo de Origem']}, "
-    #if declara['Regime'] in declara['regime_list']: text+=f"{declara['Regime']}, "
     if (len(declara['Regime']) > 4) : text+=f"{declara['Regime']}, "
     text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, no(a) {declara['Destinação']}, do(a) \
             {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
             gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \
             de Saúde - SUS/SP ou sejam por este credenciadas."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
-    #c.drawRightString(500, 500, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.drawRightString(500, 400, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
-    #c.drawRightString(500, 450, f"{declara['Nome']}")
     c.drawRightString(500, 200, f"{declara['Nome']}")
     rodape(c)
     
@@ -808,7 +747,7 @@ def declaracao_acumulo(c , declara):
     c.drawCentredString(300, 750, "DECLARAÇÃO DE ACÚMULO")
     y_position = 700
     text_bold =f"DECLARO, "
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
@@ -817,36 +756,36 @@ def declaracao_acumulo(c , declara):
     text_bold =f"sob pena de responsabilidade, para fins de acumulação que no âmbito do Serviço Público Federal, Estadual ou Municipal\
             , ou ainda em Autarquias, Fundações, Empresas Públicas, Sociedade de Economia Mista, suas subsidiárias e Sociedades Controladas\
             , direta ou indiretamente pelo Poder Público.:"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), firstLineIndent = 65)
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), firstLineIndent = 65, fontSize=11)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     c.setFont("Verdana", 11)
     text=f"EU, {declara['Nome']}, RG Nº {declara['RG']},"
-    style = ParagraphStyle(name='Justify', alignment=0, leading=(12*1.5), fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=0, leading=(12*1.5), fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 590)
     p.drawOn(c, 100, 590)
     text=f"não exerço"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     draw_checkbox(c, 100, 580 , checked=False)
     draw_checkbox(c, 180, 580 , checked=False)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 580)
     p.drawOn(c, 120, 580)
     text=f" exerço"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 580)
     p.drawOn(c, 198, 580)
     text=f"SE EXERCE "
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 540)
     p.drawOn(c, 100, 540)
         
     text=f"outro cargo"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     draw_checkbox(c, 100, 520 , checked=False)
     draw_checkbox(c, 210, 520 , checked=False)
     p = Paragraph(text, style)
@@ -854,38 +793,38 @@ def declaracao_acumulo(c , declara):
     p.drawOn(c, 120, 520)
 
     text=f"emprego"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 520)
     p.drawOn(c, 228, 520)
 
     text=f"função pública"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 520)
     p.drawOn(c, 336, 520)
     draw_checkbox(c, 318, 520 , checked=False)
     
     text=f"Onde:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 480)
     p.drawOn(c, 100, 480)
     
     text=f"Cargo/E/FP:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 450)
     p.drawOn(c, 100, 450)
     
     text=f"APOSENTADO "
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 400)
     p.drawOn(c, 100, 400)
         
     text=f"Sim"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     draw_checkbox(c, 135, 380 , checked=False)
     draw_checkbox(c, 238, 380 , checked=False)
     p = Paragraph(text, style)
@@ -893,58 +832,58 @@ def declaracao_acumulo(c , declara):
     p.drawOn(c, 100, 380)
 
     text=f"Não"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 380)
     p.drawOn(c, 210, 380)
     
     text=f"SE SIM: "
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 320)
     p.drawOn(c, 100, 320)
         
     
     text=f"Orgão Público"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     draw_checkbox(c, 170, 300 , checked=False)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 300)
     p.drawOn(c, 100, 300)
     
     text=f"Qual: "
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 320, 300)
     p.drawOn(c, 210, 300)
     
     text=f"Cargo: "
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 320, 275)
     p.drawOn(c, 210, 275)
 
     text=f"D.O.E da Aposentadoria: "
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 320, 242)
     p.drawOn(c, 210, 242)
     
     text=f"Empresa Privada "
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     draw_checkbox(c, 190, 212 , checked=False)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 212)
     p.drawOn(c, 100, 212)
 
     text=f"Onde: "
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 320, 212)
     p.drawOn(c, 250, 212)
     
     text=f"Outro"
-    style = ParagraphStyle(name='Justify', alignment=4)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 320, 198)
     p.drawOn(c, 250, 198)
@@ -971,7 +910,7 @@ def anexo_i(c , declara):
                     de 26 de maio de 2009 alterado pelo artigo\
                     1º do Decreto nº 67.445, de 12 de janeiro de 2023"
     
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700)
@@ -1435,11 +1374,11 @@ def anexo_iii(c , declara):
     
 def declaracao_de_parentesco(c , declara):
     y_position = 780
-    c.setFont("Verdana-Bold", 16)
+    c.setFont("Verdana-Bold", 14)
     c.drawCentredString(300, 780, "DECLARAÇÃO DE PARENTESCO")
 
     # Definir a largura do texto para sublinhar corretamente
-    text_width = c.stringWidth("DECLARAÇÃO DE PARENTESCO", "Verdana-Bold", 16)
+    text_width = c.stringWidth("DECLARAÇÃO DE PARENTESCO", "Verdana-Bold", 14)
 
     # Desenhar a linha abaixo do texto
     underline_y = 778  # Ajustar conforme necessário
@@ -1477,18 +1416,18 @@ def declaracao_de_parentesco(c , declara):
                     até o terceiro grau inclusive, da autoridade nomeante ou de agente público do Poder Executivo do Estado de São Paulo\
                     que ocupe cargo ou função de confiança? <i> (Exemplo: Diretoria, Chefia, Assessoramento ou similares) </i>"
     
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=11)
     p = Paragraph(text_descricao, style)
     p.wrapOn(c, 480, 670)
     p.drawOn(c, 58, 670 - p.height)
     c.rect(50, 580, 495, 95)
     
     text_nao=f"<b>NÃO</b>."
-    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
-    draw_checkbox(c, 58, 604 , checked=False)
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10, fontSize=11)
+    draw_checkbox(c, 58, 598 , checked=False)
     p = Paragraph(text_nao, style)
-    p.wrapOn(c, 200, 604)
-    p.drawOn(c, 78, 604)
+    p.wrapOn(c, 200, 598)
+    p.drawOn(c, 78, 598)
     
     text_sim=f"<b>SIM</b>. Em caso positivo apontar:"
     #draw_arrow(c, 225, 590, size=9, line_width=2.5)
@@ -1504,68 +1443,43 @@ def declaracao_de_parentesco(c , declara):
         desired_width = 8
         desired_height = desired_width / aspect_ratio
         # Insere a imagem com o tamanho proporcional
-        c.drawImage(image_path, x=220, y=585, width=desired_width, height=desired_height)
+        c.drawImage(image_path, x=235, y=583, width=desired_width, height=desired_height)
     except:
         # Se a imagem falhar, desenha a seta
-        draw_arrow(c, 225, 590, size=9, line_width=2.5)
+        draw_arrow(c, 235, 591, size=9, line_width=2.5)
 
-    
-    
-    #try:
-    #    c.drawImage(image_path, x=220, y=585, width=desired_width, height=desired_height)
-
-
-    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10)
-    draw_checkbox(c, 58, 585 , checked=False)
+    style = ParagraphStyle(name='Justify', alignment=4, IdentFirstLine = 10, fontSize=11)
+    draw_checkbox(c, 58, 583 , checked=False)
     p = Paragraph(text_sim, style)
-    p.wrapOn(c, 200, 585)
-    p.drawOn(c, 78, 585)
-     
-    # y_position = 400
-    # text_positivo =f"Em caso positivo, apontar:"
-    # style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana")
-    # p = Paragraph(text_positivo, style)
-    # p.wrapOn(c, 400, 400)
-    # p.drawOn(c, 100, 380)
-    # c.setFont("Verdana", 11)
-    
+    p.wrapOn(c, 200, 583)
+    p.drawOn(c, 78, 583)
     y_position = 420
     text_autoridade =f"NOME DA AUTORIDADE<sup><i>(4)</i></sup>/OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontSize=10)
+    style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text_autoridade, style)
-    #p.wrapOn(c, 400, 380)
-    #p.drawOn(c, 100, 360)
     p.wrapOn(c, 480, 565)
-    p.drawOn(c, 58, 565)# - p.height)
-    #c.drawRightString(500, 360, f"_____________________________________________________")
+    p.drawOn(c, 58, 565)
     c.rect(50, 545, 495, 35)
     
     y_position = 240
     text_relacao =f"RELAÇÃO DE PARENTESCO:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=10)
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=11)
     p = Paragraph(text_relacao, style)
     p.wrapOn(c, 480, 530)
     p.drawOn(c, 58, 530)
-    #c.drawRightString(500, 340, f"_______________________________________")
-    
     c.rect(50, 510, 495, 35)
-    #y_position = 240
     text_bold =f"CARGO/FUNÇÃO OCUPADA:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=10)
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=11)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 495)
     p.drawOn(c, 58, 495)
-    #c.drawRightString(500, 320, f"_____________________________________________")
-    
     c.rect(50, 475, 495, 35)
     
     text_bold =f"ÓRGÃO DA AUTORIDADE OU OCUPANTE DE CARGO OU FUNÇÃO DE CONFIANÇA:"
-    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=10)
+    style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana", fontSize=11)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 490, 460)
     p.drawOn(c, 58, 460)
-   #c.drawRightString(500, 320, f"_____________________________________________")
-    
     c.rect(50, 440, 495, 35)
     c.rect(50, 327.5, 495, 100)
     text_bold =f"<b>DECLARAÇÃO:</b>"
@@ -1582,12 +1496,7 @@ def declaracao_de_parentesco(c , declara):
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 480, 330)
     p.drawOn(c, 58, 330)
-    #c.setFont("Verdana", 12)
-    
-
-    #c.rect(90, 222, 450, 70)
-    
-    c.rect(50, 80, 495, 240)#último
+    c.rect(50, 80, 495, 240)
     
     text_bold =f"<b>OBSERVAÇÕES:</b>"
     style = ParagraphStyle(name='Justify', alignment=4)
@@ -1617,7 +1526,6 @@ def declaracao_de_parentesco(c , declara):
     p = Paragraph(text_obs, style)
     p.wrapOn(c, 480, 82.5)
     p.drawOn(c, 60, 82.5)
-    #c.rect(90, 140, 450, 75)
            
     c.setFont("Verdana", 11)
     text=f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}."
@@ -1638,9 +1546,7 @@ def declaracao_de_parentesco(c , declara):
     p.wrapOn(c, 495, 25)
     p.drawOn(c, 50, 25)
     rodape(c)
-    #c.showPage()
-    #informacoes_adicionais(c, declara)
-
+    
 def declaracao(declara, statusbar_text):
     search_font_verdana()
     nome_arquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
@@ -1672,24 +1578,6 @@ def gerar_declaracoes(c, declara):
     c.showPage()
     declaracao_de_parentesco(c, declara)
     c.showPage()
-############ Designação => Anexo III #####################################
-#     if is_designacao(declara):
-        
-#         #anexo_iii(c, declara)
-#         declaracao_de_parentesco(c, declara)
-#         c.showPage()
-# ################## Designação com posterior Nomeação => Anexo III e I ####
-#     elif is_designacao_nomeacao(declara):
-#         #anexo_i(c, declara)
-#         declaracao_de_parentesco(c, declara)
-#         c.showPage()
-#         #anexo_iii(c, declara)  # Adiciona também o anexo III
-#         #c.showPage()
-#     # Nomeação => Anexo I
-#     elif is_nomeacao(declara):
-#         declaracao_de_parentesco(c, declara)
-#         #anexo_i(c, declara)
-#         c.showPage()
 
 def is_designacao(declara):
     return declara['Ato'] == 'Designação'
@@ -1750,12 +1638,8 @@ def draw_arrow(c, x, y, size=20, line_width=2):
     c.line(x  + size - arrow_head_size , y - size + arrow_head_size, x + size, y - size)  # Diagonal esquerda
     c.line(x - 1.8 + size + arrow_head_size , y - size + arrow_head_size, x + size, y - size)  # Diagonal direita
     
-    
     # Restaura o estado anterior do canvas (volta ao line_width original)
     c.restoreState()
-
-
-
 
 def cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
@@ -1783,10 +1667,7 @@ def on_select(event, valores, combo):
         combo.focus()
 
 def on_select_estado_civil(event, nome_entry, rg_entry, cpf_entry, ato_combo, statusbar_text, estado_civil_combo):
-    # print(estado_civil_combo.get())  # Corrigido
-    # print(estado_civil_combo['values'])  # Corrigido
-    # print(nome_entry.get())  # Corrigido
-    
+  
     if len(nome_entry.get()) < 3 :
         statusbar_text.set("Favor preencher o nome do servidor")
         nome_entry.focus()
@@ -2258,4 +2139,3 @@ def on_select_regime_combo(cargo_origem_combo, regime_combo):
                             "Visitador Sanitário",
                             "Zootecnista",
                         ]
-    cargo_origem_combo.config(state="enable")
