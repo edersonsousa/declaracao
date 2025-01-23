@@ -268,13 +268,20 @@ destinacao_entry.bind("<Tab>", lambda event: cargo_de_origem(btn_n_servidor, btn
 destinacao_entry.bind("<Return>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
                         coordenadoria_combo, regime_combo),)
-destinacao_entry.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
+destinacao_entry.bind("<FocusIn>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
+                        estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
+                        coordenadoria_combo, regime_combo),)
+destinacao_entry.bind("<Key>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
+                        estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
+                        coordenadoria_combo, regime_combo),)
+destinacao_entry.bind("<KeyPress>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
                         coordenadoria_combo, regime_combo),)
 
+
 frame_regime = Frame(window)
 frame_regime.grid(row=11, column=2, padx=0, pady=4)
-regime_list = ["Efetivo", "Lei 500", "Comissão", "CLT"]
+regime_list = ["Efetivo", "Lei 500", "Comissão", "CLT",""]
 regime_combo = AutocompleteCombobox(
     frame_regime, 
     width=43, 
@@ -287,6 +294,11 @@ regime_combo.bind("<Tab>", lambda event: on_select_regime_combo(cargo_origem_com
 regime_combo.bind("<Return>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
 regime_combo.bind("<KeyRelease>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
 regime_combo.bind("<FocusOut>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
+regime_combo.bind("<<ComboboxSelected>>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo, coordenadoria_combo, regime_combo),)
+
+regime_combo.bind("<FocusOut>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo, coordenadoria_combo, regime_combo),)
+
+regime_combo.bind("<FocusIn>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo, coordenadoria_combo, regime_combo),)
 
 frame_cargo_origem = Frame(window)
 frame_cargo_origem.grid(row=12, column=2, padx=0, pady=4)
@@ -305,6 +317,10 @@ cargo_origem_combo.bind("<FocusOut>", lambda event: on_select_regime_combo(event
 cargo_origem_combo.bind("<KeyRelease>", lambda event: on_select_regime_combo(event, cargo_origem_combo, regime_combo))
 cargo_origem_combo.bind("<Return>", lambda event: on_select_regime_combo(event, cargo_origem_combo, regime_combo))
 cargo_origem_combo.bind("<Tab>", lambda event: on_select_regime_combo(event, cargo_origem_combo, regime_combo))
+cargo_origem_combo.bind("<FocusIn>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
+#cargo_origem_combo.bind("<Motion>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
+cargo_origem_combo.bind("<Enter>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
+cargo_origem_combo.bind("<Leave>", lambda event: on_select_regime_combo(cargo_origem_combo, regime_combo))
 
 cargo_origem_combo.bind("<FocusOut>" and "<<ComboboxSelected>>",lambda event: btn_on(btn_n_servidor, btn_servidor, cargo_origem_combo, 
                                                                                      ato_combo, nome_entry, rg_entry, cpf_entry, 
@@ -324,7 +340,9 @@ cargo_origem_combo.bind("<Return>", lambda event: cargo_de_origem(btn_n_servidor
 cargo_origem_combo.bind("<KeyRelease>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry, cpf_entry,
                         estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
                         coordenadoria_combo, regime_combo),)
-
+cargo_origem_combo.bind("<<ComboboxSelected>>", lambda event: cargo_de_origem(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_entry, rg_entry,        cpf_entry,
+                        estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, ua_combo,
+                        coordenadoria_combo, regime_combo),)
 
 # Criar um estilo
 style = ttk.Style()
@@ -412,7 +430,7 @@ btn_n_servidor = ttk.Button(
             "Coordenadoria": coordenadoria_combo.get(),
             "Cargo de Origem": cargo_origem_combo.get(),
             "cargo_origem_list": cargo_origem_list,
-            "Regime de Origem": regime_combo.get(),
+            "Regime": regime_combo.get(),
             "regime_list": regime_list
         },
         statusbar_text=statusbar_text

@@ -169,7 +169,7 @@ def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_che
             mes = int(user_date[3:5])
             ano = int(user_date[6:])
             # Verificar se o dia, mês e ano são válidos
-            if (1 <= mes <= 12) and (ano == 2024):
+            if (1 <= mes <= 12) and (ano >= 2024):
                 if (mes in [1, 3, 5, 7, 8, 10, 12] and 1 <= dia <= 31) or \
                    (mes in [4, 6, 9, 11] and 1 <= dia <= 30) or \
                    (mes == 2 and ((ano % 4 == 0 and ano % 100 != 0) or ano % 400 == 0) and 1 <= dia <= 29) or \
@@ -183,7 +183,7 @@ def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_che
                     messagebox.showerror("Erro", "Dia inválido para o mês fornecido.")
                     toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
             else:
-                messagebox.showerror("Erro", "Mês inválido ou ano diferente de 2024.")
+                messagebox.showerror("Erro", "Mês inválido")# ou ano diferente de 2024.")
                 toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
 
         elif user_date == None or user_date_a_partir_variable == None:
@@ -272,6 +272,8 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
             btn_n_servidor.focus()
         elif btn_n_servidor.cget("state") == "disable":
             btn_servidor.focus()
+    #print(date_periodofechado_inicio_variable)
+    #print(date_periodofechado_fim_variable)
     window.deiconify()
     
 def ato_box_select(event, ato_combo, a_partir_var, periodo_fechado_var, a_partir_checkbutton, periodo_fechado_checkbutton, lei_combo):
@@ -491,16 +493,34 @@ def btn_on(btn_n_servidor, btn_servidor, cargo_origem_combo, ato_combo, nome_ent
     if validar_dados_servidor(ato_combo, cargo_origem_combo, btn_n_servidor, btn_servidor, nome_entry, rg_entry, 
                              cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, 
                              ua_combo, coordenadoria_combo, regime_combo):
-        if (ato_combo.get() == "Nomeação" and len(regime_combo.get()) == 0 and len(cargo_origem_combo.get()) == 0):
+        #if (len(destinacao_entry.get())==0 or (destinacao_entry.get())):
+            #btn_n_servidor.config(state="disable")
+            #btn_servidor.config(state="disable")
+            #print('foiiiiiii')
+        if ((len(regime_combo.get()) == 0 and len(cargo_origem_combo.get()) > 0) 
+                        or (len(regime_combo.get()) > 0 and len(cargo_origem_combo.get()) == 0)):
+            #print(destinacao_entry.get())
+            #print(len(destinacao_entry.get()))
+            btn_n_servidor.config(state="disable")
+            btn_servidor.config(state="disable")
+        elif(ato_combo.get() == "Nomeação" and len(regime_combo.get()) == 0 and len(cargo_origem_combo.get()) == 0):
             btn_n_servidor.config(state="normal")
             btn_servidor.config(state="disable")
         elif (ato_combo.get() == "Nomeação" and (len(cargo_origem_combo.get()) > 0 and len(regime_combo.get()) > 0)):    
+            btn_n_servidor.config(state="disable") 
+            btn_servidor.config(state="normal")
+        elif ((ato_combo.get() == "Designação" or ato_combo.get() == "Designação com posterior Nomeação") 
+                                    and (len(cargo_origem_combo.get()) > 0 and len(regime_combo.get()) > 0)):
             btn_n_servidor.config(state="disable")
             btn_servidor.config(state="normal")
-        elif (ato_combo.get() != "Nomeação" and (len(cargo_origem_combo.get()) > 0 and len(regime_combo.get()) > 0)):
-            btn_n_servidor.config(state="disable")
-            btn_servidor.config(state="normal")
-            
+        elif ((ato_combo.get() == "Designação" or ato_combo.get() == "Designação com posterior Nomeação") 
+                                    and (len(cargo_origem_combo.get()) == 0 and len(regime_combo.get()) == 0)):
+            btn_n_servidor.config(state="normal")
+            btn_servidor.config(state="disable")
+        #elif (len(destinacao_entry.get())==0 or (len(destinacao_entry.get()) ))
+    #print(destinacao_entry.get())
+    #print(len(destinacao_entry.get()))
+    
 def validar_dados_servidor(ato_combo, cargo_origem_combo, btn_n_servidor, btn_servidor, nome_entry, rg_entry, 
                              cpf_entry, estado_civil_combo, jornada_combo, lei_combo, cargo_combo, destinacao_entry, 
                              ua_combo, coordenadoria_combo, regime_combo):
@@ -536,7 +556,7 @@ def rodape(c):
     # Formata como "NOV/2024"
     data_formatada = f"{mes_abreviado}/{ano}"
 
-    versao="1.1"
+    versao="1.25 Beta"
         
     # Definir o texto e suas coordenadas
     texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"
@@ -562,7 +582,10 @@ def declaracao_experiencia(c, declara):
     if declara['A partir'] != False:
         text += f" a partir de {user_date_a_partir_variable}"
     elif declara['Periodo Fechado']:
-        text += f" no período {declara['Periodo Fechado']['Inicio']} a {declara['Periodo Fechado']['Fim']}"
+        #text += f" no período {declara['Periodo Fechado']['Inicio']} a {declara['Periodo Fechado']['Fim']}"
+        text += f" no período {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}"
+        #print(date_periodofechado_inicio_variable)
+        #print(date_periodofechado_fim_variable)
 
     # text += f" e após análise curricular declaro que para fins do disposto do {declara['Lei']}, \
     #         que o(a) indicado(a) atende ao estabelecido no anexo IV da referida Lei Complementar, \
@@ -615,7 +638,7 @@ def termo_de_anuencia(c , declara):
     if {declara['Periodo Fechado']} is True:
         text += f", no período de {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}, "
     text += f", no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}. "
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 600 - p.height)
@@ -663,23 +686,23 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text =f"Eu, {nome_em_negrito}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
             declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     text2 =f"Declaro ainda, sob as penas da lei, não incorrer em nenhuma das hipóteses de inelegibilidade previstas em lei federal."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
     p = Paragraph(text2, style)
     p.wrapOn(c, 400, 540)
     p.drawOn(c, 100, 640 - p.height)
     text3 =f"Assumo, por fim, o compromisso de comunicar a meu superior hierárquico, no prazo de 30 (trinta) dias subsequentes \
             à respectiva ciência, a superveniência de:"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
     p = Paragraph(text3, style)
     p.wrapOn(c, 400, 500)
     p.drawOn(c, 100, 600 - p.height)
     text =f"a) enquadramento em qualquer hipótese de inelegibilidade prevista em lei federal;"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 480)
     p.drawOn(c, 100, 518)
@@ -1679,7 +1702,11 @@ def search_font_verdana():
         pdfmetrics.registerFont(TTFont(font_name, font_path))
     
 def on_select_regime_combo(cargo_origem_combo, regime_combo):
-    if regime_combo.get() == "Comissão":
+    
+    if regime_combo.get() == "":
+        cargo_origem_combo["completevalues"] = [""]
+        #print("Nada no Regime")
+    elif regime_combo.get() == "Comissão":
         cargo_origem_combo["completevalues"] = [
                                                 "Assessor de Gabinete I"                , 
                                                 "Assessor de Gabinete II"               , 
@@ -1725,7 +1752,7 @@ def on_select_regime_combo(cargo_origem_combo, regime_combo):
                                                 "Supervisor de Equipe Técnica de Saúde"     ,
                                                 "Supervisor de Saúde" 
                                                 ]
-    else:
+    elif regime_combo.get() != "Comissão":
         cargo_origem_combo["completevalues"] = [
                             "Agente Administrativo",
                             "Agente Administrativo de Ensino",
@@ -2113,4 +2140,5 @@ def on_select_regime_combo(cargo_origem_combo, regime_combo):
                             "Visitador Comunitário",
                             "Visitador Sanitário",
                             "Zootecnista",
+                            "",
                         ]
