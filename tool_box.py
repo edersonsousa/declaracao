@@ -556,7 +556,7 @@ def rodape(c):
     # Formata como "NOV/2024"
     data_formatada = f"{mes_abreviado}/{ano}"
 
-    versao="1.25 Beta"
+    versao="1.3"
         
     # Definir o texto e suas coordenadas
     texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"
@@ -626,7 +626,7 @@ def termo_de_anuencia(c , declara):
     # Para o caso de Servidor ou Não Servidor [RAI](da rua)
     if (len(declara['Cargo de Origem']) > 4):
         text += f"{declara['Cargo de Origem']}, "
-    if (len(declara['Regime']) > 4):
+    if (len(declara['Regime']) > 2):
         text += f"{declara['Regime']}, "
     
     text += f"RG. {declara['RG']}, concordo com\
@@ -726,7 +726,7 @@ def declaracao_cargo_funcao(c , declara):
     text =f"Eu, {nome_em_negrito}, "
     ####### Se o que consta no formulário também consta no autocompletar do campo este é exibido aqui   ############
     if (len(declara['Cargo de Origem']) > 4) : text +=f"{declara['Cargo de Origem']}, "
-    if (len(declara['Regime']) > 4) : text+=f"{declara['Regime']}, "
+    if (len(declara['Regime']) > 2) : text+=f"{declara['Regime']}, "
     text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, no(a) {declara['Destinação']}, do(a) \
             {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
             gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \

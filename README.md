@@ -135,3 +135,5 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
 * 06 => 23/01/2025 - Correção/Ajuste de erro do "A Partir" que não estava aceitando o ano de 2025
                    - Ajuste em alguns documentos onde a fonte não estava "setada" e adotava ua fonte padrão 
                    - Ajuste no comportamento dos botões x Cargo e Regime de Origem (Servidor e Não Servidor)
+
+* 27 => 28/03/2025 - Nova exigência REGIME de origem a ser exibido em Termo de Anuência e Declaração Convênio/SUS
