@@ -556,7 +556,7 @@ def rodape(c):
     # Formata como "NOV/2024"
     data_formatada = f"{mes_abreviado}/{ano}"
 
-    versao="1.3"
+    versao="1.31"
         
     # Definir o texto e suas coordenadas
     texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"
@@ -597,7 +597,7 @@ def declaracao_experiencia(c, declara):
             no tocante a experiência profissional exigida nos assuntos relacionados com as atividades a serem desempenhadas \
             no cargo de {declara['Cargo']}, classificado no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}."
     
-    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=125, leading=(12*1.5), fontSize=11)
+    style = ParagraphStyle(name='Justify', alignment=4, firstLineIndent=125, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 300)
     p.drawOn(c, 100, y_position - p.height)
@@ -662,7 +662,7 @@ def termo_de_compromisso_clt(c , declara):
             {declara['Ato']} para exercer o cargo de {declara['Cargo']}, do SQC-I, no(a) {declara['Destinação']},\
              do(a) {declara['UA']}, da {declara['Coordenadoria']}, comprometo-me a exercer o referido cargo em \
             {declara['Jornada']}."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5))
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
@@ -686,32 +686,32 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
     text =f"Eu, {nome_em_negrito}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
             declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 600)
     p.drawOn(c, 100, 700 - p.height)
     text2 =f"Declaro ainda, sob as penas da lei, não incorrer em nenhuma das hipóteses de inelegibilidade previstas em lei federal."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text2, style)
-    p.wrapOn(c, 400, 540)
-    p.drawOn(c, 100, 640 - p.height)
+    p.wrapOn(c, 400, 535)
+    p.drawOn(c, 100, 625 - p.height)
     text3 =f"Assumo, por fim, o compromisso de comunicar a meu superior hierárquico, no prazo de 30 (trinta) dias subsequentes \
             à respectiva ciência, a superveniência de:"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text3, style)
-    p.wrapOn(c, 400, 500)
-    p.drawOn(c, 100, 600 - p.height)
+    p.wrapOn(c, 400, 485)
+    p.drawOn(c, 100, 585 - p.height)
     text =f"a) enquadramento em qualquer hipótese de inelegibilidade prevista em lei federal;"
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 480)
-    p.drawOn(c, 100, 518)
+    p.wrapOn(c, 400, 445)
+    p.drawOn(c, 100, 483)
     text =f"b) instauração de processos administrativos ou judiciais cuja decisão possa importar \
             em inelegibilidade, nos termos de lei federal."
-    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11)
+    style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 440)
-    p.drawOn(c, 100, 470)
+    p.wrapOn(c, 400, 415)
+    p.drawOn(c, 100, 445)
     c.drawRightString(500, 350, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
     c.drawRightString(500, 200, f"{declara['Nome']}")
@@ -844,7 +844,7 @@ def declaracao_acumulo(c , declara):
     
     text=f"Orgão Público"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
-    draw_checkbox(c, 170, 300 , checked=False)
+    draw_checkbox(c, 190, 300 , checked=False)
     p = Paragraph(text, style)
     p.wrapOn(c, 400, 300)
     p.drawOn(c, 100, 300)
