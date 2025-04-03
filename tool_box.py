@@ -762,20 +762,20 @@ def declaracao_acumulo(c , declara):
     text=f"EU, {declara['Nome']}, RG Nº {declara['RG']},"
     style = ParagraphStyle(name='Justify', alignment=0, leading=(12*1.5), fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 590)
-    p.drawOn(c, 100, 590)
+    p.wrapOn(c, 400, 570)
+    p.drawOn(c, 100, 570)
     text=f"não exerço"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
-    draw_checkbox(c, 100, 580 , checked=False)
-    draw_checkbox(c, 180, 580 , checked=False)
+    draw_checkbox(c, 100, 560 , checked=False)
+    draw_checkbox(c, 180, 560 , checked=False)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 580)
-    p.drawOn(c, 120, 580)
+    p.wrapOn(c, 400, 560)
+    p.drawOn(c, 120, 560)
     text=f" exerço"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 580)
-    p.drawOn(c, 198, 580)
+    p.wrapOn(c, 400, 560)
+    p.drawOn(c, 198, 560)
     text=f"SE EXERCE "
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
