@@ -137,3 +137,8 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
                    - Ajuste no comportamento dos botões x Cargo e Regime de Origem (Servidor e Não Servidor)
 
 * 27 => 28/03/2025 - Nova exigência REGIME de origem a ser exibido em Termo de Anuência e Declaração Convênio/SUS
+
+
+* 03/04/2025 - Ajuste na declaração de acúmulo para nomes mais extensos
+
+* 03/04/2025 - Adição dos campos RG e REGIME na Declaração e Termo de Anuência

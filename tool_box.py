@@ -622,14 +622,14 @@ def termo_de_anuencia(c , declara):
     c.setFont("Verdana", 11)
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
-    text = f"Eu, {nome_em_negrito}, "
+    text = f"Eu, {nome_em_negrito}, RG. {declara['RG']}, "
     # Para o caso de Servidor ou Não Servidor [RAI](da rua)
     if (len(declara['Cargo de Origem']) > 4):
         text += f"{declara['Cargo de Origem']}, "
     if (len(declara['Regime']) > 2):
         text += f"{declara['Regime']}, "
     
-    text += f"RG. {declara['RG']}, concordo com\
+    text += f"concordo com\
                 a {declara['Ato']}, em {declara['Jornada']}, para o cargo de {declara['Cargo']}"
     # Para o caso do "A partir" CAIeIII AP
     if  user_date_a_partir_variable is not None:
@@ -723,11 +723,11 @@ def declaracao_cargo_funcao(c , declara):
     c.setFont("Verdana", 11)
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
-    text =f"Eu, {nome_em_negrito}, "
+    text =f"Eu, {nome_em_negrito}, RG. {declara['RG']}, "
     ####### Se o que consta no formulário também consta no autocompletar do campo este é exibido aqui   ############
     if (len(declara['Cargo de Origem']) > 4) : text +=f"{declara['Cargo de Origem']}, "
     if (len(declara['Regime']) > 2) : text+=f"{declara['Regime']}, "
-    text +=f"RG. {declara['RG']}, DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, no(a) {declara['Destinação']}, do(a) \
+    text +=f"DECLARO para fins de {declara['Ato']} no cargo de {declara['Cargo']}, no(a) {declara['Destinação']}, do(a) \
             {declara['UA']}, da {declara['Coordenadoria']}, que não exerço cargo ou função de direção, \
             gerência ou administração em entidades que mantenham contratos ou convênios com o Sistema Único \
             de Saúde - SUS/SP ou sejam por este credenciadas."
