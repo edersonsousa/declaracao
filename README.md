@@ -142,3 +142,13 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
 * 03/04/2025 - Ajuste na declaração de acúmulo para nomes mais extensos 
 
 * 03/04/2025 - Adição dos campos RG e REGIME na Declaração e Termo de Anuência
+
+
+* 04/04/2025 - [Solicitação][Evelin] - Na declaração de inelegibilidade, favor colocar o RG e o CPF, após o nome do indicado (para ficar antes da nacionalidade e estado civil);
+        
+* 04/04/2025 - [Solicitação][Evelin] - Na declaração de acúmulo, precisa acertar duas virgulas no texto (depois de Municipal e depois de Controladas) e verificar a possibilidade de no “SE EXERCE” descer uma linha e subir uma linha do “SE SIM” do aposentado;
+
+* 04/04/2025 - [Solicitação][Evelin] - No termo de anuência e no termo de compromisso, excluir o risco para assinatura;
+
+
+

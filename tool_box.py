@@ -751,9 +751,9 @@ def declaracao_acumulo(c , declara):
     p.drawOn(c, 100, 700 - p.height)
     c.setFont("Verdana", 11)
     y_position = 700
-    text_bold =f"sob pena de responsabilidade, para fins de acumulação que no âmbito do Serviço Público Federal, Estadual ou Municipal\
-            , ou ainda em Autarquias, Fundações, Empresas Públicas, Sociedade de Economia Mista, suas subsidiárias e Sociedades Controladas\
-            , direta ou indiretamente pelo Poder Público.:"
+    text_bold =f"sob pena de responsabilidade, para fins de acumulação que no âmbito do Serviço Público Federal, Estadual ou Municipal,\
+            ou ainda em Autarquias, Fundações, Empresas Públicas, Sociedade de Economia Mista, suas subsidiárias e Sociedades Controladas,\
+            direta ou indiretamente pelo Poder Público.:"
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), firstLineIndent = 65, fontSize=11)
     p = Paragraph(text_bold, style)
     p.wrapOn(c, 400, 600)
@@ -779,29 +779,29 @@ def declaracao_acumulo(c , declara):
     text=f"SE EXERCE "
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 540)
-    p.drawOn(c, 100, 540)
+    p.wrapOn(c, 400, 530)
+    p.drawOn(c, 100, 530)
         
     text=f"outro cargo"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
-    draw_checkbox(c, 100, 520 , checked=False)
-    draw_checkbox(c, 210, 520 , checked=False)
+    draw_checkbox(c, 100, 515 , checked=False)
+    draw_checkbox(c, 210, 515 , checked=False)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 520)
-    p.drawOn(c, 120, 520)
+    p.wrapOn(c, 400, 515)
+    p.drawOn(c, 120, 515)
 
     text=f"emprego"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 520)
-    p.drawOn(c, 228, 520)
+    p.wrapOn(c, 400, 515)
+    p.drawOn(c, 228, 515)
 
     text=f"função pública"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 520)
-    p.drawOn(c, 336, 520)
-    draw_checkbox(c, 318, 520 , checked=False)
+    p.wrapOn(c, 400, 515)
+    p.drawOn(c, 336, 515)
+    draw_checkbox(c, 318, 515 , checked=False)
     
     text=f"Onde:"
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
@@ -838,55 +838,55 @@ def declaracao_acumulo(c , declara):
     text=f"SE SIM: "
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 320)
-    p.drawOn(c, 100, 320)
+    p.wrapOn(c, 400, 335)
+    p.drawOn(c, 100, 335)
         
     
     text=f"Orgão Público"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
-    draw_checkbox(c, 190, 300 , checked=False)
+    draw_checkbox(c, 190, 315 , checked=False)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 300)
-    p.drawOn(c, 100, 300)
+    p.wrapOn(c, 400, 315)
+    p.drawOn(c, 100, 315)
     
     text=f"Qual: "
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 320, 300)
-    p.drawOn(c, 210, 300)
+    p.wrapOn(c, 320, 315)
+    p.drawOn(c, 210, 315)
     
     text=f"Cargo: "
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 320, 275)
-    p.drawOn(c, 210, 275)
+    p.wrapOn(c, 320, 290)
+    p.drawOn(c, 210, 290)
 
     text=f"D.O.E da Aposentadoria: "
     style = ParagraphStyle(name='Justify', alignment=4, fontName="Verdana-Bold", fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 320, 242)
-    p.drawOn(c, 210, 242)
+    p.wrapOn(c, 320, 260)
+    p.drawOn(c, 210, 260)
     
     text=f"Empresa Privada "
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
-    draw_checkbox(c, 190, 212 , checked=False)
+    draw_checkbox(c, 190, 230 , checked=False)
     p = Paragraph(text, style)
-    p.wrapOn(c, 400, 212)
-    p.drawOn(c, 100, 212)
+    p.wrapOn(c, 400, 230)
+    p.drawOn(c, 100, 230)
 
     text=f"Onde: "
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 320, 212)
-    p.drawOn(c, 250, 212)
+    p.wrapOn(c, 320, 230)
+    p.drawOn(c, 250, 230)
     
     text=f"Outro"
     style = ParagraphStyle(name='Justify', alignment=4, fontSize=11)
     p = Paragraph(text, style)
-    p.wrapOn(c, 320, 198)
-    p.drawOn(c, 250, 198)
-    draw_checkbox(c, 280, 198 , checked=False)
-    c.drawRightString(500, 198, f"_________________________")
+    p.wrapOn(c, 320, 210)
+    p.drawOn(c, 250, 210)
+    draw_checkbox(c, 280, 210 , checked=False)
+    c.drawRightString(500, 210, f"_________________________")
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
 
     c.setFont("Verdana", 11)
