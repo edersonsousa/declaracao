@@ -684,7 +684,7 @@ def declaracao_hipotese_inelegibilidade(c , declara):
     c.setFont("Verdana", 11)
     y_position = 700
     nome_em_negrito = f"<b>{declara['Nome']}</b>"
-    text =f"Eu, {nome_em_negrito}, brasileiro(a), {declara['Estado Civil']}, RG. {declara['RG']}, CPF. {declara['CPF']}, \
+    text =f"Eu, {nome_em_negrito}, RG. {declara['RG']}, CPF. {declara['CPF']}, brasileiro(a), {declara['Estado Civil']}, \
             declaro ter pleno conhecimento das disposições contidas no Decreto nº 57.970, de 12 de abril de 2012."
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
