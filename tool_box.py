@@ -644,7 +644,7 @@ def termo_de_anuencia(c , declara):
     p.drawOn(c, 100, 600 - p.height)
     c.setFont("Verdana", 11)
     c.drawRightString(500, 400, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
-    c.drawRightString(500, 215, f"______________________________________")
+    #c.drawRightString(500, 215, f"______________________________________")
     c.drawRightString(500, 200, f"{declara['Nome']}")
     rodape(c)
     
@@ -669,7 +669,7 @@ def termo_de_compromisso_clt(c , declara):
     c.setFont("Verdana", 11)
     c.drawRightString(500, 400, f"São Paulo, {format_date(datetime.now(), format='full', locale=locale).split(',')[1].strip()}.")
     c.setFont("Verdana", 11)
-    c.drawRightString(500, 215, f"__________________________________________________")
+    #c.drawRightString(500, 215, f"__________________________________________________")
     c.setFont("Verdana", 11)
     c.drawRightString(500, 200, f"{declara['Nome']}")
     rodape(c)
