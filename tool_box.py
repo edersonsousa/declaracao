@@ -556,7 +556,7 @@ def rodape(c):
     # Formata como "NOV/2024"
     data_formatada = f"{mes_abreviado}/{ano}"
 
-    versao="1.31"
+    versao="1.32"
         
     # Definir o texto e suas coordenadas
     texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"
