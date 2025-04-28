@@ -1546,12 +1546,17 @@ def declaracao_de_parentesco(c , declara):
     rodape(c)
     
 def declaracao(declara, statusbar_text):
+    
     search_font_verdana()
     nome_arquivo = f"{declara['Nome']} - {declara['Cargo']}.pdf"
     path_check(declara, statusbar_text)
 
     c = canvas.Canvas(f"./{declara['Ato']}/{declara['Nome']}/{nome_arquivo}", pagesize=A4)
     try:
+        #print (date_periodofechado_inicio_variable)
+        #print (date_periodofechado_fim_variable)
+        #print (toggle_check_periodo_fechado)
+        #print(has_date_period_closed)
         gerar_declaracoes(c, declara)
     finally:
         c.save()  # Salva o conteúdo do canvas em um arquivo PDF

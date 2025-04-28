@@ -150,5 +150,7 @@ Para compilar usei o comando 'python -m auto_py_to_exe'
 
 * 04/04/2025 - [Solicitação][Evelin] - No termo de anuência e no termo de compromisso, excluir o risco para assinatura;
 
+* 25/04/2025 - [AJUSTE][Evelin] - Termo de anuência não exibe o período fechado.
+
 
 
