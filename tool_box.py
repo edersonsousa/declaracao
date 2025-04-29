@@ -556,7 +556,7 @@ def rodape(c):
     # Formata como "NOV/2024"
     data_formatada = f"{mes_abreviado}/{ano}"
 
-    versao="1.32"
+    versao="1.341"
         
     # Definir o texto e suas coordenadas
     texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"
@@ -635,8 +635,8 @@ def termo_de_anuencia(c , declara):
     if  user_date_a_partir_variable is not None:
         text += f", a partir de {user_date_a_partir_variable}"
     # Para o caso de "Período Fechado" CAIII PF
-    if {declara['Periodo Fechado']} is True:
-        text += f", no período de {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}, "
+    if (declara['Periodo Fechado'] is not None and date_periodofechado_inicio_variable is not None and date_periodofechado_fim_variable is not None) :#True:
+        text += f", no período de {date_periodofechado_inicio_variable} a {date_periodofechado_fim_variable}"
     text += f", no(a) {declara['Destinação']}, do(a) {declara['UA']}, da {declara['Coordenadoria']}. "
     style = ParagraphStyle(name='Justify', alignment=4, leading=(12*1.5), fontSize=11, fontName="Verdana")
     p = Paragraph(text, style)
