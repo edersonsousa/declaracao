@@ -16,10 +16,14 @@ from babel.dates import format_date, Locale
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 import os
-global date_periodofechado_inicio 
-global date_periodofechado_fim
+global date_periodofechado_inicio_variable
+global date_periodofechado_fim_variable
 locale = Locale('pt', 'BR')
 
+
+date_periodofechado_inicio_variable = None
+
+date_periodofechado_fim_variable = None
 def validar_nome_entry(new_value, nome_entry, statusbar_text):
     # Verifica se a entrada está vazia
     if not new_value:
@@ -114,7 +118,8 @@ def validar_cpf(event, cpf_entry, statusbar_text):
     
 def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo, jornada_combo, lei_combo, cargo_combo, 
                   destinacao_entry, ua_combo, coordenadoria_combo, cargo_origem_combo, a_partir_checkbutton, periodo_fechado_var, 
-                  periodo_fechado_checkbutton, regime_combo, btn_n_servidor, btn_servidor, statusbar_text, user_date_a_partir_variable, a_partir_var):
+                  periodo_fechado_checkbutton, regime_combo, btn_n_servidor, btn_servidor, statusbar_text, user_date_a_partir_variable, a_partir_var, 
+                  date_periodofechado_inicio_variable, date_periodofechado_fim_variable  ):
     # Limpa o valor de todos os campos de entrada
     nome_entry.delete(0, END)
     nome_entry.focus()
@@ -144,6 +149,8 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     a_partir_var = None
     a_partir_checkbutton.config(state="normal")
     user_date_a_partir_variable = None
+    date_periodofechado_inicio_variable  = None
+    date_periodofechado_fim_variable = None
     periodo_fechado_checkbutton.config(state="normal")
     regime_combo.set('')
     regime_combo.config(state="readonly")
@@ -151,6 +158,8 @@ def limpar_campos(nome_entry, rg_entry, cpf_entry, estado_civil_combo, ato_combo
     btn_servidor.config(state="disable")
     statusbar_text.set("GADI")
 global user_date_a_partir_variable
+#global date_periodofechado_inicio_variable
+#global date_periodofechado_fim_variable
 # user_date_a_partir_variable = None
 
 def toggle_check_a_partir(a_partir_var, periodo_fechado_var, periodo_fechado_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor):
@@ -215,16 +224,16 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
         ato_combo["values"] = "Designação"
         window.withdraw()
 
-        date_periodofechado_inicio = simpledialog.askstring("Período Fechado", "Qual a data do início para o período fechado?\nEx:(dd/mm/aaaa)")
-        if date_periodofechado_inicio and len(date_periodofechado_inicio) == 10 and date_periodofechado_inicio[2] == '/' and date_periodofechado_inicio[5] == '/':
-            dia_inicio = int(date_periodofechado_inicio[:2])
-            mes_inicio = int(date_periodofechado_inicio[3:5])
-            ano_inicio = int(date_periodofechado_inicio[6:])
+        date_periodofechado_inicio_variable = simpledialog.askstring("Período Fechado", "Qual a data do início para o período fechado?\nEx:(dd/mm/aaaa)")
+        if date_periodofechado_inicio_variable and len(date_periodofechado_inicio_variable) == 10 and date_periodofechado_inicio_variable[2] == '/' and date_periodofechado_inicio_variable[5] == '/':
+            dia_inicio = int(date_periodofechado_inicio_variable[:2])
+            mes_inicio = int(date_periodofechado_inicio_variable[3:5])
+            ano_inicio = int(date_periodofechado_inicio_variable[6:])
             try:
                 data_inicio = datetime(ano_inicio, mes_inicio, dia_inicio)
-                if data_inicio < datetime.now():
-                    date_periodofechado_inicio_variable = date_periodofechado_inicio
-                else:
+                if data_inicio >= datetime.now():
+                    #date_periodofechado_inicio_variable = date_periodofechado_inicio
+                #else:
                     messagebox.showerror("Erro", "Data inicial inválida. A data deve ser anterior ao dia atual.")
                     toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
                     return
@@ -451,11 +460,13 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                     ]
     elif selected_value == "Coordenadoria de Controle de Doenças":
         ua_combo["completevalues"] = [
+                                        
                                         'Centro de Referência e Treinamento - "DST/AIDS"',
                                         'Centro de Vigilância Epidemiológica "Professor Alexandre Vranjac"',
                                         "Centro de Vigilância Sanitária",
                                         'Instituto "Adolfo Lutz" - IAL',
-                                        "Instituto Pasteur"
+                                        "Instituto Pasteur",
+                                        "Sede"
                                     ]
     elif selected_value == "Coordenadoria de Gestão de Contratos de Serviços de Saúde":
         ua_combo["completevalues"] = [
@@ -556,7 +567,7 @@ def rodape(c):
     # Formata como "NOV/2024"
     data_formatada = f"{mes_abreviado}/{ano}"
 
-    versao="1.341"
+    versao="1.342"
         
     # Definir o texto e suas coordenadas
     texto = f"NMP/CCRH/GADI/CRH/SES - versão {versao} | {mes_abreviado}/{ano}"

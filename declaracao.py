@@ -24,7 +24,9 @@ from tool_box import (
     filter_combobox, 
     on_select,
     on_select_estado_civil,
-    mascara_cpf
+    mascara_cpf,
+    date_periodofechado_inicio_variable, 
+    date_periodofechado_fim_variable
                         )
 
 import tkinter as tk
@@ -494,7 +496,9 @@ bnt_limpar = ttk.Button(
     btn_servidor,
     statusbar_text,
     user_date_a_partir_variable,
-    a_partir_var  # Passando como argumento posicional, não como argumento de palavra-chave
+    a_partir_var,  # Passando como argumento posicional, não como argumento de palavra-chave
+    date_periodofechado_inicio_variable, 
+    date_periodofechado_fim_variable
 )
 ,
 )
