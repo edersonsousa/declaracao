@@ -241,7 +241,7 @@ def toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_che
                 messagebox.showerror("Erro", "Data inicial inválida. Por favor, insira uma data válida no formato dd/mm/aaaa.")
                 toggle_check_periodo_fechado(periodo_fechado_var, a_partir_var, a_partir_checkbutton, ato_combo, window, btn_servidor, btn_n_servidor)
                 return
-        elif date_periodofechado_inicio is None:
+        elif date_periodofechado_inicio_variable is None:
             window.deiconify()
             return
         else:
@@ -446,7 +446,8 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                             "Unidade de Gestão Assistencial II",
                                             "Unidade de Gestão Assistencial III",
                                             "Unidade de Gestão Assistencial IV",
-                                            "Unidade de Gestão Assistencial V"
+                                            "Unidade de Gestão Assistencial V",
+                                            "Sede"
                                     ]
     elif selected_value == "Coordenadoria de Assistência Farmacêutica":
         ua_combo["completevalues"] = [
@@ -491,7 +492,8 @@ def coordenadoria_box_select(ua_combo, coordenadoria_combo):
                                         "DRS XV - São José do Rio Preto",
                                         "DRS XVI - Sorocaba",
                                         "DRS XVII - Taubaté",
-                                        "DRS XVIII - Botucatu"
+                                        "DRS XVIII - Botucatu",
+                                        "Sede"
                                     ]
     ua_combo.focus()
 
